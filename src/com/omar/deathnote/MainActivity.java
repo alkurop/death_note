@@ -39,10 +39,7 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.google.android.vending.licensing.AESObfuscator;
-import com.google.android.vending.licensing.LicenseChecker;
-import com.google.android.vending.licensing.LicenseCheckerCallback;
-import com.google.android.vending.licensing.ServerManagedPolicy;
+ 
 import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
