@@ -4,6 +4,8 @@ Death note is a notepad for Android 4.0.3 and up
 
 It is published as a free app at the [Play Market](https://play.google.com/store/apps/details?id=com.omar.deathnote)
 
+If you want to know more how this app works, open the [Commented Branch](https://github.com/alkurop/death_note/tree/commented )
+
 # Features
 
 * Organize notes by color 
