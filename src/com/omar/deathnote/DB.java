@@ -124,6 +124,8 @@ public class DB {
 
 		if (mCursor != null) {
 			mCursor.moveToLast();
+			
+			if(mCursor == null ){Log.d("NullCUrsor","NullCUrsor");}
 		}
 		return mCursor;
 	}

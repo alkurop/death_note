@@ -26,25 +26,12 @@ public class DialogOnDelete extends DialogFragment implements OnClickListener {
  @Override 
 public void onStart(){
 	super.onStart();
-/*
-	  // safety check
-	  if (getDialog() == null)
-	    return;*/
 
 	  int dialogWidth = getResources().getDimensionPixelSize(R.dimen.popup_width);
 	  int dialogHeight =getResources().getDimensionPixelSize(R.dimen.popup_height);
 	  getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
 } 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			deleteDialog = (DeleteDialog) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement onSomeEventListener");
-		}
-	}
+	
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -71,14 +58,6 @@ public void onStart(){
 		}
 	}
 
-	public void onDismiss(DialogInterface dialog) {
-		super.onDismiss(dialog);
-		/*Log.d(LOG_TAG, "Dialog 1: onDismiss");*/
-	}
 
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		/*Log.d(LOG_TAG, "Dialog 1: onCancel");*/
-	}
 
 }
