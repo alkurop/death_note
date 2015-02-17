@@ -7,23 +7,16 @@ import java.util.Random;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings.Secure;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,13 +32,13 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
- 
 import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.pref.PrefActivity;
+import com.omar.deathnote.rate.RateMeMaybe;
 
-public class MainActivity extends Activity implements OnNavigationListener,
+public class MainActivity extends FragmentActivity implements OnNavigationListener,
 		LoaderCallbacks<Cursor>, DeleteDialog {
 
 	SimpleAdapter selectAdapter;
@@ -106,7 +99,11 @@ public class MainActivity extends Activity implements OnNavigationListener,
 		db = new DB(this);
 
 		db.open();
-
+		
+		RateMeMaybe rmm = new RateMeMaybe(this);
+		rmm.setPromptMinimums(10, 10, 10, 10);
+		rmm.run();
+		
 		if (savedInstanceState != null) {
 
 			orderStatus = savedInstanceState.getInt("orderStatus");

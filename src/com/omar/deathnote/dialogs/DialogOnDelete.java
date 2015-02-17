@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.omar.deathnote.R;
+import com.omar.deathnote.dialogs.AddAudioDialog.AudioDialogListener;
 
 @SuppressLint("InflateParams")
 public class DialogOnDelete extends DialogFragment implements OnClickListener {
@@ -57,7 +58,18 @@ public void onStart(){
 			break;
 		}
 	}
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Verify that the host activity implements the callback interface
+		try {
+			// Instantiate the NoticeDialogListener so we can send events to the
+			// host
+			deleteDialog = (DeleteDialog) activity;
+		} catch (ClassCastException e) {
+			// The activity doesn't implement the interface, throw exception
+			throw new ClassCastException(activity.toString()
+					+ " must implement NoticeDialogListener");
+		}
 
-
-
+	}
 }
