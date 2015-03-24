@@ -32,7 +32,7 @@ public class SingleViewActivity extends FragmentActivity {
 		/*Log.d("position", String.valueOf(position));*/
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(new ImagesPagerAdapter(getSupportFragmentManager(),
-				this, list));
+				 list));
 		pager.setCurrentItem(position);
 	}
 }

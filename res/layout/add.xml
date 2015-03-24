@@ -5,15 +5,15 @@
      android:layout_margin="20dp"
      android:padding="10dp"
      android:clickable="true"
-      android:onClick="doNata" >
+        >
 
      <ImageView
-         android:id="@+id/btnPlay"
+         android:id="@+id/addNote"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_gravity="right"
+         android:layout_gravity="end"
          android:src="@drawable/add_btn" 
          android:clickable="true"
-         android:onClick="addNote"/>
+         />
 
     </LinearLayout>

@@ -2,42 +2,33 @@ package com.omar.deathnote.picview;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+public class ImagesPagerAdapter extends FragmentPagerAdapter {
+	public ImagesPagerAdapter(FragmentManager fm, ArrayList<String> list) {
+		super(fm);
 
+		values = list;
+	}
 
-public class ImagesPagerAdapter extends FragmentPagerAdapter{
+	private ArrayList<String> values = new ArrayList<String>();
 
-    public Context ctx;
-    public ArrayList <String> values = new ArrayList<String>();
-    
-    public ImagesPagerAdapter(FragmentManager fm,Context ctx, ArrayList<String> list) {
-        super(fm);
-        this.ctx=ctx;
-        values = list;
-    }
+	@Override
+	public Fragment getItem(int i) {
+		Bundle args = new Bundle();
+		args.putString("path", values.get(i));
 
-    public Integer[] mThumbIds = {
-            
-    };
+		SingleViewFragment fragment = new SingleViewFragment();
+		fragment.setArguments(args);
 
-    @Override
-    public Fragment getItem(int i) {
-        Bundle args = new Bundle();
-        args.putString ("path",values.get(i) );
+		return fragment;
+	}
 
-        SingleViewFragment fragment = new SingleViewFragment();
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-    @Override
-    public int getCount() {
-        return values.size();
-    }
+	@Override
+	public int getCount() {
+		return values.size();
+	}
 }

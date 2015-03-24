@@ -2,6 +2,7 @@ package com.omar.deathnote.fragments;
 
 import java.util.TreeMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,32 +14,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.omar.deathnote.R;
+import com.omar.deathnote.Select;
 import com.omar.deathnote.utility.OnDeleteFragment;
 
-public class LinkFragment extends Fragment implements OnDeleteFragment {
+@SuppressLint("InflateParams")
+public class LinkFragment extends Fragment   {
 
-	EditText etLink;
-	String link;
-	String fragId;
-	Button btnDel;
-	LinearLayout main;
+	private EditText etLink;
+	private String link;
+	private String fragId;
 
-	OnDeleteFragment OnDeleteFragment;
+	private LinearLayout main;
+	private OnDeleteFragment OnDeleteFragment;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
+		if (activity.getClass().isInstance(OnDeleteFragment)) {
 			OnDeleteFragment = (OnDeleteFragment) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement onSomeEventListener");
+		} else {
+			throw new IllegalArgumentException(
+					"Activity must implement onSomeEventListener interface ");
 		}
 	}
 
@@ -48,28 +49,20 @@ public class LinkFragment extends Fragment implements OnDeleteFragment {
 			fragId = savedInstanceState.getString("fragId");
 		View v = inflater.inflate(R.layout.note_elem_link, null);
 		main = (LinearLayout) v.findViewById(R.id.noteElemAudio);
-		main.setFocusable(true); 
+		main.setFocusable(true);
 		main.requestFocus();
-		
 		etLink = (EditText) v.findViewById(R.id.link);
 		etLink.setText(link);
 		etLink.setFocusable(true);
-		 
-	
-		
-		
-		
 		etLink.setLinksClickable(true);
-		 
-
-		Linkify.addLinks(etLink, Linkify.WEB_URLS);
+   		Linkify.addLinks(etLink, Linkify.WEB_URLS);
 		etLink.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 				if (Patterns.WEB_URL.matcher(s).matches()) {
 
 					Linkify.addLinks(etLink, Linkify.WEB_URLS);
-					 
-						etLink.setLinksClickable(true);
+
+					etLink.setLinksClickable(true);
 
 				}
 
@@ -128,10 +121,10 @@ public class LinkFragment extends Fragment implements OnDeleteFragment {
 	}
 
 	public void loadContent(TreeMap<String, String> temp) {
-		if (temp.get("cont1") != null) {
+		if (temp.get(Select.Flags.Cont1.name()) != null) {
 
-			link = temp.get("cont1");
-			String space = temp.get("cont2");
+			link = temp.get(Select.Flags.Cont1.name());
+			 
 
 		}
 	}
@@ -140,10 +133,6 @@ public class LinkFragment extends Fragment implements OnDeleteFragment {
 		fragId = str;
 	}
 
-	@Override
-	public void delete(String s, boolean dialog) {
-		// TODO Auto-generated method stub
-
-	}
+ 
 
 }

@@ -23,15 +23,16 @@ public class AddAudioDialog extends DialogFragment {
 
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		// Verify that the host activity implements the callback interface
-		try {
-			// Instantiate the NoticeDialogListener so we can send events to the
-			// host
+		if(AudioDialogListener.class.isInstance(
+				activity)){
+		
+		 
 			mListener = (AudioDialogListener) activity;
-		} catch (ClassCastException e) {
+		 
+		} else {
 			// The activity doesn't implement the interface, throw exception
-			throw new ClassCastException(activity.toString()
-					+ " must implement NoticeDialogListener");
+			throw new IllegalArgumentException(
+					 " must implement NoticeDialogListener");
 		}
 	}
 

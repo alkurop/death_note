@@ -5,12 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
+import android.annotation.SuppressLint;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,15 +18,11 @@ import android.content.IntentFilter;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaRecorder;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -37,37 +33,34 @@ import com.omar.deathnote.MainActivity;
 import com.omar.deathnote.R;
 import com.omar.deathnote.fragments.AudioFragment;
 
-public class AudioPlayService extends Service implements OnCompletionListener,
-		OnPreparedListener, OnErrorListener, OnSeekCompleteListener,
-		OnInfoListener, OnBufferingUpdateListener {
+public class AudioPlayService extends IntentService implements
+		OnCompletionListener, OnPreparedListener,  
+		OnSeekCompleteListener {
 
 	static {
 		System.loadLibrary("mp3lame");
 	}
 
-	AudioRecord recorder;
+	private AudioRecord recorder;
 
-	MediaPlayer mediaPlayer;
-	public String audioPath;
-	String sntSeekPos;
-	int intSeekPos;
-	int mediaPos;
-	int mediaMax;
-	int audioNumber;
-	ArrayList<String> pathList;
+	private MediaPlayer mediaPlayer;
+	private String audioPath;;
+	private int mediaPos;
+	private int mediaMax;
+	private int audioNumber;
+	private ArrayList<String> pathList;
 	private TelephonyManager telephoneManager;
 	private boolean isPausedCall = false;
 	private boolean autonome = false;
 
-	boolean recording;
+	private boolean recording;
 
-	String counter;
-	boolean audioRepeat = false;
-	boolean audioShuffle = false;
-	boolean paused = false;
+	private boolean audioRepeat = false;
+	private boolean audioShuffle = false;
+	private boolean paused = false;
 
-	String mode;
-	Notification notification;
+	private String mode = "";;
+	private Notification notification;
 
 	private PhoneStateListener phoneStateListener;
 
@@ -78,17 +71,17 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	public static final String BROADCAST_REFRESHUI = "com.omar.deathnote.audioplay.refreshui";
 	public static final String BROADCAST_NOTIFIC = "com.omar.deathnote.audioplay.notif";
 
-	Intent seekIntent = new Intent(BROADCAST_ACTION);
-	Intent endSongIntent = new Intent(BROADCAST_ENDOFSONG);
-	Intent refreshUi = new Intent(BROADCAST_REFRESHUI);
+	private Intent seekIntent = new Intent(BROADCAST_ACTION);
+	private Intent endSongIntent = new Intent(BROADCAST_ENDOFSONG);
+	private Intent refreshUi = new Intent(BROADCAST_REFRESHUI);
 
-	BroadcastReceiver pauseSongReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver pauseSongReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
 			String flag = intent.getStringExtra("flag");
-		/*	Log.d("flag", flag);*/
+			/* Log.d("flag", flag); */
 			switch (flag) {
 			case "destroy":
 
@@ -115,13 +108,13 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 		}
 	};
-	BroadcastReceiver runningAutonome = new BroadcastReceiver() {
+	private BroadcastReceiver runningAutonome = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			initNotification();
 			autonome = intent.getBooleanExtra("flag", false);
-			/*Log.d("autonome  --> ", String.valueOf(autonome));*/
+			/* Log.d("autonome  --> ", String.valueOf(autonome)); */
 			if (autonome) {
 				audioRepeat = intent.getBooleanExtra("audioRepeat", false);
 				audioShuffle = intent.getBooleanExtra("audioShuffle", false);
@@ -135,7 +128,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 		}
 	};
-	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -146,14 +139,14 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	};
 	public static final String BROADCAST_NOTIF = "com.omar.deathnote.audioplay.notif";
 
-	BroadcastReceiver notifReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver notifReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (!recording) {
 
 				String todo = intent.getStringExtra("todo");
-		/*		Log.d("notif action recieved", todo);*/
+				/* Log.d("notif action recieved", todo); */
 				switch (todo) {
 
 				case "playpause":
@@ -199,17 +192,24 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	int readSize;
 
 	byte[] mp3buffer;
-
+	
+	static {
+		System.loadLibrary("mp3lame");
+	}
 	final int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate,
 			AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public AudioPlayService() {
+		super("AudioPlayService");
 
+	}
+
+	
+	@Override
+	protected void onHandleIntent(Intent intent) {
 		registerReceiver(runningAutonome, new IntentFilter(
 				AudioFragment.BROADCAST_AUTONOME));
 
-/*		Log.d("start ===>", "on start command");*/
 		telephoneManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneStateListener = new PhoneStateListener() {
 
@@ -252,27 +252,26 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 		audioNumber = intent.getExtras().getInt("audioNumber");
 
-	/*	Log.d("audionumber --->", String.valueOf(audioNumber));*/
 		audioPath = pathList.get(audioNumber);
 
 		mode = intent.getExtras().getString("mode");
 		File f = new File(audioPath);
 		if (mode.equalsIgnoreCase("rec")) {
-		/*	Log.d("service ======>", "new audio rec");*/
+
 			recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
 					mSampleRate, AudioFormat.CHANNEL_IN_MONO,
 					AudioFormat.ENCODING_PCM_16BIT, minBufferSize * 2);
 
 			recordStart();
 		} else {
-			/*Log.d("service ======>", "new media player");*/
+
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setOnCompletionListener(this);
 			mediaPlayer.setOnPreparedListener(this);
-			mediaPlayer.setOnErrorListener(this);
+			 
 			mediaPlayer.setOnSeekCompleteListener(this);
-			mediaPlayer.setOnInfoListener(this);
-			mediaPlayer.setOnBufferingUpdateListener(this);
+		 
+	 
 
 			if (!mediaPlayer.isPlaying()) {
 
@@ -297,7 +296,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 				} catch (IllegalArgumentException | SecurityException
 						| IllegalStateException | IOException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 
@@ -305,7 +304,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		}
 
 		initNotification();
-		return START_STICKY;
+
 	}
 
 	private void setupHandler() {
@@ -328,7 +327,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 				mediaPos = mediaPlayer.getCurrentPosition();
 				mediaMax = mediaPlayer.getDuration();
-			/*	Log.d("send ====>>", "seekIntent");*/
+				/* Log.d("send ====>>", "seekIntent"); */
 				seekIntent.putExtra("counter", String.valueOf(mediaPos));
 				seekIntent.putExtra("mediamax", String.valueOf(mediaMax));
 				seekIntent.putExtra("song_ended", String.valueOf(songEnded));
@@ -341,7 +340,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	};
 
 	protected void updateSeekPos(Intent intent) {
-/*		Log.d("updateSeekPos", "updateSeekPos");*/
+
 		int seekPos = intent.getIntExtra("seekpos", 0);
 		if (mediaPlayer.isPlaying()) {
 
@@ -349,19 +348,6 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 			mediaPlayer.seekTo(seekPos);
 			setupHandler();
 		}
-
-	}
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mode = "";
-
-		/*
-		 * registerReceiver(runningAutonome, new IntentFilter(
-		 * AudioFragment.BROADCAST_AUTONOME));
-		 */
-		/* registerReceiver(destroy, new IntentFilter(Note.BROADCAST_DESTROY)); */
 
 	}
 
@@ -415,30 +401,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 			telephoneManager.listen(phoneStateListener,
 					PhoneStateListener.LISTEN_NONE);
 		}
-		/*Log.d("audio service =======+++>", "Stop self");*/
+		/* Log.d("audio service =======+++>", "Stop self"); */
 		cancelNotification();
 		super.onDestroy();
 	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onBufferingUpdate(MediaPlayer mp, int percent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onInfo(MediaPlayer mp, int what, int extra) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
+  	@Override
 	public void onSeekComplete(MediaPlayer arg0) {
 		if (!mediaPlayer.isPlaying()) {
 
@@ -448,14 +415,8 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	}
 
 	@Override
-	public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void onPrepared(MediaPlayer arg0) {
-		// TODO Auto-generated method stub
+		 
 		playMedia();
 	}
 
@@ -473,7 +434,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	}
 
 	public void stopMedia() {
-	/*	Log.d("media ====>>", "stop");*/
+	 
 		if (mediaPlayer != null) {
 			if (mediaPlayer.isPlaying()) {
 				mediaPlayer.stop();
@@ -537,10 +498,10 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setOnCompletionListener(this);
 		mediaPlayer.setOnPreparedListener(this);
-		mediaPlayer.setOnErrorListener(this);
+	 
 		mediaPlayer.setOnSeekCompleteListener(this);
-		mediaPlayer.setOnInfoListener(this);
-		mediaPlayer.setOnBufferingUpdateListener(this);
+	 
+ 
 		registerReceiver(broadcastReceiver, new IntentFilter(
 				AudioFragment.BROADCAST_SEEKBAR));
 		registerReceiver(runningAutonome, new IntentFilter(
@@ -572,6 +533,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	}
 
+	@SuppressLint("InlinedApi")
 	private void initNotification() {
 		registerReceiver(notifReceiver, new IntentFilter(BROADCAST_NOTIFIC));
 
@@ -596,7 +558,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 				next, 0);
 
 		Intent notificationIntent = new Intent(getApplicationContext(),
-				com.omar.deathnote.Note.class);
+				com.omar.deathnote.NoteActivity.class);
 
 		PendingIntent intentBack = PendingIntent.getActivity(
 				getApplicationContext(), 0, notificationIntent, 0);
@@ -697,11 +659,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					audioNumber = 0;
 
 				}
-		/*		Log.d("keys", "audioNumber ");*/
+				/* Log.d("keys", "audioNumber "); */
 
 			} else {
 				audioNumber = MainActivity.randInt(0, (pathList.size() - 1));
-			/*	Log.d("keys", "audioNumber ");*/
+				/* Log.d("keys", "audioNumber "); */
 
 			}
 		}
@@ -732,11 +694,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					audioNumber = 0;
 
 				}
-			/*	Log.d("keys", "audioNumber ");*/
+				/* Log.d("keys", "audioNumber "); */
 
 			} else {
 				audioNumber = MainActivity.randInt(0, (pathList.size() - 1));
-		/*		Log.d("keys", "audioNumber ");*/
+				/* Log.d("keys", "audioNumber "); */
 
 			}
 		}
@@ -753,43 +715,8 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		}
 	}
 
-	/*
-	 * protected void playRecorded() { File f = new File(audioPath); mode = "";
-	 * Log.d("service ======>", "play"); mediaPlayer = new MediaPlayer();
-	 * mediaPlayer.setOnCompletionListener(this);
-	 * mediaPlayer.setOnPreparedListener(this);
-	 * mediaPlayer.setOnErrorListener(this);
-	 * mediaPlayer.setOnSeekCompleteListener(this);
-	 * mediaPlayer.setOnInfoListener(this);
-	 * mediaPlayer.setOnBufferingUpdateListener(this);
-	 * 
-	 * if (!mediaPlayer.isPlaying()) {
-	 * 
-	 * try { if (f.exists()) { mediaPlayer.setDataSource(audioPath);
-	 * mediaPlayer.prepareAsync(); registerReceiver(broadcastReceiver, new
-	 * IntentFilter( AudioFragment.BROADCAST_SEEKBAR)); setupHandler(); } else {
-	 * 
-	 * Toast.makeText( getBaseContext(),
-	 * audioPath.substring(audioPath.lastIndexOf("/") + 1) + " does not exist",
-	 * Toast.LENGTH_LONG) .show();
-	 * 
-	 * stopMedia();
-	 * 
-	 * }
-	 * 
-	 * } catch (IllegalArgumentException | SecurityException |
-	 * IllegalStateException | IOException e) { // TODO Auto-generated catch
-	 * block e.printStackTrace(); }
-	 * 
-	 * } mediaPlayer.start();
-	 * 
-	 * mediaPlayer.pause(); paused = true; initNotification();
-	 * 
-	 * }
-	 */
-
 	public void recordStart() {
-/*		Log.d("recording ==== >>   ", audioPath);*/
+		/* Log.d("recording ==== >>   ", audioPath); */
 
 		recording = true;
 		registerReceiver(pauseSongReceiver, new IntentFilter(
@@ -803,9 +730,6 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	}
 
-	static {
-		System.loadLibrary("mp3lame");
-	}
 
 	public void recThread() {
 
@@ -849,11 +773,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 				}
 				SimpleLame.init(mSampleRate, 1, mSampleRate, 192);
 
-			/*	Log.d("audiorecorder ====>", "record start");*/
 				recorder.startRecording();
-				int recordingState = recorder.getRecordingState();
-				/*Log.d("audiorecorder ====>", "recordingState = "
-						+ recordingState);*/
 
 				int readSize = 0;
 
@@ -868,14 +788,10 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 							mp3buffer);
 					try {
 						output.write(mp3buffer, 0, encResult);
-						/*
-						 * Log.d("recorder ===>", "writing buffer size = " +
-						 * String.valueOf(encResult));
-						 */
 
 						recCoutner = rC.c();
 						seekIntent.putExtra("recCounter", recCoutner);
-						/*Log.d("send ====>>", "seekIntent");*/
+
 						sendBroadcast(seekIntent);
 
 					} catch (IOException e) {
@@ -883,16 +799,12 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					}
 				}
 
-		/*		Log.d("record ====>>", "stop");*/
-
 				int flushResult = SimpleLame.flush(mp3buffer);
 
 				if (flushResult != 0) {
 					try {
 						output.write(mp3buffer, 0, flushResult);
-						/*Log.d("recorder ===>",
-								"writing flushresult= "
-										+ String.valueOf(flushResult));*/
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -911,7 +823,6 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 				mode = "";
 
-				/* stopSelf(); */
 			}
 		}.start();
 	}
@@ -920,12 +831,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		refreshUi = new Intent(BROADCAST_REFRESHUI);
 		refreshUi.putExtra("audioRepeat", audioRepeat);
 		refreshUi.putExtra("audioShuffle", audioShuffle);
-		/*Log.d("audionumber --->", String.valueOf(audioNumber));*/
 		refreshUi.putExtra("audioNumber", audioNumber);
 		refreshUi.putExtra("paused", paused);
 
 		sendBroadcast(refreshUi);
-	/*	Log.d("sending broadcast ======>", " refresh UI");*/
+
 	}
 
 	public class RecCounter {
@@ -977,7 +887,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 			else
 				cSmall += String.valueOf(secs);
 
-		/*	Log.d("connuter ==>", cSmall);*/
+			/* Log.d("connuter ==>", cSmall); */
 			return cSmall;
 		}
 	}

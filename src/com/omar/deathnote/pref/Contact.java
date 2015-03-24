@@ -8,16 +8,10 @@ import android.os.Bundle;
  
 
 public class Contact extends Activity {
-	
-	
-	
-	
-	
-	
-	
+ 
 	 @Override
 	protected void onCreate(Bundle savedInstanceState) {
-		/* Log.d("Contact ======>>>", "starting");*/
+	 
 		 initContactIntent();
 		super.onCreate(savedInstanceState);
 	}

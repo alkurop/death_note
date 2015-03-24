@@ -20,7 +20,7 @@ public class SingleViewFragment extends Fragment {
 
     public static SingleViewFragment buildWithResource(String path){
         Bundle args = new Bundle();
-        /*args.putInt(ARG_IMAGE_RESOURCE, res);*/
+       
         args.putString (ARG_IMAGE_PATH, path);
 
         SingleViewFragment fragment = new SingleViewFragment();
@@ -39,11 +39,9 @@ public class SingleViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	String path =  getArguments().getString (ARG_IMAGE_PATH);
-        ImageView imageView = (ImageView) getView().findViewById(R.id.imageview);
-      /*  imageView.setImageResource(resource);*/
-        Uri uri = Uri.fromFile(new File(path));
+        ImageView imageView = (ImageView) getView().findViewById(R.id.imageview);   
         imageView.setImageURI(Uri.fromFile(new File(path)));
-       /* Log.d("image uri ===>>", uri.getPath());*/
+      
     }	
 }
 

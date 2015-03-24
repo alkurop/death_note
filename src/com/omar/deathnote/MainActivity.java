@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -24,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,100 +38,95 @@ import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.pref.PrefActivity;
 import com.omar.deathnote.rate.RateMeMaybe;
 
-public class MainActivity extends FragmentActivity implements OnNavigationListener,
-		LoaderCallbacks<Cursor>, DeleteDialog {
+@SuppressWarnings({ "deprecation" })
+public class MainActivity extends FragmentActivity implements
+		OnNavigationListener, LoaderCallbacks<Cursor>, DeleteDialog {
 
-	SimpleAdapter selectAdapter;
-	ArrayList<Map<String, Object>> dataSelect;
-	Map<String, Object> m;
-	Select sel;
+	private static final int LOAD_LIST = 1;
+ 
+	private static final int DELETE_SOME_NOTE = 3;
+	private static final int addItem = 1;
+	private static final int editItem = 2;
 
-	ListView lvData;
-	LinearLayout mainLayout;
-	DB db;
-	MyCursorAdapter scAdapter;
-	ImageButton del;
-	int listItemId;
-
-	final int addItem = 1;
-	final int editItem = 2;
-	final int delItem = 3;
-	int recToDel = 0;
-	FileManager sc;
+	private int recToDel = 0;
 	private static int orderStatus;
 
-	// License checking
- 
+	private SimpleAdapter selectAdapter;
+	private ArrayList<Map<String, Object>> dataSelect;
+	private Map<String, Object> m;
+
+	private ListView lvData;
+	private LinearLayout mainLayout;
+
+	private MainListCursorAdapter scAdapter;
+
+	private ImageView addNote;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// licencing
-	 
-
 		getActionBar().setDisplayShowTitleEnabled(false);
-		/* requestWindowFeature(Window.FEATURE_NO_TITLE); */
+
 		setContentView(R.layout.activity_main);
 
-		sc = new FileManager();
 		naviSelect();
-		sel = new Select();
 
 		mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
 
 		if (getResources().getConfiguration().orientation == 1) {
 			mainLayout.setBackgroundDrawable(getApplicationContext()
-					.getResources().getDrawable(sel.bg_images_main[0]));
+					.getResources().getDrawable(Select.bg_images_main[0]));
 		} else {
 			mainLayout.setBackgroundDrawable(getApplicationContext()
-					.getResources().getDrawable(sel.bg_images_main_2[0]));
+					.getResources().getDrawable(Select.bg_images_main_2[0]));
 		}
 
 		LayoutInflater inf = getLayoutInflater();
-		ListView channelsList = (ListView) findViewById(R.id.mainList);
+		ListView mainList = (ListView) findViewById(R.id.mainList);
 
-		View snapshot = inf.inflate(R.layout.add, channelsList, false);
-		channelsList.addHeaderView(snapshot);
+		View addNoteView = inf.inflate(R.layout.add, mainList, false);
+		mainList.addHeaderView(addNoteView);
 
-		// < ---- DB --->
+		addNote = (ImageView) addNoteView.findViewById(R.id.addNote);
+		addNote.setOnClickListener(new OnClickListener(
+
+		) {
+
+			@Override
+			public void onClick(View arg0) {
+				addNote();
+
+			}
+		});
+
 		Log.d("Orientation", "" + getResources().getConfiguration().orientation);
-		db = new DB(this);
 
-		db.open();
-		
-		RateMeMaybe rmm = new RateMeMaybe(this);
-		rmm.setPromptMinimums(10, 10, 10, 10);
-		rmm.run();
-		
+		setUpRatingModule();
+
 		if (savedInstanceState != null) {
 
 			orderStatus = savedInstanceState.getInt("orderStatus");
+			recToDel = savedInstanceState.getInt("recToDel");
 			getActionBar().setSelectedNavigationItem(orderStatus);
 
-			Cursor cursor = db.getByStyle(orderStatus);
-
-			loadList(cursor);
-
-		} else {
-			 
-
-			Cursor cursor = db.getAllData();
-			loadList(cursor);
 		}
+		setupMainList() ;
+		
+		
+		reloadList();
 
 		lvData.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				 
+
 				Bundle bundle = new Bundle();
 
 				bundle.putLong("id", id);
-			 
 
 				Intent intent;
-				intent = new Intent(getApplicationContext(), Note.class);
+				intent = new Intent(getApplicationContext(), NoteActivity.class);
 				intent.putExtras(bundle);
 
 				startActivityForResult(intent, editItem);
@@ -145,7 +140,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	protected void onSaveInstanceState(Bundle outState) {
 
 		outState.putInt("orderStatus", orderStatus);
-		/*Log.d("orderStatus", String.valueOf((orderStatus)));*/
+		outState.putInt("recToDel", recToDel);
+
 	}
 
 	@Override
@@ -154,75 +150,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		destroyMusic.putExtra("flag", "destroy");
 		sendBroadcast(destroyMusic);
 		super.onDestroy();
-
-	}
-
-	public void addNote(View v) {
-
-		Bundle bundle = new Bundle();
-
-		int style;
-		if (orderStatus != 0) {
-			style = orderStatus;
-		} else {
-			style = randInt(1, 6);
-		}
-		bundle.putInt("style", style);
-		Intent intent;
-
-		intent = new Intent(this, Note.class);
-		intent.putExtras(bundle);
-		startActivityForResult(intent, addItem);
-
-	}
-
-	public void doNata(View v) {
-	}
-
-	public void naviSelect() {
-		sel = new Select();
-
-		dataSelect = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < sel.select_images.length; i++) {
-
-			m = new HashMap<String, Object>();
-			m.put(sel.ATTRIBUTE_NAME_TEXT,
-					getResources().getString(sel.select_names[i]));
-			m.put(sel.ATTRIBUTE_NAME_STYLE, sel.select_images[i]);
-			dataSelect.add(m);
-		}
-
-		String[] fromSel = { sel.ATTRIBUTE_NAME_TEXT, sel.ATTRIBUTE_NAME_STYLE };
-		int[] toSel = { R.id.itemName, R.id.itemImg };
-		selectAdapter = new SimpleAdapter(this, dataSelect, R.layout.select,
-				fromSel, toSel);
-		ActionBar bar = getActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		selectAdapter.setDropDownViewResource(R.layout.select);
-
-		bar.setListNavigationCallbacks(selectAdapter, this);
-		// </ --- SELECT --- >
-	}
-
-	public void loadList(Cursor cursor) {
-
-		String[] fromMain = new String[] { DB.COLUMN_STYLE, DB.COLUMN_TITLE,
-				DB.COLUMN_TIMEDATE };
-		int[] toMain = new int[] { R.id.itemImg, R.id.itemTitle, R.id.itemDate };
-
-		scAdapter = new MyCursorAdapter(this, R.layout.item, cursor, fromMain,
-				toMain, 0);
-		lvData = (ListView) findViewById(R.id.mainList);
-
-		// < --- on item click listener --- >
-		lvData.setAdapter(scAdapter);
-		getLoaderManager().initLoader(0, null, this);
-
-	}
-
-	public void reloadList() {
-
-		getLoaderManager().restartLoader(0, null, this);
 
 	}
 
@@ -246,22 +173,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			return true;
 		case R.id.add:
 
-			Bundle bundle = new Bundle();
-
-			int style;
-			if (orderStatus != 0) {
-				style = orderStatus;
-			} else {
-				style = randInt(1, 6);
-				bundle.putInt("style", style);
-				Intent intent;
-
-				intent = new Intent(this, Note.class);
-				intent.putExtras(bundle);
-
-				startActivityForResult(intent, addItem);
-
-			}
+			addNote();
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -277,17 +189,167 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	}
 
 	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+		DB db = new DB(this);
+		db.open();
+		switch (id) {
+		case LOAD_LIST:
+			try {
+				TimeUnit.MILLISECONDS.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return new MainListCursorLoader(this, db);
 
-		return new MyCursorLoader(this, db);
+		  
+		case DELETE_SOME_NOTE:
+
+			int some = bundle.getInt("some");
+
+			return new DeleteSomeNoteCursorLoader(this, db, some);
+
+		default:
+			return null;
+
+		}
 
 	}
 
-	static class MyCursorLoader extends CursorLoader {
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		
+		int loaderId = loader.getId();
+		switch (loaderId) {
+		
+		case LOAD_LIST:
+			scAdapter.swapCursor(cursor);
+			break;
+		 
+		case DELETE_SOME_NOTE:
+			Log.d("Some note","finish delete some note");
+			orderStatus = 0;
+		 
+			reloadList();
+			break;
+		
+		
+		}
+
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+ 
+		scAdapter.swapCursor(null);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent bundle) {
+	 
+ /*
+ 			int newOrderStatus = bundle.getIntExtra("style", 0);*/
+ 			
+ 			orderStatus = 0;
+ 			
+			reloadList();
+		 
+		 
+	}
+
+	private void addNote() {
+
+		Bundle bundle = new Bundle();
+
+		int style;
+		if (orderStatus != 0) {
+			style = orderStatus;
+		} else {
+			style = randInt(1, 6);
+		}
+		bundle.putInt("style", style);
+		Intent intent;
+
+		intent = new Intent(this, NoteActivity.class);
+		intent.putExtras(bundle);
+		startActivityForResult(intent, addItem);
+
+	}
+
+	public void naviSelect() {
+
+		dataSelect = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < Select.select_images.length; i++) {
+
+			m = new HashMap<String, Object>();
+			m.put(Select.ATTRIBUTE_NAME_TEXT,
+					getResources().getString(Select.select_names[i]));
+			m.put(Select.ATTRIBUTE_NAME_STYLE, Select.select_images[i]);
+			dataSelect.add(m);
+		}
+
+		String[] fromSel = { Select.ATTRIBUTE_NAME_TEXT,
+				Select.ATTRIBUTE_NAME_STYLE };
+		int[] toSel = { R.id.itemName, R.id.itemImg };
+		selectAdapter = new SimpleAdapter(this, dataSelect, R.layout.select,
+				fromSel, toSel);
+		ActionBar bar = getActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		selectAdapter.setDropDownViewResource(R.layout.select);
+
+		bar.setListNavigationCallbacks(selectAdapter, this);
+
+	}
+
+	private void setupMainList() {
+		String[] fromMain = new String[] { DB.COLUMN_STYLE, DB.COLUMN_TITLE,
+				DB.COLUMN_TIMEDATE };
+		int[] toMain = new int[] { R.id.itemImg, R.id.itemTitle, R.id.itemDate };
+
+		scAdapter = new MainListCursorAdapter(this, R.layout.item, null,
+				fromMain, toMain, 0);
+		lvData = (ListView) findViewById(R.id.mainList);
+
+		lvData.setAdapter(scAdapter);
+	}
+ 
+	private void reloadList() {
+
+		getLoaderManager().restartLoader(LOAD_LIST, null, this);
+
+	}
+ 
+
+	private void deleteSomeNote(int some) {
+
+		Bundle bundle = new Bundle();
+		Log.d("Some note", String.valueOf(some));
+		bundle.putInt("some", some);
+		getLoaderManager().restartLoader(DELETE_SOME_NOTE, bundle, this);
+		 
+
+	}
+
+	public static int randInt(int min, int max) {
+
+		Random rand = new Random();
+
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+
+		return randomNum;
+	}
+
+	private void setUpRatingModule() {
+		RateMeMaybe rmm = new RateMeMaybe(this);
+		rmm.setPromptMinimums(10, 10, 10, 10);
+		rmm.run();
+	}
+
+	private static class MainListCursorLoader extends CursorLoader {
 
 		DB db;
 
-		public MyCursorLoader(Context context, DB db) {
+		public MainListCursorLoader(Context context, DB db) {
 			super(context);
 			this.db = db;
 		}
@@ -296,12 +358,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		public Cursor loadInBackground() {
 			Cursor cursor;
 			if (orderStatus == 0) {
-				db.open();
 
 				cursor = db.getAllData();
 
 			} else {
-				db.open();
 
 				cursor = db.getByStyle(orderStatus);
 
@@ -311,58 +371,36 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		}
 	}
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		scAdapter.swapCursor(cursor);
-		db.close();
+ 
 
-	}
+	private static class DeleteSomeNoteCursorLoader extends CursorLoader {
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
+		private DB db;
+		private int id;
 
-		scAdapter.swapCursor(null);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data == null) {
-
-			return;
-		}
-
-		if (resultCode == RESULT_CANCELED && requestCode == addItem) {
-			db.open();
-			Cursor cursor = db.fetchLast();
-			long toDel = cursor.getLong(cursor.getColumnIndex(DB.COLUMN_ID));
-
-			db.delRec(toDel);
-			db.deleteNoteTable(toDel);
-			db.close();
-
-			reloadList();
+		public DeleteSomeNoteCursorLoader(Context context, DB db, int id) {
+			super(context);
+			this.db = db;
+			this.id = id;
 
 		}
 
-		if (resultCode == RESULT_OK) {
+		@Override
+		public Cursor loadInBackground() {
+			db.delRec(id);
+			db.deleteNoteTable(id);
+			
+			
+		
 
-			int style = 1;
-
-			Bundle extras = data.getExtras();
-
-			style = extras.getInt("style");
-
-			/* getActionBar().setSelectedNavigationItem(style); */
-
-			reloadList();
-
+			return null;
 		}
 	}
 
-	public class MyCursorAdapter extends SimpleCursorAdapter {
+	private class MainListCursorAdapter extends SimpleCursorAdapter {
 
-		public MyCursorAdapter(Context _context, int _layout, Cursor _cursor,
-				String[] _from, int[] _to, int flags) {
+		public MainListCursorAdapter(Context _context, int _layout,
+				Cursor _cursor, String[] _from, int[] _to, int flags) {
 
 			super(_context, _layout, _cursor, _from, _to, flags);
 
@@ -370,17 +408,29 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 
 		@Override
 		public void bindView(View view, Context _context, Cursor _cursor) {
+
 			String title = _cursor.getString(_cursor
 					.getColumnIndex(DB.COLUMN_TITLE));
 			String date = _cursor.getString(_cursor
 					.getColumnIndex(DB.COLUMN_TIMEDATE));
-
 			final int id = _cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_ID));
-			int img = sel.select_images[_cursor.getInt(_cursor
+			int img = Select.select_images[_cursor.getInt(_cursor
 					.getColumnIndex(DB.COLUMN_STYLE))];
 
-			ImageView del = (ImageView) view.findViewById(R.id.del);
-			del.setOnClickListener(new OnClickListener() {
+			ViewHolder holder = (ViewHolder) view.getTag();
+			if (holder == null) {
+				holder = new ViewHolder();
+				holder.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+				holder.itemDate = (TextView) view.findViewById(R.id.itemDate);
+				holder.itemImg = (ImageView) view.findViewById(R.id.itemImg);
+				holder.del = (ImageView) view.findViewById(R.id.del);
+				view.setTag(holder);
+			}
+
+			holder.itemTitle.setText(title);
+			holder.itemDate.setText(date);
+			holder.itemImg.setImageResource(img);
+			holder.del.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 
@@ -391,50 +441,25 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				}
 
 			});
-			TextView itemTitle = (TextView) view.findViewById(R.id.itemTitle);
-			TextView itemDate = (TextView) view.findViewById(R.id.itemDate);
 
-			itemTitle.setText(title);
-			itemDate.setText(date);
-			ImageView itemImg = (ImageView) view.findViewById(R.id.itemImg);
-			itemImg.setImageResource(img);
+		}
 
+		private class ViewHolder {
+			TextView itemTitle;
+			TextView itemDate;
+			ImageView itemImg;
+			ImageView del;
 		}
 
 	}
 
 	@Override
-	public void del(String dialogId, String s) {
-		switch (dialogId) {
-		case "delItem":
-			switch (s) {
-			case "Yes":
-				if (recToDel != 0)
-					sc.delFile("XML", recToDel);
-				db.open();
+	public void del() {
 
-				db.delRec(recToDel);
-				db.deleteNoteTable(recToDel);
-				db.close();
-
-				reloadList();
-
-			}
-			break;
-		}
+		deleteSomeNote(recToDel);
+		orderStatus = 0;
+		reloadList();
 
 	}
-
-	public static int randInt(int min, int max) {
- 
-		Random rand = new Random();
- 
-		int randomNum = rand.nextInt((max - min) + 1) + min;
-		 
-		return randomNum;
-	}
-
-	// licencing
-	 
 
 }

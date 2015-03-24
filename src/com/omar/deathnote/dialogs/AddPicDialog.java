@@ -16,20 +16,18 @@ public class AddPicDialog extends DialogFragment {
 
 		public void onDialogClickCameraPic(DialogFragment dialog);
 	}
-	 
+
 	PicDialogListener mListener;
 
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		// Verify that the host activity implements the callback interface
-		try {
-			// Instantiate the NoticeDialogListener so we can send events to the
-			// host
+		if (PicDialogListener.class.isInstance(activity)) {
+
 			mListener = (PicDialogListener) activity;
-		} catch (ClassCastException e) {
+		} else {
 			// The activity doesn't implement the interface, throw exception
-			throw new ClassCastException(activity.toString()
-					+ " must implement NoticeDialogListener");
+			throw new IllegalArgumentException(
+					" must implement NoticeDialogListener");
 		}
 	}
 
@@ -43,19 +41,24 @@ public class AddPicDialog extends DialogFragment {
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 						case 0:
-						/*	Toast.makeText(getActivity(), "From Galery",
-									Toast.LENGTH_LONG).show();
-*/
+							/*
+							 * Toast.makeText(getActivity(), "From Galery",
+							 * Toast.LENGTH_LONG).show();
+							 */
 							mListener.onDialogClickBrowsePic(AddPicDialog.this);
 							break;
 						case 1:
-						/*	Toast.makeText(getActivity(), "From Camera",
-									Toast.LENGTH_LONG).show();*/
+							/*
+							 * Toast.makeText(getActivity(), "From Camera",
+							 * Toast.LENGTH_LONG).show();
+							 */
 							mListener.onDialogClickCameraPic(AddPicDialog.this);
 							break;
 						case 2:
-						/*	Toast.makeText(getActivity(), "Cancel",
-									Toast.LENGTH_LONG).show();*/
+							/*
+							 * Toast.makeText(getActivity(), "Cancel",
+							 * Toast.LENGTH_LONG).show();
+							 */
 							break;
 						}
 					}

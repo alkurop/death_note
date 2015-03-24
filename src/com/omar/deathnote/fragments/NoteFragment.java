@@ -3,6 +3,7 @@ package com.omar.deathnote.fragments;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -14,22 +15,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.omar.deathnote.R;
+import com.omar.deathnote.Select;
 import com.omar.deathnote.utility.OnDeleteFragment;
 
-public class NoteFragment extends Fragment implements OnDeleteFragment {
+@SuppressLint("InflateParams")
+public class NoteFragment extends Fragment {
 
-	EditText etText;
-	String text;
-	String fragId;
-	Button btnDel;
+	private EditText etText;
+	private String text;
+	private String fragId;
+	private ImageView del;
 
-	OnDeleteFragment OnDeleteFragment;
+	private OnDeleteFragment OnDeleteFragment;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -55,63 +57,13 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 		etText.requestFocus();
 		etText.setLinksClickable(false);
 		TextView tv = (TextView) v.findViewById(R.id.songTitle);
-	
-		if(fragId.equalsIgnoreCase("1")){
+
+		if (fragId.equalsIgnoreCase("1")) {
 			etText.setMinHeight(150);
-			
-			
-			tv.setVisibility(v.VISIBLE ) ;
-			
-			
-			
-		}else{	/*tv.setVisibility(v.INVISIBLE)*/ ;}
-	/*}
-		etText.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				etText.setLinksClickable(false);
-				try {
-					TimeUnit.MILLISECONDS.sleep(2);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 
-				etText.setLinksClickable(true);
-				try {
-					TimeUnit.MILLISECONDS.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				etText.setLinksClickable(false);
-			}
-		});
-		*/
+			tv.setVisibility(View.VISIBLE);
 
-	 /*
-		etText.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				// TODO Auto-generated method stub
-				if (!hasFocus) {
-
-					etText.setLinksClickable(false);
-
-					// code to execute when EditText loses focus
-				}
-				if (hasFocus) {
-					try {
-						TimeUnit.MILLISECONDS.sleep(5);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					etText.setLinksClickable(true);
-
-					// code to execute when EditText loses focus
-				}
-			}
-		});*/
-
+		}
 
 		Linkify.addLinks(etText, Linkify.WEB_URLS);
 		etText.addTextChangedListener(new TextWatcher() {
@@ -120,10 +72,10 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 
 					Linkify.addLinks(etText, Linkify.WEB_URLS);
 					try {
-				        TimeUnit.MILLISECONDS.sleep(5);
-				      } catch (InterruptedException e) {
-				        e.printStackTrace();
-				      }
+						TimeUnit.MILLISECONDS.sleep(5);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 
 					etText.setLinksClickable(true);
 
@@ -141,13 +93,13 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 
 				if (!Patterns.WEB_URL.matcher(s).matches()) {
 					Linkify.addLinks(etText, Linkify.WEB_URLS);
-				
+
 				}
 
 			}
 		});
 
-		ImageView del = (ImageView) v.findViewById(R.id.del);
+		del = (ImageView) v.findViewById(R.id.del);
 		del.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -164,11 +116,11 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		if (text != null) {
-			content.put("cont1", text);
+			content.put(Select.Flags.Cont1.name(), text);
 		} else {
-			content.put("cont1", "No Text");
+			content.put(Select.Flags.Cont1.name(), "No Text");
 		}
-		content.put("cont2", "blank");
+		 
 
 		return content;
 
@@ -182,9 +134,9 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 	}
 
 	public void loadContent(TreeMap<String, String> temp) {
-		if (temp.get("cont1") != null) {
+		if (temp.get(Select.Flags.Cont1.name()) != null) {
 
-			text = temp.get("cont1");
+			text = temp.get(Select.Flags.Cont1.name());
 
 		}
 
@@ -194,9 +146,4 @@ public class NoteFragment extends Fragment implements OnDeleteFragment {
 		fragId = str;
 	}
 
-	@Override
-	public void delete(String s, boolean dialog) {
-		// TODO Auto-generated method stub
-
-	}
 }

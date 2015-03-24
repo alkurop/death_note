@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -33,41 +35,41 @@ import android.widget.Toast;
 import com.omar.deathnote.DB;
 import com.omar.deathnote.FileManager;
 import com.omar.deathnote.R;
+import com.omar.deathnote.Select;
 import com.omar.deathnote.audioplay.AudioPlayService;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
 
-public class AudioFragment extends Fragment implements OnDeleteFragment,
-		SaveNote, OnFocusChangeListener {
+@SuppressLint({ "SimpleDateFormat", "InflateParams" })
+public class AudioFragment extends Fragment implements 
+	  OnFocusChangeListener {
 
 	public static final String BROADCAST_SEEKBAR = "com.omar.deathnote.fragments.audiofragment.seekbar";
 	public static final String BROADCAST_PAUSESONG = "com.omar.deathnote.fragments.audiofragment.pausesong";
 	public static final String BROADCAST_AUTONOME = "com.omar.deathnote.fragments.audiofragment.autonome";
 
-	Intent seekBarChanged, songPause, audioAutonome, audioPlayIntent;
+	private Intent seekBarChanged, songPause, audioAutonome, audioPlayIntent;
 
-	OnDeleteFragment OnDeleteFragment;
-	String audioName, audioPath, fragId;
+	private OnDeleteFragment OnDeleteFragment;
+	private String audioName, audioPath, fragId;
 
-	Context thiscontext;
-	SaveNote sX;
+	private Context thiscontext;
+	private SaveNote sX;
 
 	public boolean musicPlaying, recording, recorderMode, musicPaused,
 			repeatAudio, shuffleAudio;
 
-	ImageView del, play, prev, stop, next, repeat, shuffle;
-	SeekBar seekBar;
-	LinearLayout hidable;
-	TextView songName, songTime;
-	View v;
+	private ImageView del, play, prev, stop, next, repeat, shuffle;
+	private SeekBar seekBar;
+	private LinearLayout hidable;
+	private TextView songName, songTime;
+	private View v;
 
-	String noteId;
-	DB db;
-	Cursor cursor;
+	private String noteId;
 
-	LinearLayout audioLayout;
-	NextAudio nextAudio;
-	BroadcastReceiver progressbarReceiver = new BroadcastReceiver() {
+	private LinearLayout audioLayout;
+	private NextAudio nextAudio;
+	private BroadcastReceiver progressbarReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent serviceIntent) {
@@ -85,42 +87,35 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 			String mediamax = serviceIntent.getStringExtra("mediamax");
 			String strSongEnded = serviceIntent.getStringExtra("song_ended");
 			int seekProgress = Integer.parseInt(counter);
+
 			seekMax = Integer.parseInt(mediamax);
-
 			songEnded = Integer.parseInt(strSongEnded);
-
 			seekBar.setMax(seekMax);
 			seekBar.setProgress(seekProgress);
 
-			/*
-			 * Log.d("songEnded", "updating "+ String.valueOf(songEnded));
-			 * Log.d("seekMax", "updating "+ String.valueOf(seekMax));
-			 */
-			/* Log.d("update", "updating"+ String.valueOf(seekProgress)); */
 			if (songEnded == 1) {
 
 				stopAudio();
 				musicPlaying = false;
 				play.setBackgroundResource(R.drawable.media_play);
-				/* Log.d("update", "song ended"); */
+
 			}
 
 		}
 
 		private void updateRecUi(Intent serviceIntent) {
 			String recCounter = serviceIntent.getStringExtra("recCounter");
-			/* Log.d("set Song Time ===>", "recCounter"); */
 			songTime.setText(recCounter);
 
 		}
 
 	};
 
-	BroadcastReceiver endSongReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver endSongReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
-			/* Log.d("end song", "received"); */
+
 			if (!recording)
 				nextAudio();
 			else
@@ -128,20 +123,15 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 		}
 	};
-	BroadcastReceiver refreshUI = new BroadcastReceiver() {
+	private BroadcastReceiver refreshUI = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context arg0, Intent intent) {
 
 			musicPaused = intent.getBooleanExtra("paused", false);
-			/* Log.d(" musicPaused ======>", String.valueOf(musicPaused)); */
 			repeatAudio = intent.getBooleanExtra("audioRepeat", false);
 			shuffleAudio = intent.getBooleanExtra("audioShuffle", false);
 			int audioNumber = intent.getIntExtra("audioNumber", 0);
-			/*
-			 * Log.d("resrech ui", "recieved"); Log.d("audionumber --->",
-			 * String.valueOf(audioNumber));
-			 */
 
 			playerMode();
 
@@ -150,7 +140,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		}
 	};
 
-	OnClickListener onClickListener = new OnClickListener() {
+	private OnClickListener onClickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
@@ -159,7 +149,6 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 				audioLayout.requestFocus();
 
 				if (musicPaused) {
-
 					resumeAudio();
 				} else if (recorderMode && !recording) {
 					recAudio();
@@ -172,7 +161,6 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 					playerMode();
 					pauseAudio();
 				}
-
 				break;
 
 			case R.id.btnPrev:
@@ -239,7 +227,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	};
 
-	OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
+	private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
 
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
@@ -250,7 +238,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 				int seekPos = seekBar.getProgress();
 				seekBarChanged.putExtra("seekpos", seekPos);
 				getActivity().sendBroadcast(seekBarChanged);
-				/* Log.d("seekbar changed", "cahnged"); */
+
 			}
 		}
 
@@ -266,7 +254,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 	};
 
 	int seekMax;
-	static int songEnded = 0;
+	private static int songEnded = 0;
 
 	public interface NextAudio {
 
@@ -282,7 +270,17 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 				boolean paused, int audionumber);
 
 	}
-
+	
+	 
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        
+        setRetainInstance(true);
+    }
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -311,22 +309,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		hidable = (LinearLayout) v.findViewById(R.id.hidable);
 
 		if (savedInstanceState != null) {
-			fragId = savedInstanceState.getString("fragId");
-			audioName = savedInstanceState.getString("audioName");
-			audioPath = savedInstanceState.getString("audioPath");
-
-			songName.setText(audioName);
-
-			musicPlaying = savedInstanceState.getBoolean("musicPlaying");
-			musicPaused = savedInstanceState.getBoolean("musicPaused");
-			repeatAudio = savedInstanceState.getBoolean("repeatAudio");
-			shuffleAudio = savedInstanceState.getBoolean("shuffleAudio");
-			noteId = savedInstanceState.getString("noteId");
-
-			recorderMode = savedInstanceState.getBoolean("recorderMode");
-			recording = savedInstanceState.getBoolean("recording");
-
-		} else {
+			 
 			if (audioPath == null) {
 				audioPath = "";
 				audioName = "";
@@ -344,7 +327,6 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 			else {
 				songName.setText(audioName);
-
 				playerMode();
 			}
 
@@ -378,19 +360,16 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
 			getActivity().registerReceiver(endSongReceiver,
 					new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
-			/*
-			 * Log.d("reciever", "registered"); Log.d("musicplaying", "true");
-			 */
+
 			if (!musicPaused) {
 				play.setBackgroundResource(R.drawable.media_pause);
 			}
-			songTime.setVisibility(v.GONE);
+			songTime.setVisibility(View.GONE);
 
 		}
 
 		if (recorderMode) {
 
-			/* Log.d("Recodrer mode ===>>>>", "true"); */
 			play.setBackgroundResource(R.drawable.ic_action_rec);
 			recMode();
 
@@ -408,9 +387,33 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		if (repeatAudio)
 			repeat.setBackgroundResource(R.drawable.media_replay_pressed);
 
-		db = new DB(thiscontext);
 		v.setOnFocusChangeListener(this);
 		return v;
+	}
+
+	
+	
+	
+	@Override
+	public void onDetach() {
+		try {
+
+			getActivity().unregisterReceiver(progressbarReceiver);
+
+		} catch (Exception e) {
+			Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
+					+ e.getMessage());
+		}
+		try {
+
+			getActivity().unregisterReceiver(endSongReceiver);
+
+		} catch (Exception e) {
+			Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
+					+ e.getMessage());
+		}
+
+		super.onDetach();
 	}
 
 	private void loadAudioFromBrowser() {
@@ -430,13 +433,6 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	protected void resumeAudio() {
 		play.setBackgroundResource(R.drawable.media_pause);
-		/*
-		 * try {
-		 * 
-		 * getActivity().stopService((audioPlayIntent)); } catch (Exception e) {
-		 * Log.d("Audio Intent Error4", e.getClass().getName() + "  ___  " +
-		 * e.getMessage()); }
-		 */
 		songPause = new Intent(BROADCAST_PAUSESONG);
 		songPause.putExtra("flag", "resume");
 		musicPaused = true;
@@ -446,105 +442,14 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	public void pauseAudio() {
 		play.setBackgroundResource(R.drawable.media_play);
-		/*
-		 * try {
-		 * 
-		 * getActivity().stopService((audioPlayIntent)); } catch (Exception e) {
-		 * Log.d("Audio Intent Error4", e.getClass().getName() + "  ___  " +
-		 * e.getMessage()); }
-		 */
 		songPause = new Intent(BROADCAST_PAUSESONG);
 		songPause.putExtra("flag", "pause");
-
 		getActivity().sendBroadcast(songPause);
 		musicPaused = true;
 	}
 
-	public void playAudio() {
-		seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
-		/* audioLayout.requestFocus(); */
-		nextAudio.stopAllAudio(fragId);
-		play.setBackgroundResource(R.drawable.media_pause);
-
-		audioPlayIntent.putStringArrayListExtra("audioPath",
-				loadAudioToService());
-		audioPlayIntent.putExtra("audioNumber",
-				getPositionToViewer(loadAudioToService(), audioPath));
-		audioPlayIntent.putExtra("mode", "play");
-		try {
-			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
-			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
-			getActivity().registerReceiver(refreshUI,
-					new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
-			musicPlaying = true;
-			getActivity().startService((audioPlayIntent));
-		} catch (Exception e) {
-			Log.d("Audio Intent Error1",
-					e.getClass().getName() + "  ___  " + e.getMessage());
-		}
-
-		/* Log.d("reciever", "registered"); */
-	}
-
-	public void recAudio() {
-		recording = true;
-
-		getActivity().registerReceiver(progressbarReceiver,
-				new IntentFilter(AudioPlayService.BROADCAST_ACTION));
-
-		SimpleDateFormat time = new SimpleDateFormat("_dd_MMMM_HH-MM-ss");
-		FileManager fileManager = new FileManager();
-		audioName = "VoiceRecording" + time.format(new Date());
-		time = null;
-		/* Log.d("audiorecording  title =======>", audioName); */
-		audioPath = fileManager.sdPath + "/" + fileManager.MusicFolder + "/"
-				+ audioPath + audioName + ".mp3";
-		File f = new File(audioPath);
-		/* Log.d("audiorecording  path =======>", audioPath); */
-		try {
-			f.createNewFile();
-		} catch (IOException e1) {
-			Toast.makeText(thiscontext, "Record not created",
-					Toast.LENGTH_SHORT);
-		}
-
-		sX.saveRun();
-
-		/* audioLayout.requestFocus(); */
-		nextAudio.stopAllAudio(fragId);
-		play.setBackgroundResource(R.drawable.ic_action_recording);
-		songName.setText(audioName);
-
-		audioPlayIntent.putStringArrayListExtra("audioPath",
-				loadAudioToService());
-		audioPlayIntent.putExtra("audioNumber",
-				getPositionToViewer(loadAudioToService(), audioPath));
-
-		audioPlayIntent.putExtra("mode", "rec");
-
-		try {
-
-			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
-			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
-			getActivity().registerReceiver(refreshUI,
-					new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
-
-			getActivity().startService((audioPlayIntent));
-		} catch (Exception e) {
-			Log.d("Audio Intent Error1",
-					e.getClass().getName() + "  ___  " + e.getMessage());
-		}
-
-		/* Log.d("reciever", "registered"); */
-
-	}
-
 	public void refreshPlayAudio(boolean p) {
-		/* audioLayout.requestFocus(); */
+
 		seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 		if (p)
 			play.setBackgroundResource(R.drawable.media_play);
@@ -569,7 +474,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 			Log.d("Audio Intent Error1",
 					e.getClass().getName() + "  ___  " + e.getMessage());
 		}
-		/* Log.d("reciever", "registered"); */
+
 	}
 
 	public void nextAudio() {
@@ -634,7 +539,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 	}
 
 	public void specialStopAudio() {
-		/* Log.d("special stop", "stopping frag    -- " + fragId); */
+
 		seekBar.setOnSeekBarChangeListener(null);
 		musicPlaying = false;
 		playerMode();
@@ -723,82 +628,19 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		}
 
 	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		/* Log.d("onSaveInstanceState", ""); */
-		outState.putString("noteId", noteId);
-		if (fragId != null)
-			outState.putString("fragId", fragId);
-
-		if (audioName != null)
-			outState.putString("audioName", audioName);
-
-		if (audioName != null)
-			outState.putString("audioPath", audioPath);
-		if (musicPlaying) {
-			outState.putBoolean("musicPlaying", true);
-			/* Log.d("musicplaying", "true"); */
-
-			try {
-
-				getActivity().unregisterReceiver(progressbarReceiver);
-
-			} catch (Exception e) {
-				Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
-						+ e.getMessage());
-			}
-			try {
-
-				getActivity().unregisterReceiver(endSongReceiver);
-
-			} catch (Exception e) {
-				Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
-						+ e.getMessage());
-			}
-
-		}
-		if (musicPaused) {
-			outState.putBoolean("musicPaused", true);
-			/* Log.d("musicPaused", "true"); */
-
-		}
-		if (repeatAudio) {
-			outState.putBoolean("repeatAudio", true);
-			/* Log.d("repeatAudio", "true"); */
-
-		}
-		if (shuffleAudio) {
-			outState.putBoolean("shuffleAudio", true);
-			/* Log.d("shuffleAudio", "true"); */
-
-		}
-		if (recorderMode) {
-			outState.putBoolean("recorderMode", true);
-			/* Log.d("recorderMode", "true"); */
-
-		}
-		if (recording) {
-			outState.putBoolean("recording", true);
-			/* Log.d("recording", "true"); */
-
-		}
-
-	}
-
+	 
 	public TreeMap<String, String> saveContent() {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		if (audioPath.equalsIgnoreCase("")) {
-			content.put("cont1", "No Audio");
+			content.put(Select.Flags.Cont1.name(), "No Audio");
 		} else {
-			content.put("cont1", audioPath);
+			content.put(Select.Flags.Cont1.name(), audioPath);
 		}
 		if (audioName.equalsIgnoreCase("")) {
-			content.put("cont2", "No Audio");
+			content.put(Select.Flags.Cont2.name(), "No Audio");
 		} else {
-			content.put("cont2", audioName);
+			content.put(Select.Flags.Cont2.name(), audioName);
 		}
 
 		return content;
@@ -807,8 +649,8 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	public void loadContent(TreeMap<String, String> temp) {
 
-		audioPath = temp.get("cont1");
-		audioName = temp.get("cont2");
+		audioPath = temp.get(Select.Flags.Cont1.name());
+		audioName = temp.get(Select.Flags.Cont2.name());
 
 	}
 
@@ -834,17 +676,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		}
 
 	}
-
-	@Override
-	public void delete(String s, boolean dialog) {
-
-	}
-
-	@Override
-	public void saveRun() {
-
-	}
-
+ 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -855,6 +687,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 				Uri audioUri = data.getData();
 				/* Log.d("uri", audioUri.toString()); */
 				if (audioUri != null) {
+
 					String[] filePathColumn = { MediaStore.Audio.Media.DATA };
 					Cursor cursor = thiscontext.getContentResolver().query(
 							audioUri, filePathColumn, null, null, null);
@@ -873,29 +706,32 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 			}
 		} else {
-			/* Log.d("de;eteig =======>", "audio"); */
+
 			OnDeleteFragment.delete(fragId, false);
 
 		}
 	}
 
-	// TODO Auto-generated method stub
-
 	public void resetSeekPos() {
 		seekBar.setProgress(0);
 	}
 
-	public ArrayList<String> loadAudioToService() {
+	/**
+	 * This only method should only be used in a separate thread
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> loadAudioToService(DB db, Cursor cursor) {
 
 		ArrayList<String> values = new ArrayList<String>();
 		db.open();
 		cursor = db.getAllNoteData(noteId);
 		while (cursor.moveToNext()) {
-			if (cursor.getString(cursor.getColumnIndex(db.COLUMN_TYPE))
+			if (cursor.getString(cursor.getColumnIndex(DB.COLUMN_TYPE))
 					.equalsIgnoreCase("AudioFragment")) {
 
 				values.add(cursor.getString(cursor
-						.getColumnIndex(db.COLUMN_CONT1)));
+						.getColumnIndex(DB.COLUMN_CONT1)));
 
 			}
 
@@ -914,7 +750,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 				position = i;
 			}
 		}
-		/* Log.d("curretn image position", String.valueOf(position)); */
+
 		return position;
 	}
 
@@ -924,7 +760,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	@Override
 	public void onPause() {
-		/* Log.d("onpause", ""); */
+
 		if (musicPlaying) {
 			seekBar.setOnSeekBarChangeListener(null);
 			audioAutonome = new Intent(BROADCAST_AUTONOME);
@@ -938,7 +774,7 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 
 	@Override
 	public void onResume() {
-		/* Log.d("onresume", ""); */
+
 		if (musicPlaying) {
 			getActivity().registerReceiver(refreshUI,
 					new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
@@ -972,25 +808,25 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 	@Override
 	public void onFocusChange(View arg0, boolean arg1) {
 		if (arg1) {
-			hidable.setVisibility(v.VISIBLE);
+			hidable.setVisibility(View.VISIBLE);
 		} else {
-			hidable.setVisibility(v.GONE);
+			hidable.setVisibility(View.GONE);
 		}
 
 	}
 
 	public void recMode() {
 		recorderMode = true;
-		seekBar.setVisibility(v.GONE);
-		songTime.setVisibility(v.VISIBLE);
+		seekBar.setVisibility(View.GONE);
+		songTime.setVisibility(View.VISIBLE);
 
 	}
 
 	public void playerMode() {
 		recorderMode = false;
 		recording = false;
-		seekBar.setVisibility(v.VISIBLE);
-		songTime.setVisibility(v.GONE);
+		seekBar.setVisibility(View.VISIBLE);
+		songTime.setVisibility(View.GONE);
 	}
 
 	public void recStop() {
@@ -1029,6 +865,131 @@ public class AudioFragment extends Fragment implements OnDeleteFragment,
 		pauseAudio();
 		musicPaused = false;
 		playerMode();
+
+	}
+
+	public void playAudio() {
+		PlayAudio playTask = new PlayAudio();
+		playTask.execute();
+	}
+
+	private class PlayAudio extends AsyncTask<Void, Void, ArrayList<String>> {
+		private DB db = new DB(thiscontext);
+		private Cursor cursor = null;
+
+		@Override
+		protected ArrayList<String> doInBackground(Void... params) {
+
+			return loadAudioToService(db, cursor);
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<String> result) {
+
+			playAudio(result);
+
+		}
+
+		private void playAudio(ArrayList<String> result) {
+			seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+			nextAudio.stopAllAudio(fragId);
+			play.setBackgroundResource(R.drawable.media_pause);
+
+			audioPlayIntent.putStringArrayListExtra("audioPath", result);
+			audioPlayIntent.putExtra("audioNumber",
+					getPositionToViewer(result, audioPath));
+			audioPlayIntent.putExtra("mode", "play");
+
+			try {
+				getActivity().registerReceiver(progressbarReceiver,
+						new IntentFilter(AudioPlayService.BROADCAST_ACTION));
+				getActivity().registerReceiver(endSongReceiver,
+						new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
+				getActivity().registerReceiver(refreshUI,
+						new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
+				musicPlaying = true;
+				getActivity().startService((audioPlayIntent));
+			} catch (Exception e) {
+				Log.d("Audio Intent Error1", e.getClass().getName() + "  ___  "
+						+ e.getMessage());
+			}
+
+		}
+
+	}
+
+	public void recAudio() {
+		RecAudio recTask = new RecAudio();
+		recTask.execute();
+	}
+
+	private class RecAudio extends AsyncTask<Void, Void, ArrayList<String>> {
+		private DB db = new DB(thiscontext);
+		private Cursor cursor = null;
+
+		@Override
+		protected ArrayList<String> doInBackground(Void... params) {
+
+			return loadAudioToService(db, cursor);
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<String> result) {
+
+			recAudio(result);
+
+		}
+
+		private void recAudio(ArrayList<String> result) {
+			recording = true;
+
+			getActivity().registerReceiver(progressbarReceiver,
+					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
+
+			SimpleDateFormat time = new SimpleDateFormat("_dd_MMMM_HH-MM-ss");
+			FileManager fileManager = new FileManager(thiscontext);
+			audioName = "VoiceRecording" + time.format(new Date());
+			time = null;
+
+			audioPath = fileManager.sdPath + "/" + fileManager.MusicFolder
+					+ "/" + audioPath + audioName + ".mp3";
+			File f = new File(audioPath);
+
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				Toast.makeText(thiscontext, "Record not created",
+						Toast.LENGTH_SHORT).show();
+			}
+
+			sX.saveRun();
+
+			nextAudio.stopAllAudio(fragId);
+			play.setBackgroundResource(R.drawable.ic_action_recording);
+			songName.setText(audioName);
+
+			audioPlayIntent.putStringArrayListExtra("audioPath", result);
+			audioPlayIntent.putExtra("audioNumber",
+					getPositionToViewer(result, audioPath));
+
+			audioPlayIntent.putExtra("mode", "rec");
+
+			try {
+
+				getActivity().registerReceiver(progressbarReceiver,
+						new IntentFilter(AudioPlayService.BROADCAST_ACTION));
+				getActivity().registerReceiver(endSongReceiver,
+						new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
+				getActivity().registerReceiver(refreshUI,
+						new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
+
+				getActivity().startService((audioPlayIntent));
+			} catch (Exception e) {
+				Log.d("Audio Intent Error1", e.getClass().getName() + "  ___  "
+						+ e.getMessage());
+			}
+
+		}
 
 	}
 

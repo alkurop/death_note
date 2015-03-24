@@ -10,7 +10,7 @@ public class ExportPrefFragment extends PreferenceFragment {
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-/*    Log.d("opening ======>>>", "Export Frag");*/
+ 
     addPreferencesFromResource(R.xml.export_pref);
 
   }

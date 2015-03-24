@@ -3,6 +3,7 @@ package com.omar.deathnote;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,12 +12,13 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class DB {
 
 	private static final String DB_NAME = "deathnote";
 	private static final int DB_VERSION = 1;
 	private static final String DB_TABLE = "maintab";
-	private static final String LICENSE_TABLE = "licensetab";
+	 
 
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_STYLE = "style";
@@ -41,13 +43,17 @@ public class DB {
 
 	private final Context mCtx;
 
-	private DBHelper mDBHelper;
+	private static DBHelper mDBHelper;
 	private SQLiteDatabase mDB;
 
 	public DB(Context ctx) {
 		mCtx = ctx;
+		
 	}
-
+		
+	
+	
+	
 	Select sel = new Select();
 	public void beginTransaction(){
 	mDB.beginTransaction();
@@ -58,8 +64,16 @@ public class DB {
 	public void setTransactionSuccessful(){
 		mDB.setTransactionSuccessful();
 	}
-	public void open() {
-		mDBHelper = new DBHelper(mCtx, DB_NAME, null, DB_VERSION);
+	public synchronized void open() {
+		
+		 if (mDBHelper == null) {
+			 mDBHelper = new DBHelper(mCtx, DB_NAME, null, DB_VERSION);
+				 
+		    }
+		   
+		
+		
+		 
 		mDB = mDBHelper.getWritableDatabase();
 		Log.d("db", "open");
 	}
@@ -68,11 +82,14 @@ public class DB {
 			
 			mDBHelper.close();
 		Log.d("db", "close");
+		 
 	}
 
 	public Cursor getAllData() {
-		return mDB.query(DB_TABLE, null, null, null, null, null,
+ 
+		Cursor cursor = mDB.query(DB_TABLE, null, null, null, null, null,
 				COLUMN_TIMEDATE + " DESC");
+		return cursor;
 
 	}
 
@@ -125,8 +142,8 @@ public class DB {
 		if (mCursor != null) {
 			mCursor.moveToLast();
 			
-			if(mCursor == null ){Log.d("NullCUrsor","NullCUrsor");}
-		}
+			
+		}else { Log.d("NullCUrsor","NullCUrsor");} 
 		return mCursor;
 	}
 
@@ -223,9 +240,14 @@ public class DB {
 			super(context, name, factory, version);
 		}
 
+		
+	 
+		
+		
+		
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			FileManager sc = new FileManager();
+			FileManager sc = new FileManager(mCtx);
 			Log.d("db", "creating");
 			sc.startup();
 			db.execSQL(DB_CREATE);
