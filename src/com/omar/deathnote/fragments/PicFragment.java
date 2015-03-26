@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 
 import com.omar.deathnote.DB;
 import com.omar.deathnote.FileManager;
+import com.omar.deathnote.NoteActivity;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Select;
 import com.omar.deathnote.picview.SingleViewActivity;
@@ -71,10 +72,16 @@ public class PicFragment extends Fragment {
 	private ImageView del;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (fragId != null)
+			outState.putString("fragId", fragId);
 
-		setRetainInstance(true);
+		if (noteId != null)
+			outState.putString("noteId", noteId);
+		if (imName != null)
+			outState.putString("imName", imName);
+
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,7 +115,7 @@ public class PicFragment extends Fragment {
 		if (savedInstanceState == null) {
 
 			if (imName == null) {
-				Log.d("imname","imname == null" );
+				Log.d("imname", "imname == null");
 				del.setVisibility(View.INVISIBLE);
 
 				if (cam == "cam") {
@@ -118,8 +125,8 @@ public class PicFragment extends Fragment {
 				}
 
 			} else {
-				
-				Log.d("loading saved",imName );
+
+				Log.d("loading saved", imName);
 				if (new File(imName).exists()) {
 					setSavedImageToLayout(imName);
 
@@ -131,8 +138,16 @@ public class PicFragment extends Fragment {
 
 			}
 
+		} else {
+
+			fragId = savedInstanceState.getString("fragId");
+			noteId = savedInstanceState.getString("noteId");
+			imName = savedInstanceState.getString("imName");
+
+			setSavedImageToLayout(imName);
+
 		}
-	 
+
 		return v;
 
 	}
@@ -140,15 +155,17 @@ public class PicFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
 
-			sX = (SaveNote) activity;
-			OnDeleteFragment = (OnDeleteFragment) activity;
-			thiscontext = activity.getApplicationContext();
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement onSomeEventListener");
+		if (NoteActivity.class.isInstance(activity)) {
+			sX = NoteActivity.getSaveNote();
+
+			OnDeleteFragment = NoteActivity.getOnDeleteFragment();
+		} else {
+			throw new IllegalArgumentException(
+					"Activity must implement OnDeleteFragment interface ");
 		}
+
+		thiscontext = ((Activity) OnDeleteFragment).getApplicationContext();
 
 	}
 
@@ -185,7 +202,7 @@ public class PicFragment extends Fragment {
 
 		imName = sc.sdPath + "/" + "DCIM" + "/" + "Camera" + "/" + "Deathnotes"
 				+ noteId + "_" + fragId + ".jpg";
-	 
+
 		File photo = new File(imName);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
 		startActivityForResult(intent, 2);
@@ -250,7 +267,6 @@ public class PicFragment extends Fragment {
 		}
 	}
 
-	
 	public void openViewer() {
 		GetPositionToViewer getPositionToViewer = new GetPositionToViewer();
 		getPositionToViewer.execute();
@@ -261,13 +277,11 @@ public class PicFragment extends Fragment {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		content.put(Select.Flags.Cont1.name(), imName);
-		 
 
 		return content;
 
 	}
-	
-	
+
 	private class LoadPicasaImage extends AsyncTask<Uri, Void, Void> {
 		@Override
 		protected void onPreExecute() {
@@ -370,7 +384,6 @@ public class PicFragment extends Fragment {
 		}
 	}
 
-	
 	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 		private final WeakReference<LinearLayout> imageViewReference;
 		private String data = null;
@@ -568,7 +581,5 @@ public class PicFragment extends Fragment {
 		}
 
 	}
-
-
 
 }

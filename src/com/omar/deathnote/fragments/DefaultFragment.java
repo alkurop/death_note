@@ -30,6 +30,8 @@ public class DefaultFragment extends Fragment {
 
 		etTitle = (EditText) v.findViewById(R.id.link);
 		etTitle.setText(title);
+		
+		etTitle.requestFocus();
 
 		return v;
 	}
@@ -63,5 +65,11 @@ public class DefaultFragment extends Fragment {
 
 	public void loadFragId(String str) {
 		fragId = str;
+		
 	}
+	 
+	
+	
+	
+	
 }

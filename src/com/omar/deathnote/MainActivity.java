@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.DialogFragment;
-import android.app.LoaderManager.LoaderCallbacks;
+import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -37,30 +34,63 @@ import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.pref.PrefActivity;
 import com.omar.deathnote.rate.RateMeMaybe;
+import com.omar.deathnote.utility.MyLoaderManager;
 
 @SuppressWarnings({ "deprecation" })
 public class MainActivity extends FragmentActivity implements
-		OnNavigationListener, LoaderCallbacks<Cursor>, DeleteDialog {
+		OnNavigationListener  {
 
-	private static final int LOAD_LIST = 1;
- 
-	private static final int DELETE_SOME_NOTE = 3;
 	private static final int addItem = 1;
 	private static final int editItem = 2;
+	private static int orderStatus;
 
 	private int recToDel = 0;
-	private static int orderStatus;
+
+	private static MainListCursorAdapter scAdapter;
+	private static LoaderManager loaderManager;
+	private static MyLoaderManager callbacks;
+	private static DeleteDialog deleteDialog;
+
+	
 
 	private SimpleAdapter selectAdapter;
 	private ArrayList<Map<String, Object>> dataSelect;
 	private Map<String, Object> m;
-
 	private ListView lvData;
 	private LinearLayout mainLayout;
-
-	private MainListCursorAdapter scAdapter;
-
 	private ImageView addNote;
+
+	public static DeleteDialog getDeleteDialog() {
+		return deleteDialog;
+	}
+	
+	public static int getOrderStatus() {
+		return orderStatus;
+	}
+
+	public static void setOrderStatus(int orderStatus) {
+		MainActivity.orderStatus = orderStatus;
+	}
+
+	@Override
+	protected void onResume() {
+		reloadList();
+		super.onResume();
+	}
+
+	private void setupMyListeners() {
+		deleteDialog = new DeleteDialog() {
+
+			@Override
+			public void del() {
+
+				deleteSomeNote(recToDel);
+				orderStatus = 0;
+				reloadList();
+
+			}
+		};
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +101,10 @@ public class MainActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_main);
 
 		naviSelect();
+		setupMyListeners();
 
+		loaderManager = getLoaderManager();
+		callbacks = MyLoaderManager.getInstance(this);
 		mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
 
 		if (getResources().getConfiguration().orientation == 1) {
@@ -111,9 +144,8 @@ public class MainActivity extends FragmentActivity implements
 			getActionBar().setSelectedNavigationItem(orderStatus);
 
 		}
-		setupMainList() ;
-		
-		
+		setupMainList();
+
 		reloadList();
 
 		lvData.setOnItemClickListener(new OnItemClickListener() {
@@ -188,79 +220,20 @@ public class MainActivity extends FragmentActivity implements
 
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		DB db = new DB(this);
-		db.open();
-		switch (id) {
-		case LOAD_LIST:
-			try {
-				TimeUnit.MILLISECONDS.sleep(50);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return new MainListCursorLoader(this, db);
-
-		  
-		case DELETE_SOME_NOTE:
-
-			int some = bundle.getInt("some");
-
-			return new DeleteSomeNoteCursorLoader(this, db, some);
-
-		default:
-			return null;
-
-		}
-
+	public static void swapCursor(Cursor cursor) {
+		scAdapter.swapCursor(cursor);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-		
-		int loaderId = loader.getId();
-		switch (loaderId) {
-		
-		case LOAD_LIST:
-			scAdapter.swapCursor(cursor);
-			break;
-		 
-		case DELETE_SOME_NOTE:
-			Log.d("Some note","finish delete some note");
-			orderStatus = 0;
-		 
-			reloadList();
-			break;
-		
-		
-		}
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent bundle) {
+		orderStatus = 0;
+		reloadList();
 
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
- 
-		scAdapter.swapCursor(null);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent bundle) {
-	 
- /*
- 			int newOrderStatus = bundle.getIntExtra("style", 0);*/
- 			
- 			orderStatus = 0;
- 			
-			reloadList();
-		 
-		 
 	}
 
 	private void addNote() {
-
 		Bundle bundle = new Bundle();
-
 		int style;
 		if (orderStatus != 0) {
 			style = orderStatus;
@@ -312,21 +285,20 @@ public class MainActivity extends FragmentActivity implements
 
 		lvData.setAdapter(scAdapter);
 	}
- 
-	private void reloadList() {
 
-		getLoaderManager().restartLoader(LOAD_LIST, null, this);
+	public static void reloadList() {
+
+		loaderManager.restartLoader(MyLoaderManager.LOAD_LIST, null, callbacks);
 
 	}
- 
 
 	private void deleteSomeNote(int some) {
 
 		Bundle bundle = new Bundle();
 		Log.d("Some note", String.valueOf(some));
 		bundle.putInt("some", some);
-		getLoaderManager().restartLoader(DELETE_SOME_NOTE, bundle, this);
-		 
+		loaderManager.restartLoader(MyLoaderManager.DELETE_SOME_NOTE, bundle,
+				callbacks);
 
 	}
 
@@ -343,58 +315,6 @@ public class MainActivity extends FragmentActivity implements
 		RateMeMaybe rmm = new RateMeMaybe(this);
 		rmm.setPromptMinimums(10, 10, 10, 10);
 		rmm.run();
-	}
-
-	private static class MainListCursorLoader extends CursorLoader {
-
-		DB db;
-
-		public MainListCursorLoader(Context context, DB db) {
-			super(context);
-			this.db = db;
-		}
-
-		@Override
-		public Cursor loadInBackground() {
-			Cursor cursor;
-			if (orderStatus == 0) {
-
-				cursor = db.getAllData();
-
-			} else {
-
-				cursor = db.getByStyle(orderStatus);
-
-			}
-
-			return cursor;
-		}
-	}
-
- 
-
-	private static class DeleteSomeNoteCursorLoader extends CursorLoader {
-
-		private DB db;
-		private int id;
-
-		public DeleteSomeNoteCursorLoader(Context context, DB db, int id) {
-			super(context);
-			this.db = db;
-			this.id = id;
-
-		}
-
-		@Override
-		public Cursor loadInBackground() {
-			db.delRec(id);
-			db.deleteNoteTable(id);
-			
-			
-		
-
-			return null;
-		}
 	}
 
 	private class MainListCursorAdapter extends SimpleCursorAdapter {
@@ -453,13 +373,6 @@ public class MainActivity extends FragmentActivity implements
 
 	}
 
-	@Override
-	public void del() {
-
-		deleteSomeNote(recToDel);
-		orderStatus = 0;
-		reloadList();
-
-	}
+	
 
 }

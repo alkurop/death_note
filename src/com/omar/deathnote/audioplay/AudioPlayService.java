@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -33,17 +34,26 @@ import com.omar.deathnote.MainActivity;
 import com.omar.deathnote.R;
 import com.omar.deathnote.fragments.AudioFragment;
 
-public class AudioPlayService extends IntentService implements
-		OnCompletionListener, OnPreparedListener,  
-		OnSeekCompleteListener {
+public class AudioPlayService extends Service implements OnCompletionListener,
+		OnPreparedListener, OnSeekCompleteListener {
 
 	static {
 		System.loadLibrary("mp3lame");
 	}
 
-	private AudioRecord recorder;
+	public static final String BROADCAST_ACTION = "com.omar.deathnote.audioplay.progressbar";
+	public static final String BROADCAST_ENDOFSONG = "com.omar.deathnote.audioplay.endofsong";
+	public static final String BROADCAST_REFRESHUI = "com.omar.deathnote.audioplay.refreshui";
+	public static final String BROADCAST_NOTIFIC = "com.omar.deathnote.audioplay.notif";
+	public static final String BROADCAST_NOTIF = "com.omar.deathnote.audioplay.notif";
+	public static final int NOTIFICATION_ID = 1;
 
-	private MediaPlayer mediaPlayer;
+	private final int mSampleRate = 16000;
+	private final int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate,
+			AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+
+	private static int songEnded;
+
 	private String audioPath;;
 	private int mediaPos;
 	private int mediaMax;
@@ -52,24 +62,18 @@ public class AudioPlayService extends IntentService implements
 	private TelephonyManager telephoneManager;
 	private boolean isPausedCall = false;
 	private boolean autonome = false;
-
 	private boolean recording;
-
 	private boolean audioRepeat = false;
 	private boolean audioShuffle = false;
 	private boolean paused = false;
+	private String mode = "";
 
-	private String mode = "";;
+	private AudioRecord recorder;
+	private MediaPlayer mediaPlayer;
 	private Notification notification;
-
 	private PhoneStateListener phoneStateListener;
 
 	private final Handler handler = new Handler();
-	private static int songEnded;
-	public static final String BROADCAST_ACTION = "com.omar.deathnote.audioplay.progressbar";
-	public static final String BROADCAST_ENDOFSONG = "com.omar.deathnote.audioplay.endofsong";
-	public static final String BROADCAST_REFRESHUI = "com.omar.deathnote.audioplay.refreshui";
-	public static final String BROADCAST_NOTIFIC = "com.omar.deathnote.audioplay.notif";
 
 	private Intent seekIntent = new Intent(BROADCAST_ACTION);
 	private Intent endSongIntent = new Intent(BROADCAST_ENDOFSONG);
@@ -137,8 +141,6 @@ public class AudioPlayService extends IntentService implements
 		}
 
 	};
-	public static final String BROADCAST_NOTIF = "com.omar.deathnote.audioplay.notif";
-
 	private BroadcastReceiver notifReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -185,28 +187,14 @@ public class AudioPlayService extends IntentService implements
 
 	};
 
-	public static final int NOTIFICATION_ID = 1;
+	private FileOutputStream output;
 
-	final int mSampleRate = 16000;
-	FileOutputStream output;
-	int readSize;
-
-	byte[] mp3buffer;
-	
 	static {
 		System.loadLibrary("mp3lame");
 	}
-	final int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate,
-			AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-	public AudioPlayService() {
-		super("AudioPlayService");
-
-	}
-
-	
 	@Override
-	protected void onHandleIntent(Intent intent) {
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		registerReceiver(runningAutonome, new IntentFilter(
 				AudioFragment.BROADCAST_AUTONOME));
 
@@ -268,16 +256,14 @@ public class AudioPlayService extends IntentService implements
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setOnCompletionListener(this);
 			mediaPlayer.setOnPreparedListener(this);
-			 
 			mediaPlayer.setOnSeekCompleteListener(this);
-		 
-	 
 
 			if (!mediaPlayer.isPlaying()) {
 
 				try {
 					if (f.exists()) {
 						mediaPlayer.setDataSource(audioPath);
+						Log.d("audiopath", audioPath);
 						mediaPlayer.prepareAsync();
 						registerReceiver(broadcastReceiver, new IntentFilter(
 								AudioFragment.BROADCAST_SEEKBAR));
@@ -304,7 +290,7 @@ public class AudioPlayService extends IntentService implements
 		}
 
 		initNotification();
-
+		return START_STICKY;
 	}
 
 	private void setupHandler() {
@@ -405,7 +391,8 @@ public class AudioPlayService extends IntentService implements
 		cancelNotification();
 		super.onDestroy();
 	}
-  	@Override
+
+	@Override
 	public void onSeekComplete(MediaPlayer arg0) {
 		if (!mediaPlayer.isPlaying()) {
 
@@ -416,7 +403,7 @@ public class AudioPlayService extends IntentService implements
 
 	@Override
 	public void onPrepared(MediaPlayer arg0) {
-		 
+
 		playMedia();
 	}
 
@@ -434,7 +421,8 @@ public class AudioPlayService extends IntentService implements
 	}
 
 	public void stopMedia() {
-	 
+		Log.d("stopping", "stopmedia");
+
 		if (mediaPlayer != null) {
 			if (mediaPlayer.isPlaying()) {
 				mediaPlayer.stop();
@@ -498,10 +486,9 @@ public class AudioPlayService extends IntentService implements
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setOnCompletionListener(this);
 		mediaPlayer.setOnPreparedListener(this);
-	 
+
 		mediaPlayer.setOnSeekCompleteListener(this);
-	 
- 
+
 		registerReceiver(broadcastReceiver, new IntentFilter(
 				AudioFragment.BROADCAST_SEEKBAR));
 		registerReceiver(runningAutonome, new IntentFilter(
@@ -730,7 +717,6 @@ public class AudioPlayService extends IntentService implements
 
 	}
 
-
 	public void recThread() {
 
 		new Thread() {
@@ -890,6 +876,12 @@ public class AudioPlayService extends IntentService implements
 			/* Log.d("connuter ==>", cSmall); */
 			return cSmall;
 		}
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

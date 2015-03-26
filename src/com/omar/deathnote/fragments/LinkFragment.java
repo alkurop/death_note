@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.omar.deathnote.NoteActivity;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Select;
 import com.omar.deathnote.utility.OnDeleteFragment;
@@ -35,11 +36,19 @@ public class LinkFragment extends Fragment   {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (activity.getClass().isInstance(OnDeleteFragment)) {
+		
+		if (NoteActivity.class.isInstance(activity)) {
+			OnDeleteFragment = NoteActivity.getOnDeleteFragment();}
+		
+		
+		
+		
+		else if (	OnDeleteFragment.class.isInstance(
+				activity)) {
 			OnDeleteFragment = (OnDeleteFragment) activity;
 		} else {
 			throw new IllegalArgumentException(
-					"Activity must implement onSomeEventListener interface ");
+					"Activity must implement OnDeleteFragment interface ");
 		}
 	}
 
@@ -109,12 +118,12 @@ public class LinkFragment extends Fragment   {
 		String link = etLink.getText().toString();
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		if (link.equalsIgnoreCase("")) {
-			content.put("cont1", "No Link");
+			content.put(Select.Flags.Cont1.name(), "No Link");
 		} else {
-			content.put("cont1", link);
+			content.put(Select.Flags.Cont1.name(), link);
 		}
 
-		content.put("cont2", "blank");
+	 
 
 		return content;
 

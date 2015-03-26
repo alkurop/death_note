@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.omar.deathnote.DB;
 import com.omar.deathnote.FileManager;
+import com.omar.deathnote.NoteActivity;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Select;
 import com.omar.deathnote.audioplay.AudioPlayService;
@@ -41,34 +42,32 @@ import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
 
 @SuppressLint({ "SimpleDateFormat", "InflateParams" })
-public class AudioFragment extends Fragment implements 
-	  OnFocusChangeListener {
+public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 	public static final String BROADCAST_SEEKBAR = "com.omar.deathnote.fragments.audiofragment.seekbar";
 	public static final String BROADCAST_PAUSESONG = "com.omar.deathnote.fragments.audiofragment.pausesong";
 	public static final String BROADCAST_AUTONOME = "com.omar.deathnote.fragments.audiofragment.autonome";
 
-	private Intent seekBarChanged, songPause, audioAutonome, audioPlayIntent;
-
-	private OnDeleteFragment OnDeleteFragment;
-	private String audioName, audioPath, fragId;
-
-	private Context thiscontext;
-	private SaveNote sX;
-
+	private static int songEnded = 0;
+	private String noteId;
 	public boolean musicPlaying, recording, recorderMode, musicPaused,
 			repeatAudio, shuffleAudio;
+	private String audioName, audioPath, fragId;
+	private int seekMax;
 
+	private OnDeleteFragment OnDeleteFragment;
+	private SaveNote sX;
+
+	private Intent seekBarChanged, songPause, audioAutonome, audioPlayIntent;
+	private Context thiscontext;
 	private ImageView del, play, prev, stop, next, repeat, shuffle;
 	private SeekBar seekBar;
 	private LinearLayout hidable;
 	private TextView songName, songTime;
 	private View v;
-
-	private String noteId;
-
 	private LinearLayout audioLayout;
 	private NextAudio nextAudio;
+
 	private BroadcastReceiver progressbarReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -110,7 +109,6 @@ public class AudioFragment extends Fragment implements
 		}
 
 	};
-
 	private BroadcastReceiver endSongReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -226,7 +224,6 @@ public class AudioFragment extends Fragment implements
 		}
 
 	};
-
 	private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
 
 		@Override
@@ -253,9 +250,6 @@ public class AudioFragment extends Fragment implements
 		}
 	};
 
-	int seekMax;
-	private static int songEnded = 0;
-
 	public interface NextAudio {
 
 		public void next(String cur, String flag);
@@ -270,17 +264,7 @@ public class AudioFragment extends Fragment implements
 				boolean paused, int audionumber);
 
 	}
-	
-	 
-	
-	@Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        
-        setRetainInstance(true);
-    }
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -309,7 +293,7 @@ public class AudioFragment extends Fragment implements
 		hidable = (LinearLayout) v.findViewById(R.id.hidable);
 
 		if (savedInstanceState != null) {
-			 
+
 			if (audioPath == null) {
 				audioPath = "";
 				audioName = "";
@@ -327,6 +311,28 @@ public class AudioFragment extends Fragment implements
 
 			else {
 				songName.setText(audioName);
+				playerMode();
+			}
+
+		} else {
+			if (audioPath == null) {
+				audioPath = "";
+				audioName = "";
+				nextAudio.stopAllAudio("");
+
+				loadAudioFromBrowser();
+			} else if (audioPath.equalsIgnoreCase("rec")) {
+
+				audioPath = "";
+				audioName = "";
+				nextAudio.stopAllAudio("");
+
+				recMode();
+			}
+
+			else {
+				songName.setText(audioName);
+
 				playerMode();
 			}
 
@@ -391,9 +397,152 @@ public class AudioFragment extends Fragment implements
 		return v;
 	}
 
-	
-	
-	
+	@Override
+	public void onPause() {
+
+		if (musicPlaying) {
+			seekBar.setOnSeekBarChangeListener(null);
+			audioAutonome = new Intent(BROADCAST_AUTONOME);
+			audioAutonome.putExtra("flag", true);
+			audioAutonome.putExtra("audioRepeat", repeatAudio);
+			audioAutonome.putExtra("audioShuffle", shuffleAudio);
+			getActivity().sendBroadcast(audioAutonome);
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (NoteActivity.class.isInstance(activity)) {
+
+			sX = NoteActivity.getSaveNote();
+			OnDeleteFragment = NoteActivity.getOnDeleteFragment();
+			nextAudio = NoteActivity.getNextAudio();
+		} else {
+
+			if (SaveNote.class.isInstance(activity)) {
+				sX = (SaveNote) activity;
+			} else {
+				throw new IllegalArgumentException(
+						"Activity must implement SaveNote interface ");
+			}
+
+			if (OnDeleteFragment.class.isInstance(activity)) {
+				OnDeleteFragment = (OnDeleteFragment) activity;
+			} else {
+				throw new IllegalArgumentException(
+						"Activity must implement OnDeleteFragment interface ");
+			}
+
+			if (NextAudio.class.isInstance(activity)) {
+				nextAudio = (NextAudio) activity;
+			} else {
+				throw new IllegalArgumentException(
+						"Activity must implement NextAudio interface ");
+			}
+		}
+
+		thiscontext = ((Activity) OnDeleteFragment).getApplicationContext();
+
+	}
+
+	@Override
+	public void onResume() {
+
+		if (musicPlaying) {
+			getActivity().registerReceiver(refreshUI,
+					new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
+			getActivity().registerReceiver(progressbarReceiver,
+					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
+			getActivity().registerReceiver(endSongReceiver,
+					new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
+			audioAutonome = new Intent(BROADCAST_AUTONOME);
+			audioAutonome.putExtra("flag", false);
+			getActivity().sendBroadcast(audioAutonome);
+		}
+
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+
+		try {
+			getActivity().unregisterReceiver(refreshUI);
+			getActivity().unregisterReceiver(progressbarReceiver);
+			getActivity().unregisterReceiver(endSongReceiver);
+
+		} catch (Exception e) {
+			Log.d("Audio Intent Error1",
+					e.getClass().getName() + "  ___  " + e.getMessage());
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		/* Log.d("onSaveInstanceState", ""); */
+		outState.putString("noteId", noteId);
+		if (fragId != null)
+			outState.putString("fragId", fragId);
+
+		if (audioName != null)
+			outState.putString("audioName", audioName);
+
+		if (audioName != null)
+			outState.putString("audioPath", audioPath);
+		if (musicPlaying) {
+			outState.putBoolean("musicPlaying", true);
+			/* Log.d("musicplaying", "true"); */
+
+			try {
+
+				getActivity().unregisterReceiver(progressbarReceiver);
+
+			} catch (Exception e) {
+				Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
+						+ e.getMessage());
+			}
+			try {
+
+				getActivity().unregisterReceiver(endSongReceiver);
+
+			} catch (Exception e) {
+				Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
+						+ e.getMessage());
+			}
+
+		}
+		if (musicPaused) {
+			outState.putBoolean("musicPaused", true);
+			/* Log.d("musicPaused", "true"); */
+
+		}
+		if (repeatAudio) {
+			outState.putBoolean("repeatAudio", true);
+			/* Log.d("repeatAudio", "true"); */
+
+		}
+		if (shuffleAudio) {
+			outState.putBoolean("shuffleAudio", true);
+			/* Log.d("shuffleAudio", "true"); */
+
+		}
+		if (recorderMode) {
+			outState.putBoolean("recorderMode", true);
+			/* Log.d("recorderMode", "true"); */
+
+		}
+		if (recording) {
+			outState.putBoolean("recording", true);
+			/* Log.d("recording", "true"); */
+
+		}
+
+	}
+
 	@Override
 	public void onDetach() {
 		try {
@@ -401,16 +550,16 @@ public class AudioFragment extends Fragment implements
 			getActivity().unregisterReceiver(progressbarReceiver);
 
 		} catch (Exception e) {
-			Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
-					+ e.getMessage());
+			Log.d("Audio Intent Error2",
+					e.getClass().getName() + "  ___  " + e.getMessage());
 		}
 		try {
 
 			getActivity().unregisterReceiver(endSongReceiver);
 
 		} catch (Exception e) {
-			Log.d("Audio Intent Error2", e.getClass().getName() + "  ___  "
-					+ e.getMessage());
+			Log.d("Audio Intent Error2",
+					e.getClass().getName() + "  ___  " + e.getMessage());
 		}
 
 		super.onDetach();
@@ -613,22 +762,6 @@ public class AudioFragment extends Fragment implements
 
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-
-			sX = (SaveNote) activity;
-			OnDeleteFragment = (OnDeleteFragment) activity;
-			nextAudio = (NextAudio) activity;
-			thiscontext = ((Activity) OnDeleteFragment).getApplicationContext();
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement  ");
-		}
-
-	}
-	 
 	public TreeMap<String, String> saveContent() {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
@@ -676,7 +809,7 @@ public class AudioFragment extends Fragment implements
 		}
 
 	}
- 
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -756,53 +889,6 @@ public class AudioFragment extends Fragment implements
 
 	public void loadNoteId(String str) {
 		noteId = str;
-	}
-
-	@Override
-	public void onPause() {
-
-		if (musicPlaying) {
-			seekBar.setOnSeekBarChangeListener(null);
-			audioAutonome = new Intent(BROADCAST_AUTONOME);
-			audioAutonome.putExtra("flag", true);
-			audioAutonome.putExtra("audioRepeat", repeatAudio);
-			audioAutonome.putExtra("audioShuffle", shuffleAudio);
-			getActivity().sendBroadcast(audioAutonome);
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-
-		if (musicPlaying) {
-			getActivity().registerReceiver(refreshUI,
-					new IntentFilter(AudioPlayService.BROADCAST_REFRESHUI));
-			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ACTION));
-			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(AudioPlayService.BROADCAST_ENDOFSONG));
-			audioAutonome = new Intent(BROADCAST_AUTONOME);
-			audioAutonome.putExtra("flag", false);
-			getActivity().sendBroadcast(audioAutonome);
-		}
-
-		super.onResume();
-	}
-
-	@Override
-	public void onDestroy() {
-
-		try {
-			getActivity().unregisterReceiver(refreshUI);
-			getActivity().unregisterReceiver(progressbarReceiver);
-			getActivity().unregisterReceiver(endSongReceiver);
-
-		} catch (Exception e) {
-			Log.d("Audio Intent Error1",
-					e.getClass().getName() + "  ___  " + e.getMessage());
-		}
-		super.onDestroy();
 	}
 
 	@Override
