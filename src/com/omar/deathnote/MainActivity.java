@@ -38,20 +38,7 @@ import com.omar.deathnote.utility.MyLoaderManager;
 
 @SuppressWarnings({ "deprecation" })
 public class MainActivity extends FragmentActivity implements
-		OnNavigationListener  {
-
-	private static final int addItem = 1;
-	private static final int editItem = 2;
-	private static int orderStatus;
-
-	private int recToDel = 0;
-
-	private static MainListCursorAdapter scAdapter;
-	private static LoaderManager loaderManager;
-	private static MyLoaderManager callbacks;
-	private static DeleteDialog deleteDialog;
-
-	
+		OnNavigationListener {
 
 	private SimpleAdapter selectAdapter;
 	private ArrayList<Map<String, Object>> dataSelect;
@@ -60,22 +47,26 @@ public class MainActivity extends FragmentActivity implements
 	private LinearLayout mainLayout;
 	private ImageView addNote;
 
+	private static MainListCursorAdapter scAdapter;
+	private static LoaderManager loaderManager;
+	private static MyLoaderManager callbacks;
+	private static DeleteDialog deleteDialog;
+
+	private static final int addItem = 1;
+	private static final int editItem = 2;
+	private static int orderStatus;
+	private int recToDel = 0;
+
 	public static DeleteDialog getDeleteDialog() {
 		return deleteDialog;
 	}
-	
+
 	public static int getOrderStatus() {
 		return orderStatus;
 	}
 
 	public static void setOrderStatus(int orderStatus) {
 		MainActivity.orderStatus = orderStatus;
-	}
-
-	@Override
-	protected void onResume() {
-		reloadList();
-		super.onResume();
 	}
 
 	private void setupMyListeners() {
@@ -109,10 +100,10 @@ public class MainActivity extends FragmentActivity implements
 
 		if (getResources().getConfiguration().orientation == 1) {
 			mainLayout.setBackgroundDrawable(getApplicationContext()
-					.getResources().getDrawable(Select.bg_images_main[0]));
+					.getResources().getDrawable(Namespace.bg_images_main[0]));
 		} else {
 			mainLayout.setBackgroundDrawable(getApplicationContext()
-					.getResources().getDrawable(Select.bg_images_main_2[0]));
+					.getResources().getDrawable(Namespace.bg_images_main_2[0]));
 		}
 
 		LayoutInflater inf = getLayoutInflater();
@@ -139,47 +130,31 @@ public class MainActivity extends FragmentActivity implements
 
 		if (savedInstanceState != null) {
 
-			orderStatus = savedInstanceState.getInt("orderStatus");
-			recToDel = savedInstanceState.getInt("recToDel");
+			orderStatus = savedInstanceState.getInt(Namespace.ORDER_STATUS);
+			recToDel = savedInstanceState.getInt(Namespace.RECORD_TO_DELETE);
 			getActionBar().setSelectedNavigationItem(orderStatus);
 
-		}
+		}  
+
 		setupMainList();
 
+	
 		reloadList();
-
-		lvData.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-
-				Bundle bundle = new Bundle();
-
-				bundle.putLong("id", id);
-
-				Intent intent;
-				intent = new Intent(getApplicationContext(), NoteActivity.class);
-				intent.putExtras(bundle);
-
-				startActivityForResult(intent, editItem);
-
-			}
-		});
-
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 
-		outState.putInt("orderStatus", orderStatus);
-		outState.putInt("recToDel", recToDel);
+		outState.putInt(Namespace.ORDER_STATUS, orderStatus);
+
+		outState.putInt(Namespace.RECORD_TO_DELETE, recToDel);
 
 	}
 
 	@Override
 	protected void onDestroy() {
-		Intent destroyMusic = new Intent(AudioFragment.BROADCAST_PAUSESONG);
-		destroyMusic.putExtra("flag", "destroy");
+		Intent destroyMusic = new Intent(Namespace.BROADCAST_PAUSESONG);
+		destroyMusic.putExtra(Namespace.FLAG, Namespace.DESTROY);
 		sendBroadcast(destroyMusic);
 		super.onDestroy();
 
@@ -228,6 +203,7 @@ public class MainActivity extends FragmentActivity implements
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent bundle) {
 		orderStatus = 0;
+		getActionBar().setSelectedNavigationItem(orderStatus);
 		reloadList();
 
 	}
@@ -240,7 +216,7 @@ public class MainActivity extends FragmentActivity implements
 		} else {
 			style = randInt(1, 6);
 		}
-		bundle.putInt("style", style);
+		bundle.putInt(Namespace.STYLE, style);
 		Intent intent;
 
 		intent = new Intent(this, NoteActivity.class);
@@ -252,17 +228,17 @@ public class MainActivity extends FragmentActivity implements
 	public void naviSelect() {
 
 		dataSelect = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < Select.select_images.length; i++) {
+		for (int i = 0; i < Namespace.select_images.length; i++) {
 
 			m = new HashMap<String, Object>();
-			m.put(Select.ATTRIBUTE_NAME_TEXT,
-					getResources().getString(Select.select_names[i]));
-			m.put(Select.ATTRIBUTE_NAME_STYLE, Select.select_images[i]);
+			m.put(Namespace.ATTRIBUTE_NAME_TEXT,
+					getResources().getString(Namespace.select_names[i]));
+			m.put(Namespace.ATTRIBUTE_NAME_STYLE, Namespace.select_images[i]);
 			dataSelect.add(m);
 		}
 
-		String[] fromSel = { Select.ATTRIBUTE_NAME_TEXT,
-				Select.ATTRIBUTE_NAME_STYLE };
+		String[] fromSel = { Namespace.ATTRIBUTE_NAME_TEXT,
+				Namespace.ATTRIBUTE_NAME_STYLE };
 		int[] toSel = { R.id.itemName, R.id.itemImg };
 		selectAdapter = new SimpleAdapter(this, dataSelect, R.layout.select,
 				fromSel, toSel);
@@ -283,6 +259,24 @@ public class MainActivity extends FragmentActivity implements
 				fromMain, toMain, 0);
 		lvData = (ListView) findViewById(R.id.mainList);
 
+		lvData.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+
+				Bundle bundle = new Bundle();
+
+				bundle.putLong(Namespace.ID, id);
+
+				Intent intent;
+				intent = new Intent(getApplicationContext(), NoteActivity.class);
+				intent.putExtras(bundle);
+
+				startActivityForResult(intent, editItem);
+
+			}
+		});
+		
 		lvData.setAdapter(scAdapter);
 	}
 
@@ -296,7 +290,7 @@ public class MainActivity extends FragmentActivity implements
 
 		Bundle bundle = new Bundle();
 		Log.d("Some note", String.valueOf(some));
-		bundle.putInt("some", some);
+		bundle.putInt(Namespace.SOME, some);
 		loaderManager.restartLoader(MyLoaderManager.DELETE_SOME_NOTE, bundle,
 				callbacks);
 
@@ -334,7 +328,7 @@ public class MainActivity extends FragmentActivity implements
 			String date = _cursor.getString(_cursor
 					.getColumnIndex(DB.COLUMN_TIMEDATE));
 			final int id = _cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_ID));
-			int img = Select.select_images[_cursor.getInt(_cursor
+			int img = Namespace.select_images[_cursor.getInt(_cursor
 					.getColumnIndex(DB.COLUMN_STYLE))];
 
 			ViewHolder holder = (ViewHolder) view.getTag();
@@ -356,7 +350,7 @@ public class MainActivity extends FragmentActivity implements
 
 					DialogFragment delDialog = new DialogOnDelete();
 					recToDel = id;
-					delDialog.show(getFragmentManager(), "dialog");
+					delDialog.show(getFragmentManager(), Namespace.DIALOG);
 
 				}
 
@@ -372,7 +366,5 @@ public class MainActivity extends FragmentActivity implements
 		}
 
 	}
-
-	
 
 }

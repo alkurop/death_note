@@ -32,20 +32,17 @@ import android.widget.Toast;
 
 import com.omar.deathnote.MainActivity;
 import com.omar.deathnote.R;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.fragments.AudioFragment;
 
 public class AudioPlayService extends Service implements OnCompletionListener,
 		OnPreparedListener, OnSeekCompleteListener {
 
 	static {
-		System.loadLibrary("mp3lame");
+		System.loadLibrary(Namespace.MP3_LAME);
 	}
 
-	public static final String BROADCAST_ACTION = "com.omar.deathnote.audioplay.progressbar";
-	public static final String BROADCAST_ENDOFSONG = "com.omar.deathnote.audioplay.endofsong";
-	public static final String BROADCAST_REFRESHUI = "com.omar.deathnote.audioplay.refreshui";
-	public static final String BROADCAST_NOTIFIC = "com.omar.deathnote.audioplay.notif";
-	public static final String BROADCAST_NOTIF = "com.omar.deathnote.audioplay.notif";
+	
 	public static final int NOTIFICATION_ID = 1;
 
 	private final int mSampleRate = 16000;
@@ -66,7 +63,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	private boolean audioRepeat = false;
 	private boolean audioShuffle = false;
 	private boolean paused = false;
-	private String mode = "";
+	private String mode = Namespace.BLANK;
 
 	private AudioRecord recorder;
 	private MediaPlayer mediaPlayer;
@@ -75,22 +72,22 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	private final Handler handler = new Handler();
 
-	private Intent seekIntent = new Intent(BROADCAST_ACTION);
-	private Intent endSongIntent = new Intent(BROADCAST_ENDOFSONG);
-	private Intent refreshUi = new Intent(BROADCAST_REFRESHUI);
+	private Intent seekIntent = new Intent(Namespace.BROADCAST_ACTION);
+	private Intent endSongIntent = new Intent(Namespace.BROADCAST_ENDOFSONG);
+	private Intent refreshUi = new Intent(Namespace.BROADCAST_REFRESHUI);
 
 	private BroadcastReceiver pauseSongReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
-			String flag = intent.getStringExtra("flag");
-			/* Log.d("flag", flag); */
+			String flag = intent.getStringExtra(Namespace.FLAG);
+			 
 			switch (flag) {
-			case "destroy":
+			case Namespace.DESTROY:
 
 				stopSelf();
-			case "pause":
+			case Namespace.PAUSE:
 				if (!recording) {
 					pauseMedia();
 					refreshUi();
@@ -99,7 +96,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					recordStop();
 				}
 				break;
-			case "resume":
+			case Namespace.RESUME:
 				if (!recording) {
 					playMedia();
 					refreshUi();
@@ -117,16 +114,16 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			initNotification();
-			autonome = intent.getBooleanExtra("flag", false);
-			/* Log.d("autonome  --> ", String.valueOf(autonome)); */
+			autonome = intent.getBooleanExtra(Namespace.FLAG, false);
+		 
 			if (autonome) {
-				audioRepeat = intent.getBooleanExtra("audioRepeat", false);
-				audioShuffle = intent.getBooleanExtra("audioShuffle", false);
+				audioRepeat = intent.getBooleanExtra(Namespace.AUDIO_REPEAT, false);
+				audioShuffle = intent.getBooleanExtra(Namespace.AUDIO_SHUFFLE, false);
 			} else {
 				unregisterReceiver(broadcastReceiver);
 
 				registerReceiver(broadcastReceiver, new IntentFilter(
-						AudioFragment.BROADCAST_SEEKBAR));
+						Namespace.BROADCAST_SEEKBAR));
 
 			}
 
@@ -147,11 +144,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		public void onReceive(Context context, Intent intent) {
 			if (!recording) {
 
-				String todo = intent.getStringExtra("todo");
-				/* Log.d("notif action recieved", todo); */
+				String todo = intent.getStringExtra(Namespace.TODO);
+			 
 				switch (todo) {
 
-				case "playpause":
+				case Namespace.PLAY_PAUSE:
 
 					if (paused) {
 						paused = false;
@@ -165,12 +162,12 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 						initNotification();
 					}
 					break;
-				case "prev":
+				case Namespace.PREVIOUS:
 					paused = false;
 					prev();
 					initNotification();
 					break;
-				case "next":
+				case Namespace.NEXT:
 					paused = false;
 					next();
 					initNotification();
@@ -190,13 +187,13 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	private FileOutputStream output;
 
 	static {
-		System.loadLibrary("mp3lame");
+		System.loadLibrary(Namespace.MP3_LAME);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		registerReceiver(runningAutonome, new IntentFilter(
-				AudioFragment.BROADCAST_AUTONOME));
+				Namespace.BROADCAST_AUTONOME));
 
 		telephoneManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		phoneStateListener = new PhoneStateListener() {
@@ -236,15 +233,15 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		telephoneManager.listen(phoneStateListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
 
-		pathList = intent.getExtras().getStringArrayList("audioPath");
+		pathList = intent.getExtras().getStringArrayList(Namespace.AUDIO_PATH);
 
-		audioNumber = intent.getExtras().getInt("audioNumber");
+		audioNumber = intent.getExtras().getInt(Namespace.AUDIO_NUMBER);
 
 		audioPath = pathList.get(audioNumber);
 
-		mode = intent.getExtras().getString("mode");
+		mode = intent.getExtras().getString(Namespace.MODE);
 		File f = new File(audioPath);
-		if (mode.equalsIgnoreCase("rec")) {
+		if (mode.equalsIgnoreCase(Namespace.RECORD)) {
 
 			recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
 					mSampleRate, AudioFormat.CHANNEL_IN_MONO,
@@ -263,10 +260,10 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 				try {
 					if (f.exists()) {
 						mediaPlayer.setDataSource(audioPath);
-						Log.d("audiopath", audioPath);
+						Log.d(Namespace.AUDIO_PATH, audioPath);
 						mediaPlayer.prepareAsync();
 						registerReceiver(broadcastReceiver, new IntentFilter(
-								AudioFragment.BROADCAST_SEEKBAR));
+								Namespace.BROADCAST_SEEKBAR));
 						setupHandler();
 					} else {
 
@@ -296,7 +293,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	private void setupHandler() {
 		handler.removeCallbacks(sendUpdatesToUi);
 		handler.postDelayed(sendUpdatesToUi, 100);
-		/* Log.d("post handler", "handler"); */
+	 
 
 	}
 
@@ -305,20 +302,19 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 			LogMediaPosition();
 			handler.postDelayed(this, 250);
-			/* Log.d("post handler2", "handler"); */
-		}
+			 		}
 
 		private void LogMediaPosition() {
 			if (mediaPlayer.isPlaying()) {
 
 				mediaPos = mediaPlayer.getCurrentPosition();
 				mediaMax = mediaPlayer.getDuration();
-				/* Log.d("send ====>>", "seekIntent"); */
-				seekIntent.putExtra("counter", String.valueOf(mediaPos));
-				seekIntent.putExtra("mediamax", String.valueOf(mediaMax));
-				seekIntent.putExtra("song_ended", String.valueOf(songEnded));
+			 
+				seekIntent.putExtra(Namespace.COUNTER,String.valueOf(mediaPos));
+				seekIntent.putExtra(Namespace.MEDIA_MAX, String.valueOf(mediaMax));
+				seekIntent.putExtra(Namespace.SONG_ENDED, String.valueOf(songEnded));
 				sendBroadcast(seekIntent);
-				/* Log.d("sending broadcast", "boring"); */
+				 
 			}
 
 		}
@@ -327,7 +323,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	protected void updateSeekPos(Intent intent) {
 
-		int seekPos = intent.getIntExtra("seekpos", 0);
+		int seekPos = intent.getIntExtra(Namespace.SEEK_POSITION, 0);
 		if (mediaPlayer.isPlaying()) {
 
 			handler.removeCallbacks(sendUpdatesToUi);
@@ -414,7 +410,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 				paused = false;
 				mediaPlayer.start();
 				registerReceiver(pauseSongReceiver, new IntentFilter(
-						AudioFragment.BROADCAST_PAUSESONG));
+						Namespace.BROADCAST_PAUSESONG));
 			}
 		}
 
@@ -490,11 +486,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		mediaPlayer.setOnSeekCompleteListener(this);
 
 		registerReceiver(broadcastReceiver, new IntentFilter(
-				AudioFragment.BROADCAST_SEEKBAR));
+				Namespace.BROADCAST_SEEKBAR));
 		registerReceiver(runningAutonome, new IntentFilter(
-				AudioFragment.BROADCAST_AUTONOME));
+				Namespace.BROADCAST_AUTONOME));
 		registerReceiver(pauseSongReceiver, new IntentFilter(
-				AudioFragment.BROADCAST_PAUSESONG));
+				Namespace.BROADCAST_PAUSESONG));
 	}
 
 	protected void pauseMedia() {
@@ -522,7 +518,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	@SuppressLint("InlinedApi")
 	private void initNotification() {
-		registerReceiver(notifReceiver, new IntentFilter(BROADCAST_NOTIFIC));
+		registerReceiver(notifReceiver, new IntentFilter(Namespace.BROADCAST_NOTIFIC));
 
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
@@ -530,12 +526,12 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		CharSequence tickerText = audioPath.substring(audioPath
 				.lastIndexOf("/") + 1);
 		long when = System.currentTimeMillis();
-		Intent prev = new Intent(BROADCAST_NOTIFIC);
-		prev.putExtra("todo", "prev");
-		Intent playpause = new Intent(BROADCAST_NOTIFIC);
-		playpause.putExtra("todo", "playpause");
-		Intent next = new Intent(BROADCAST_NOTIFIC);
-		next.putExtra("todo", "next");
+		Intent prev = new Intent(Namespace.BROADCAST_NOTIFIC);
+		prev.putExtra(Namespace.TODO, Namespace.PREVIOUS);
+		Intent playpause = new Intent(Namespace.BROADCAST_NOTIFIC);
+		playpause.putExtra(Namespace.TODO,  Namespace.PLAY_PAUSE);
+		Intent next = new Intent(Namespace.BROADCAST_NOTIFIC);
+		next.putExtra(Namespace.TODO, Namespace.NEXT);
 
 		PendingIntent prevPendingIntent = PendingIntent.getBroadcast(this, 0,
 				prev, 0);
@@ -646,11 +642,10 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					audioNumber = 0;
 
 				}
-				/* Log.d("keys", "audioNumber "); */
-
+			 
 			} else {
 				audioNumber = MainActivity.randInt(0, (pathList.size() - 1));
-				/* Log.d("keys", "audioNumber "); */
+				 
 
 			}
 		}
@@ -681,11 +676,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 					audioNumber = 0;
 
 				}
-				/* Log.d("keys", "audioNumber "); */
+			 
 
 			} else {
 				audioNumber = MainActivity.randInt(0, (pathList.size() - 1));
-				/* Log.d("keys", "audioNumber "); */
+				 
 
 			}
 		}
@@ -703,11 +698,11 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 	}
 
 	public void recordStart() {
-		/* Log.d("recording ==== >>   ", audioPath); */
+ 
 
 		recording = true;
 		registerReceiver(pauseSongReceiver, new IntentFilter(
-				AudioFragment.BROADCAST_PAUSESONG));
+				Namespace.BROADCAST_PAUSESONG));
 		recThread();
 
 	}
@@ -776,7 +771,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 						output.write(mp3buffer, 0, encResult);
 
 						recCoutner = rC.c();
-						seekIntent.putExtra("recCounter", recCoutner);
+						seekIntent.putExtra(Namespace.RECORDING_COUNTER, recCoutner);
 
 						sendBroadcast(seekIntent);
 
@@ -807,18 +802,18 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 				SimpleLame.close();
 
-				mode = "";
+				mode = Namespace.BLANK;
 
 			}
 		}.start();
 	}
 
 	public void refreshUi() {
-		refreshUi = new Intent(BROADCAST_REFRESHUI);
-		refreshUi.putExtra("audioRepeat", audioRepeat);
-		refreshUi.putExtra("audioShuffle", audioShuffle);
-		refreshUi.putExtra("audioNumber", audioNumber);
-		refreshUi.putExtra("paused", paused);
+		refreshUi = new Intent(Namespace.BROADCAST_REFRESHUI);
+		refreshUi.putExtra(Namespace.AUDIO_REPEAT, audioRepeat);
+		refreshUi.putExtra(Namespace.AUDIO_SHUFFLE, audioShuffle);
+		refreshUi.putExtra(Namespace.AUDIO_NUMBER, audioNumber);
+		refreshUi.putExtra(Namespace.PAUSED, paused);
 
 		sendBroadcast(refreshUi);
 
@@ -845,7 +840,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 		}
 
 		public String preC() {
-			String cSmall = "";
+			String cSmall = Namespace.BLANK;
 
 			if (mins == 60) {
 				hours++;

@@ -14,7 +14,7 @@ import android.util.Log;
 import com.omar.deathnote.DB;
 import com.omar.deathnote.MainActivity;
 import com.omar.deathnote.NoteActivity;
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 
 public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 	private static MyLoaderManager myLoaderManager;
@@ -31,7 +31,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	public static MyLoaderManager getInstance(Context context) {
 
-		if (myLoaderManager != null) {
+		if (myLoaderManager == null) {
 			myLoaderManager = new MyLoaderManager(context);
 		}
 
@@ -71,7 +71,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
 		case DELETE_SOME_NOTE:
 
-			int some = bundle.getInt("some");
+			int some = bundle.getInt(Namespace.SOME);
 
 			return new DeleteSomeNoteCursorLoader(context, db, some);
 
@@ -103,7 +103,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 					String cont2 = cursor.getString(cursor
 							.getColumnIndex(DB.COLUMN_CONT2));
 
-					Select.Frags eType = NoteActivity.setFragType(type);
+					Namespace.Frags eType = NoteActivity.setFragType(type);
 
 					NoteActivity.createFragment(cont1, cont2, eType);
 
@@ -111,9 +111,9 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 			} else {
 				/* Log.d ("loading saved note  ", "cursor == null"); */
 				NoteActivity.createFragment("", null,
-						Select.Frags.DefaultFragment);
+						Namespace.Frags.DefaultFragment);
 				NoteActivity.createFragment(" ", null,
-						Select.Frags.NoteFragment);
+						Namespace.Frags.NoteFragment);
 			}
 
 			break;
@@ -221,7 +221,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 		public Cursor loadInBackground() {
 
 			db.editRec(NoteActivity.getId(), NoteActivity.getStyle(),
-					bundle.getString(Select.Flags.Cont1.name()));
+					bundle.getString(Namespace.Flags.Cont1.name()));
 
 			return null;
 		}
@@ -236,7 +236,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 			super(context);
 			this.db = db;
 			this.fragsArrayList = bundle
-					.getParcelableArrayList("fragsArrayList");
+					.getParcelableArrayList(Namespace.FRAGMENT_ARRAY_LIST);
 
 		}
 

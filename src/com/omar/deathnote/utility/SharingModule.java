@@ -18,7 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.DefaultFragment;
 import com.omar.deathnote.fragments.LinkFragment;
@@ -26,29 +26,39 @@ import com.omar.deathnote.fragments.NoteFragment;
 import com.omar.deathnote.fragments.PicFragment;
 
 public class SharingModule {
-	
+
 	private FragmentManager fm;
 	private Fragment tempFragment;
 	private TreeMap<String, String> fragList;
 	Context context;
 
-	public SharingModule(FragmentManager fm, Context context) {
+	private static final String PHOTO_URIS = "photouris";
+	private static final String AUDIO_URIS = "audiouris";
+	private static final String ALL_URIS = "alluris";
+
+	private static final String SUBJECT = "subject";
+	private static final String TEXT = "text";
+
+	public SharingModule(FragmentManager fm, Context context,
+			TreeMap<String, String> fragList) {
 		this.fm = fm;
 		this.context = context;
+		this.fragList = fragList;
 	}
-	
-	
-	public void share(){
+
+	public void share() {
 		initShareIntent(collectForShare());
-		
+
 	}
+
 	private Bundle collectForShare() {
 
 		String subject = "";
 		String text = "";
 		StringBuilder stringBuilder = new StringBuilder();
-		ArrayList<Uri> uris = new ArrayList<Uri>();
-		ArrayList<Uri> urisSpecial = new ArrayList<Uri>();
+		ArrayList<Uri> photoUris = new ArrayList<Uri>();
+		ArrayList<Uri> audioUris = new ArrayList<Uri>();
+		ArrayList<Uri> allUris = new ArrayList<Uri>();
 
 		Bundle bundle = new Bundle();
 
@@ -68,10 +78,10 @@ public class SharingModule {
 
 			String cont1 = "";
 
-			Select.Frags[] frags = Select.Frags.values();
-			Select.Frags eType = null;
+			Namespace.Frags[] frags = Namespace.Frags.values();
+			Namespace.Frags eType = null;
 
-			for (Select.Frags frag : frags) {
+			for (Namespace.Frags frag : frags) {
 
 				if (type.equalsIgnoreCase(frag.name())) {
 					eType = frag;
@@ -87,8 +97,8 @@ public class SharingModule {
 
 				temp = ((DefaultFragment) tempFragment).saveContent();
 
-				if (temp.get(Select.Flags.Cont1.name()) != null) {
-					cont1 = temp.get(Select.Flags.Cont1.name());
+				if (temp.get(Namespace.Flags.Cont1.name()) != null) {
+					cont1 = temp.get(Namespace.Flags.Cont1.name());
 				} else {
 					cont1 = "No Title";
 				}
@@ -96,7 +106,7 @@ public class SharingModule {
 				subject = cont1;
 
 				Bundle titleBundle = new Bundle();
-				titleBundle.putString(Select.Flags.Cont1.name(), cont1);
+				titleBundle.putString(Namespace.Flags.Cont1.name(), cont1);
 
 				break;
 			case PicFragment:
@@ -104,13 +114,13 @@ public class SharingModule {
 				tempFragment = (PicFragment) fm.findFragmentByTag(fragId);
 				temp = ((PicFragment) tempFragment).saveContent();
 
-				cont1 = temp.get(Select.Flags.Cont1.name());
+				cont1 = temp.get(Namespace.Flags.Cont1.name());
 				if (cont1 != null)
 					;
 				fileIn = new File(cont1);
 				fileIn.setReadable(true, false);
 				u = Uri.fromFile(fileIn);
-				uris.add(u);
+				photoUris.add(u);
 
 				break;
 			case NoteFragment:
@@ -118,8 +128,8 @@ public class SharingModule {
 				tempFragment = (NoteFragment) fm.findFragmentByTag(fragId);
 				temp = ((NoteFragment) tempFragment).saveContent();
 
-				if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Select.Flags.Cont1.name());
+				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Namespace.Flags.Cont1.name());
 				} else {
 					cont1 = "No Content";
 				}
@@ -133,8 +143,8 @@ public class SharingModule {
 				tempFragment = (LinkFragment) fm.findFragmentByTag(fragId);
 				temp = ((LinkFragment) tempFragment).saveContent();
 
-				if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Select.Flags.Cont1.name());
+				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Namespace.Flags.Cont1.name());
 				} else {
 					cont1 = "No Link";
 				}
@@ -147,8 +157,8 @@ public class SharingModule {
 				tempFragment = (AudioFragment) fm.findFragmentByTag(fragId);
 				temp = ((AudioFragment) tempFragment).saveContent();
 
-				if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Select.Flags.Cont1.name());
+				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Namespace.Flags.Cont1.name());
 				} else {
 					cont1 = "No Audio";
 				}
@@ -156,7 +166,7 @@ public class SharingModule {
 				fileIn = new File(cont1);
 				fileIn.setReadable(true, false);
 				u = Uri.fromFile(fileIn);
-				urisSpecial.add(u);
+				audioUris.add(u);
 
 				break;
 
@@ -169,17 +179,22 @@ public class SharingModule {
 
 		text = stringBuilder.toString();
 
-		bundle.putString("subject", subject);
-		bundle.putString("text", text);
-		bundle.putParcelableArrayList("uris", uris);
-
-		bundle.putParcelableArrayList("urisSpecial", urisSpecial);
+		bundle.putString(SUBJECT, subject);
+		bundle.putString(TEXT, text);
+		bundle.putParcelableArrayList(PHOTO_URIS, photoUris);
+		bundle.putParcelableArrayList(AUDIO_URIS, audioUris);
 
 		return bundle;
 
 	}
-	private List <LabeledIntent> formShareChoise (Intent emailIntent, PackageManager pm, ArrayList<Uri> uris, ArrayList<Uri> urisSpecial,List<ResolveInfo> resInfo, String subject, String text ){
 
+	private List<LabeledIntent> formShareChoise(Intent emailIntent,
+			PackageManager pm, ArrayList<Uri> photoUris,
+			ArrayList<Uri> audioUris, List<ResolveInfo> resInfo,
+			String subject, String text) {
+
+		ArrayList<Uri> allUris = photoUris;
+		allUris.addAll(audioUris);
 
 		List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
 		String packageName = null;
@@ -194,7 +209,6 @@ public class SharingModule {
 				emailIntent.setPackage(packageName);
 			} else if (packageName.contains("twitter")
 					|| packageName.contains("facebook.orca")
-
 					|| packageName.contains("skype")
 					|| packageName.contains("instagram")
 					|| packageName.contains("viber")
@@ -210,20 +224,17 @@ public class SharingModule {
 					intent.putExtra(Intent.EXTRA_TEXT, text);
 
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-
-					uris.addAll(urisSpecial);
-
-					Log.d("uris", String.valueOf(uris.size()));
+ 
 
 					intent.putParcelableArrayListExtra(
-							android.content.Intent.EXTRA_STREAM, uris);
+							android.content.Intent.EXTRA_STREAM, allUris);
 					intent.setType("message/rfc822");
 
 				}
 				if (packageName.contains("instagram")) {
 					intent.setAction(Intent.ACTION_SEND);
-					if (uris.size() > 0) {
-						intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+					if (photoUris.size() > 0) {
+						intent.putExtra(Intent.EXTRA_STREAM, photoUris.get(0));
 					}
 					intent.putExtra(Intent.EXTRA_TEXT, subject + "\n" + text);
 
@@ -235,10 +246,9 @@ public class SharingModule {
 					intent.putExtra(Intent.EXTRA_TEXT, text);
 
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-					uris.addAll(urisSpecial);
 
 					intent.putParcelableArrayListExtra(
-							android.content.Intent.EXTRA_STREAM, uris);
+							android.content.Intent.EXTRA_STREAM, allUris);
 					intent.setType("message/rfc822");
 
 				}
@@ -248,9 +258,9 @@ public class SharingModule {
 					intent.putExtra(Intent.EXTRA_TEXT, subject + "\n" + text);
 
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-					uris.addAll(urisSpecial);
+
 					intent.putParcelableArrayListExtra(
-							android.content.Intent.EXTRA_STREAM, uris);
+							android.content.Intent.EXTRA_STREAM, allUris);
 
 					intent.setType("message/rfc822");
 
@@ -259,10 +269,9 @@ public class SharingModule {
 				if (packageName.contains("viber")) {
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 					intent.putExtra(Intent.EXTRA_TEXT, subject + "\n" + text);
-					uris.addAll(urisSpecial);
 
 					intent.putParcelableArrayListExtra(
-							android.content.Intent.EXTRA_STREAM, uris);
+							android.content.Intent.EXTRA_STREAM, allUris);
 					intent.setType("message/rfc822");
 
 				}
@@ -270,18 +279,17 @@ public class SharingModule {
 					intent.putExtra(Intent.EXTRA_TEXT, subject + text + "\n");
 
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-					uris.addAll(urisSpecial);
 
 					intent.putParcelableArrayListExtra(
-							android.content.Intent.EXTRA_STREAM, uris);
+							android.content.Intent.EXTRA_STREAM, allUris);
 					intent.setType("text/pain");
 
 				}
-				 
+
 				if (packageName.contains("twitter")) {
 					intent.setAction(Intent.ACTION_SEND);
-					if (uris.size() > 0) {
-						intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+					if (photoUris.size() > 0) {
+						intent.putExtra(Intent.EXTRA_STREAM, photoUris.get(0));
 					}
 					intent.putExtra(Intent.EXTRA_TEXT, subject + "\n" + text);
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
@@ -297,14 +305,14 @@ public class SharingModule {
 		return intentList;
 
 	}
+
 	private void initShareIntent(Bundle bundle) {
 		/* Log.d("sharing", "sharing"); */
-		String subject = bundle.getString("subject");
-		String text = bundle.getString("text");
+		String subject = bundle.getString(SUBJECT);
+		String text = bundle.getString(SUBJECT);
 
-		ArrayList<Uri> uris = bundle.getParcelableArrayList("uris");
-		ArrayList<Uri> urisSpecial = bundle
-				.getParcelableArrayList("urisSpecial");
+		ArrayList<Uri> photoUris = bundle.getParcelableArrayList(PHOTO_URIS);
+		ArrayList<Uri> audUris = bundle.getParcelableArrayList(AUDIO_URIS);
 
 		/* Log.d("urisSpecial", String.valueOf(urisSpecial.size())); */
 
@@ -314,26 +322,23 @@ public class SharingModule {
 		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
 		emailIntent.putParcelableArrayListExtra(
-				android.content.Intent.EXTRA_STREAM, uris);
+				android.content.Intent.EXTRA_STREAM, photoUris);
 		emailIntent.setType("message/rfc822");
 
-		
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.setType("*/*");
 		PackageManager pm = context.getPackageManager();
 		List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
 		Intent openInChooser = Intent.createChooser(emailIntent, "Select");
-		
-		
-		List<LabeledIntent> intentList =  formShareChoise(emailIntent,pm,uris,urisSpecial,resInfo,subject,text);
-		
+
+		List<LabeledIntent> intentList = formShareChoise(emailIntent, pm,
+				photoUris, audUris, resInfo, subject, text);
+
 		LabeledIntent[] extraIntents = intentList
 				.toArray(new LabeledIntent[intentList.size()]);
 
 		openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
 		context.startActivity(openInChooser);
 	}
-
-
 
 }

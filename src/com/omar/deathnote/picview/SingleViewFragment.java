@@ -11,17 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.R;
 
 public class SingleViewFragment extends Fragment {
 
 
-    private static final String ARG_IMAGE_PATH = "path";
+ 
 
     public static SingleViewFragment buildWithResource(String path){
         Bundle args = new Bundle();
        
-        args.putString (ARG_IMAGE_PATH, path);
+        args.putString (Namespace.PATH, path);
 
         SingleViewFragment fragment = new SingleViewFragment();
         fragment.setArguments(args);
@@ -38,7 +39,7 @@ public class SingleViewFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-    	String path =  getArguments().getString (ARG_IMAGE_PATH);
+    	String path =  getArguments().getString (Namespace.PATH);
         ImageView imageView = (ImageView) getView().findViewById(R.id.imageview);   
         imageView.setImageURI(Uri.fromFile(new File(path)));
       

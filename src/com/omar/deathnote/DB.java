@@ -54,7 +54,7 @@ public class DB {
 	
 	
 	
-	Select sel = new Select();
+	Namespace sel = new Namespace();
 	public void beginTransaction(){
 	mDB.beginTransaction();
 	}

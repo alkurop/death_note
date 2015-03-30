@@ -8,7 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.DefaultFragment;
 import com.omar.deathnote.fragments.LinkFragment;
@@ -20,8 +20,9 @@ public class FragmentSaver {
 	private Fragment tempFragment;
 	private TreeMap<String, String> fragList;
 
-	public FragmentSaver(FragmentManager fm) {
+	public FragmentSaver(FragmentManager fm, TreeMap<String, String> fragList) {
 		this.fm = fm;
+		this.fragList = fragList;
 	}
 	
 	
@@ -30,16 +31,16 @@ public class FragmentSaver {
 		TreeMap<String, String> temp = new TreeMap<String, String>();
 		String cont1 = "";
 	 
-
+		tempFragment = fm.findFragmentByTag("0");
 		temp = ((DefaultFragment) tempFragment).saveContent();
 
-		if (temp.get(Select.Flags.Cont1.name()) != null) {
-			cont1 = temp.get(Select.Flags.Cont1.name());
+		if (temp.get(Namespace.Flags.Cont1.name()) != null) {
+			cont1 = temp.get(Namespace.Flags.Cont1.name());
 		} else {
 			cont1 = "No Title";
 		}
 		Bundle titleBundle = new Bundle();
-		titleBundle.putString(Select.Flags.Cont1.name(), cont1);
+		titleBundle.putString(Namespace.Flags.Cont1.name(), cont1);
 		return titleBundle;
 		
 	}
@@ -60,10 +61,10 @@ public class FragmentSaver {
 	 
 				String cont1 = "";
 				String cont2 = "";
-				Select.Frags[] frags = Select.Frags.values();
-				Select.Frags eType = null;
+				Namespace.Frags[] frags = Namespace.Frags.values();
+				Namespace.Frags eType = null;
 
-				for (Select.Frags frag : frags) {
+				for (Namespace.Frags frag : frags) {
 
 					if (type.equalsIgnoreCase(frag.name())) {
 						eType = frag;
@@ -80,8 +81,8 @@ public class FragmentSaver {
 
 					temp = ((DefaultFragment) tempFragment).saveContent();
 
-					if (temp.get(Select.Flags.Cont1.name()) != null) {
-						cont1 = temp.get(Select.Flags.Cont1.name());
+					if (temp.get(Namespace.Flags.Cont1.name()) != null) {
+						cont1 = temp.get(Namespace.Flags.Cont1.name());
 					} else {
 						cont1 = "No Title";
 					}
@@ -94,7 +95,7 @@ public class FragmentSaver {
 					tempFragment = (PicFragment) fm.findFragmentByTag(fragId);
 					temp = ((PicFragment) tempFragment).saveContent();
 
-					cont1 = temp.get(Select.Flags.Cont1.name());
+					cont1 = temp.get(Namespace.Flags.Cont1.name());
 					if (cont1 != null)
 						;
 
@@ -104,9 +105,9 @@ public class FragmentSaver {
 					tempFragment = (NoteFragment) fm.findFragmentByTag(fragId);
 					temp = ((NoteFragment) tempFragment).saveContent();
 
-					if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase(
+					if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase(
 							"")) {
-						cont1 = temp.get(Select.Flags.Cont1.name());
+						cont1 = temp.get(Namespace.Flags.Cont1.name());
 					} else {
 						cont1 = "No Content";
 					}
@@ -118,9 +119,9 @@ public class FragmentSaver {
 					tempFragment = (LinkFragment) fm.findFragmentByTag(fragId);
 					temp = ((LinkFragment) tempFragment).saveContent();
 
-					if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase(
+					if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase(
 							"")) {
-						cont1 = temp.get(Select.Flags.Cont1.name());
+						cont1 = temp.get(Namespace.Flags.Cont1.name());
 					} else {
 						cont1 = "No Link";
 					}
@@ -131,15 +132,15 @@ public class FragmentSaver {
 					tempFragment = (AudioFragment) fm.findFragmentByTag(fragId);
 					temp = ((AudioFragment) tempFragment).saveContent();
 
-					if (!temp.get(Select.Flags.Cont1.name()).equalsIgnoreCase(
+					if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase(
 							"")) {
-						cont1 = temp.get(Select.Flags.Cont1.name());
+						cont1 = temp.get(Namespace.Flags.Cont1.name());
 					} else {
 						cont1 = "No Audio";
 					}
-					if (!temp.get(Select.Flags.Cont2.name()).equalsIgnoreCase(
+					if (!temp.get(Namespace.Flags.Cont2.name()).equalsIgnoreCase(
 							"")) {
-						cont2 = temp.get(Select.Flags.Cont2.name());
+						cont2 = temp.get(Namespace.Flags.Cont2.name());
 					} else {
 						cont2 = "No Audio";
 					}
@@ -155,7 +156,7 @@ public class FragmentSaver {
 
 			}
 
-		saveBundle.putParcelableArrayList("fragsArrayList", fragsArrayList);
+		saveBundle.putParcelableArrayList(Namespace.FRAGMENT_ARRAY_LIST, fragsArrayList);
 
 		return saveBundle;
 	}

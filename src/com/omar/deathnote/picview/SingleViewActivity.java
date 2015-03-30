@@ -8,12 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.R;
 
 public class SingleViewActivity extends FragmentActivity {
 
-    public static final String EXTRA_ID = "id";
-    public static final String EXTRA_LIST = "list";
+ 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -22,10 +22,10 @@ public class SingleViewActivity extends FragmentActivity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_viewpager);
 
-		int position = getIntent().getIntExtra(EXTRA_ID, 0);
+		int position = getIntent().getIntExtra(Namespace.ID, 0);
 
 		ArrayList<String> list = getIntent()
-				.getStringArrayListExtra(EXTRA_LIST);
+				.getStringArrayListExtra(Namespace.LIST);
 		
 		
 		

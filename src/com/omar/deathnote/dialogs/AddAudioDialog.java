@@ -12,33 +12,26 @@ import com.omar.deathnote.R;
 
 public class AddAudioDialog extends DialogFragment {
 
+	private AudioDialogListener mListener;
+
 	public interface AudioDialogListener {
-	 
 
 		public void onDialogClickAudioBrowse(DialogFragment dialog);
-		
+
 		public void onDialogClickAudioRecord(DialogFragment dialog);
 	}
-	 
-	AudioDialogListener mListener;
 
 	public void onAttach(Activity activity) {
-	 
-		
-		
-		
-		
-		
-		
-		if(NoteActivity.class.isInstance(
-				activity)){
-		 
+		super.onAttach(activity);
+
+		if (NoteActivity.class.isInstance(activity)) {
+
 			mListener = NoteActivity.getAudioDialogListener();
-		 
+
 		} else {
 			// The activity doesn't implement the interface, throw exception
 			throw new IllegalArgumentException(
-					 " must implement NoticeDialogListener");
+					" must implement NoticeDialogListener");
 		}
 	}
 
@@ -48,23 +41,31 @@ public class AddAudioDialog extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		builder.setTitle(R.string.audio_add_dialog).setItems(
-				R.array.audio_add_dialog, new DialogInterface.OnClickListener() {
+				R.array.audio_add_dialog,
+				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 						case 0:
-						/*	Toast.makeText(getActivity(), "From Galery",
-									Toast.LENGTH_LONG).show();
-*/
-							mListener.onDialogClickAudioBrowse(AddAudioDialog.this);
+							/*
+							 * Toast.makeText(getActivity(), "From Galery",
+							 * Toast.LENGTH_LONG).show();
+							 */
+							mListener
+									.onDialogClickAudioBrowse(AddAudioDialog.this);
 							break;
 						case 1:
-						/*	Toast.makeText(getActivity(), "From Camera",
-									Toast.LENGTH_LONG).show();*/
-							mListener.onDialogClickAudioRecord(AddAudioDialog.this);
+							/*
+							 * Toast.makeText(getActivity(), "From Camera",
+							 * Toast.LENGTH_LONG).show();
+							 */
+							mListener
+									.onDialogClickAudioRecord(AddAudioDialog.this);
 							break;
 						case 2:
-						/*	Toast.makeText(getActivity(), "Cancel",
-									Toast.LENGTH_LONG).show();*/
+							/*
+							 * Toast.makeText(getActivity(), "Cancel",
+							 * Toast.LENGTH_LONG).show();
+							 */
 							break;
 						}
 					}

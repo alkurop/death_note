@@ -43,7 +43,7 @@ import com.omar.deathnote.DB;
 import com.omar.deathnote.FileManager;
 import com.omar.deathnote.NoteActivity;
 import com.omar.deathnote.R;
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.picview.SingleViewActivity;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
@@ -75,12 +75,12 @@ public class PicFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (fragId != null)
-			outState.putString("fragId", fragId);
+			outState.putString(Namespace.FRAGMENT_ID, fragId);
 
 		if (noteId != null)
-			outState.putString("noteId", noteId);
+			outState.putString(Namespace.NOTE_ID, noteId);
 		if (imName != null)
-			outState.putString("imName", imName);
+			outState.putString(Namespace.IMAGE_NAME, imName);
 
 	}
 
@@ -118,7 +118,7 @@ public class PicFragment extends Fragment {
 				Log.d("imname", "imname == null");
 				del.setVisibility(View.INVISIBLE);
 
-				if (cam == "cam") {
+				if (cam == Namespace.CAMERA) {
 					loadImageFromCam();
 				} else {
 					loadUnscaledImage();
@@ -140,9 +140,9 @@ public class PicFragment extends Fragment {
 
 		} else {
 
-			fragId = savedInstanceState.getString("fragId");
-			noteId = savedInstanceState.getString("noteId");
-			imName = savedInstanceState.getString("imName");
+			fragId = savedInstanceState.getString(Namespace.FRAGMENT_ID);
+			noteId = savedInstanceState.getString(Namespace.NOTE_ID);
+			imName = savedInstanceState.getString(Namespace.IMAGE_NAME);
 
 			setSavedImageToLayout(imName);
 
@@ -154,8 +154,7 @@ public class PicFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-
+		
 		if (NoteActivity.class.isInstance(activity)) {
 			sX = NoteActivity.getSaveNote();
 
@@ -165,17 +164,22 @@ public class PicFragment extends Fragment {
 					"Activity must implement OnDeleteFragment interface ");
 		}
 
-		thiscontext = ((Activity) OnDeleteFragment).getApplicationContext();
+		thiscontext = activity.getApplicationContext();
+		super.onAttach(activity);
 
 	}
+	
+	
+
+ 
 
 	public void loadContent(TreeMap<String, String> temp) {
-		if (temp.get(Select.Flags.Cont1.name()) != null) {
-			imName = temp.get(Select.Flags.Cont1.name());
+		if (temp.get(Namespace.Flags.Cont1.name()) != null) {
+			imName = temp.get(Namespace.Flags.Cont1.name());
 		}
 
-		if (temp.get(Select.Flags.Cont2.name()) != null) {
-			cam = temp.get(Select.Flags.Cont2.name());
+		if (temp.get(Namespace.Flags.Cont2.name()) != null) {
+			cam = temp.get(Namespace.Flags.Cont2.name());
 		}
 
 	}
@@ -276,7 +280,7 @@ public class PicFragment extends Fragment {
 	public TreeMap<String, String> saveContent() {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
-		content.put(Select.Flags.Cont1.name(), imName);
+		content.put(Namespace.Flags.Cont1.name(), imName);
 
 		return content;
 
@@ -534,9 +538,9 @@ public class PicFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			i.putExtra("id", getPositionToViewer(loadImagesToViewer(), imName));
+			i.putExtra(Namespace.ID, getPositionToViewer(loadImagesToViewer(), imName));
 
-			i.putStringArrayListExtra("list", loadImagesToViewer());
+			i.putStringArrayListExtra(Namespace.LIST, loadImagesToViewer());
 
 			return null;
 		}
@@ -554,7 +558,7 @@ public class PicFragment extends Fragment {
 			cursor = db.getAllNoteData(noteId);
 			while (cursor.moveToNext()) {
 				if (cursor.getString(cursor.getColumnIndex(DB.COLUMN_TYPE))
-						.equalsIgnoreCase("PicFragment")) {
+						.equalsIgnoreCase(Namespace.Frags.PicFragment.name())) {
 
 					values.add(cursor.getString(cursor
 							.getColumnIndex(DB.COLUMN_CONT1)));

@@ -8,7 +8,7 @@ import android.app.FragmentTransaction;
 import android.util.Log;
 
 import com.omar.deathnote.R;
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.DefaultFragment;
 import com.omar.deathnote.fragments.LinkFragment;
@@ -39,7 +39,7 @@ public class FragmentCreator {
 	 * @param fragList
 	 * @return fragList   - back to the activity
 	 */
-	public TreeMap<String, String> createFragment(String cont1, String cont2, Select.Frags type, int fragCount, long noteId, TreeMap<String, String> list ) {
+	public TreeMap<String, String> createFragment(String cont1, String cont2, Namespace.Frags type, int fragCount, long noteId, TreeMap<String, String> list ) {
 		if(fragList != null)
 		Log.d("fraglist length", String.valueOf(fragList.size()));
 		
@@ -53,9 +53,9 @@ public class FragmentCreator {
 		String fragId = Integer.toString(fragCount);
  
 		if (cont1 != null)
-			tempMap.put(Select.Flags.Cont1.name(), cont1);
+			tempMap.put(Namespace.Flags.Cont1.name(), cont1);
 		if (cont2 != null)
-			tempMap.put(Select.Flags.Cont2.name(), cont2);
+			tempMap.put(Namespace.Flags.Cont2.name(), cont2);
 
 		switch (type) {
 
@@ -69,7 +69,7 @@ public class FragmentCreator {
 
 			
 			fTrans.add(R.id.noteList, ((DefaultFragment) tempFragment), fragId);
-			fragList.put(fragId, Select.Frags.DefaultFragment.name());
+			fragList.put(fragId, Namespace.Frags.DefaultFragment.name());
 			
 			break;
 
@@ -82,7 +82,7 @@ public class FragmentCreator {
 			((NoteFragment) tempFragment).loadFragId(fragId);
 			
 			fTrans.add(R.id.noteList, ((NoteFragment) tempFragment), fragId);
-			fragList.put(fragId, Select.Frags.NoteFragment.name());
+			fragList.put(fragId, Namespace.Frags.NoteFragment.name());
 
 			break;
 		case LinkFragment:
@@ -94,7 +94,7 @@ public class FragmentCreator {
 			((LinkFragment) tempFragment).loadFragId(fragId);
 			
 			fTrans.add(R.id.noteList, ((LinkFragment) tempFragment), fragId);
-			fragList.put(fragId, Select.Frags.LinkFragment.name());
+			fragList.put(fragId, Namespace.Frags.LinkFragment.name());
 
 			break;
 		case PicFragment:
@@ -107,7 +107,7 @@ public class FragmentCreator {
 			((PicFragment) tempFragment).loadNoteId(String.valueOf(noteId));
 			
 			fTrans.add(R.id.noteList, ((PicFragment) tempFragment), fragId);
-			fragList.put(fragId, Select.Frags.PicFragment.name());
+			fragList.put(fragId, Namespace.Frags.PicFragment.name());
 			break;
 		case AudioFragment:
 
@@ -120,7 +120,7 @@ public class FragmentCreator {
 			((AudioFragment) tempFragment).loadNoteId(String.valueOf(noteId));
 			
 			fTrans.add(R.id.noteList, ((AudioFragment) tempFragment), fragId);
-			fragList.put(fragId, Select.Frags.AudioFragment.name());
+			fragList.put(fragId, Namespace.Frags.AudioFragment.name());
 			break;
 		case NoticeDialogFragment:
 			throw new IllegalArgumentException("Illigal fragment type");

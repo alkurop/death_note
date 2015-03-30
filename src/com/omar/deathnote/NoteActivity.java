@@ -41,6 +41,9 @@ import com.omar.deathnote.utility.SharingModule;
 @SuppressWarnings({ "deprecation", "incomplete-switch" })
 public class NoteActivity extends Activity implements OnNavigationListener {
 
+	
+	
+	
 	private static long id;
 	private static int style;
 	private static TreeMap<String, String> fragList;
@@ -74,7 +77,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	private FragmentTransaction fTrans;
 	private LinearLayout mainLayout;
 
-	// getters setters
+ 
 	public static SaveNote getSaveNote() {
 		return saveNote;
 	}
@@ -152,9 +155,9 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			Bundle extras = getIntent().getExtras();
 			fragCount = 0;
 
-			if (extras.getLong("id") != 0) {
+			if (extras.getLong(Namespace.ID) != 0) {
 
-				id = extras.getLong("id");
+				id = extras.getLong(Namespace.ID);
 
 				loaderManager.restartLoader(MyLoaderManager.LOAD_NOTE, null,
 						callbacks);
@@ -162,29 +165,29 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 						callbacks);
 
 			} else {
-				/* Log.d("LoadingNote","loadig note"); */
-				style = extras.getInt("style");
+				 
+				style = extras.getInt(Namespace.STYLE);
 				actionBar.setSelectedNavigationItem(style - 1);
 
 				loaderManager.restartLoader(MyLoaderManager.ADD_NEW_NOTE, null,
 						callbacks);
 
-				createFragment(extras.getString("title"), " ",
-						Select.Frags.DefaultFragment);
+				createFragment(extras.getString(Namespace.TITLE),Namespace.SPACE,
+						Namespace.Frags.DefaultFragment);
 
-				createFragment(" ", " ", Select.Frags.NoteFragment);
+				createFragment(Namespace.SPACE, Namespace.SPACE, Namespace.Frags.NoteFragment);
 
 			}
 
 		} else {
 
-			fragCount = savedInstanceState.getInt("fragCount");
-			id = savedInstanceState.getLong("id");
-			keys = savedInstanceState.getStringArray("fragList_keys");
-			values = savedInstanceState.getStringArray("fragList_values");
-			style = savedInstanceState.getInt("style");
-			audioShuffle = savedInstanceState.getBoolean("audioShuffle");
-			audioRepeat = savedInstanceState.getBoolean("audioRepeat");
+			fragCount = savedInstanceState.getInt(Namespace.FRAGMENT_COUNTER);
+			id = savedInstanceState.getLong(Namespace.ID);
+			keys = savedInstanceState.getStringArray(Namespace.FRAGMENT_LIST_KEYS);
+			values = savedInstanceState.getStringArray(Namespace.FRAGMENT_LIST_VALUES);
+			style = savedInstanceState.getInt(Namespace.STYLE);
+			audioShuffle = savedInstanceState.getBoolean(Namespace.AUDIO_SHUFFLE);
+			audioRepeat = savedInstanceState.getBoolean(Namespace.AUDIO_REPEAT);
 
 			fragList = new TreeMap<String, String>();
 			for (int k = 0; k < keys.length; k++) {
@@ -195,15 +198,14 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			setBackGround();
 			actionBar.setSelectedNavigationItem(style - 1);
 		}
+		setupMyListeners() ;
 
 	}
 
 	@Override
 	protected void onDestroy() {
 
-		Intent destroyMusic = new Intent(AudioFragment.BROADCAST_PAUSESONG);
-		destroyMusic.putExtra("flag", "destroy");
-		sendBroadcast(destroyMusic);
+	 
 
 		Intent intent = new Intent();
 		intent.putExtras(save());
@@ -216,11 +218,11 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	protected void onSaveInstanceState(Bundle outState) {
 
 		super.onSaveInstanceState(outState);
-		outState.putInt("style", style);
-		outState.putInt("fragCount", fragCount);
-		outState.putLong("id", id);
-		outState.putBoolean("audioShuffle", audioShuffle);
-		outState.putBoolean("audioRepeat", audioRepeat);
+		outState.putInt(Namespace.STYLE, style);
+		outState.putInt(Namespace.FRAGMENT_COUNTER, fragCount);
+		outState.putLong(Namespace.ID, id);
+		outState.putBoolean(Namespace.AUDIO_SHUFFLE, audioShuffle);
+		outState.putBoolean(Namespace.AUDIO_REPEAT, audioRepeat);
 
 		String[] keys = new String[fragList.size()];
 		String[] values = new String[fragList.size()];
@@ -232,8 +234,8 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			k++;
 		}
 
-		outState.putStringArray("fragList_keys", keys);
-		outState.putStringArray("fragList_values", values);
+		outState.putStringArray(Namespace.FRAGMENT_LIST_KEYS, keys);
+		outState.putStringArray(Namespace.FRAGMENT_LIST_VALUES, values);
 
 	}
 
@@ -259,7 +261,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 		switch (item.getItemId()) {
 
 		case R.id.action_share:
-			SharingModule sM = new SharingModule(fm, this);
+			SharingModule sM = new SharingModule(fm, this, fragList);
 			sM.share();
 
 			break;
@@ -284,19 +286,19 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			xSave();
 			AddPicDialog pic = new AddPicDialog();
 
-			pic.show(fm, Select.Frags.NoticeDialogFragment.name());
+			pic.show(fm, Namespace.Frags.NoticeDialogFragment.name());
 
 			break;
 
 		case R.id.addLink:
 			xSave();
-			createFragment(null, null, Select.Frags.LinkFragment);
+			createFragment(null, null, Namespace.Frags.LinkFragment);
 
 			break;
 
 		case R.id.addText:
 			xSave();
-			createFragment(null, null, Select.Frags.NoteFragment);
+			createFragment(null, null, Namespace.Frags.NoteFragment);
 
 			break;
 		case R.id.addAudio:
@@ -304,7 +306,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 
 			AddAudioDialog aud = new AddAudioDialog();
 
-			aud.show(fm, Select.Frags.NoticeDialogFragment.name());
+			aud.show(fm, Namespace.Frags.NoticeDialogFragment.name());
 
 			break;
 
@@ -323,7 +325,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	// Setup and save Methods
 
 	public static void createFragment(String cont1, String cont2,
-			Select.Frags type) {
+			Namespace.Frags type) {
 
 		fragList = new FragmentCreator(fm).createFragment(cont1, cont2, type,
 				fragCount, id, fragList);
@@ -331,7 +333,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 
 	}
 
-	public void setupMyListeners() {
+	private void setupMyListeners() {
 
 		saveNote = new SaveNote() {
 
@@ -348,7 +350,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 				fragToDel = s;
 				if (dialog) {
 					DialogFragment delDialog = new DialogOnDelete();
-					delDialog.show(fm, Select.Flags.Dialog.name());
+					delDialog.show(fm, Namespace.Flags.Dialog.name());
 				} else {
 					confirmDelete(fragToDel);
 				}
@@ -359,13 +361,13 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			@Override
 			public void onDialogClickBrowsePic(DialogFragment dialog) {
 
-				createFragment(null, null, Select.Frags.PicFragment);
+				createFragment(null, null, Namespace.Frags.PicFragment);
 
 			}
 
 			@Override
 			public void onDialogClickCameraPic(DialogFragment dialog) {
-				createFragment(null, "cam", Select.Frags.PicFragment);
+				createFragment(null, Namespace.CAMERA, Namespace.Frags.PicFragment);
 			}
 		};
 		audioDialogListener = new AddAudioDialog.AudioDialogListener() {
@@ -383,12 +385,12 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 							Uri.parse("file://"
 									+ Environment.getExternalStorageDirectory())));
 				}
-				createFragment(null, null, Select.Frags.AudioFragment);
+				createFragment(null, null, Namespace.Frags.AudioFragment);
 			}
 
 			@Override
 			public void onDialogClickAudioRecord(DialogFragment dialog) {
-				createFragment("rec", null, Select.Frags.AudioFragment);
+				createFragment(Namespace.RECORD, null, Namespace.Frags.AudioFragment);
 
 			}
 		};
@@ -397,7 +399,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			@Override
 			public void stopAllAudio(String cur) {
 				stopAllAudioButCurrent(cur);
-				/* xSave(); */
+			 
 
 			}
 
@@ -422,7 +424,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 				int k = 0;
 				for (Map.Entry<String, String> entry : fragList.entrySet()) {
 					if (entry.getValue().equalsIgnoreCase(
-							Select.Frags.AudioFragment.name())) {
+							Namespace.Frags.AudioFragment.name())) {
 
 						tempFragment = (AudioFragment) fm
 								.findFragmentByTag(entry.getKey());
@@ -443,7 +445,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			@Override
 			public void next(String cur, String flag) {
 
-				stopAllAudioButCurrent("");
+				stopAllAudioButCurrent(Namespace.BLANK);
 				playNextAudio(cur, flag);
 
 			}
@@ -463,17 +465,17 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	private void naviSelect() {
 
 		dataSelect = new ArrayList<Map<String, Object>>();
-		for (int i = 1; i < Select.select_images.length; i++) {
+		for (int i = 1; i < Namespace.select_images.length; i++) {
 
 			m = new HashMap<String, Object>();
-			m.put(Select.ATTRIBUTE_NAME_TEXT,
-					getResources().getString(Select.select_names[i]));
-			m.put(Select.ATTRIBUTE_NAME_STYLE, Select.select_images[i]);
+			m.put(Namespace.ATTRIBUTE_NAME_TEXT,
+					getResources().getString(Namespace.select_names[i]));
+			m.put(Namespace.ATTRIBUTE_NAME_STYLE, Namespace.select_images[i]);
 			dataSelect.add(m);
 		}
 
-		String[] fromSel = { Select.ATTRIBUTE_NAME_TEXT,
-				Select.ATTRIBUTE_NAME_STYLE };
+		String[] fromSel = { Namespace.ATTRIBUTE_NAME_TEXT,
+				Namespace.ATTRIBUTE_NAME_STYLE };
 		int[] toSel = { R.id.itemName, R.id.itemImg };
 		selectAdapter = new SimpleAdapter(this, dataSelect, R.layout.select,
 				fromSel, toSel);
@@ -489,15 +491,15 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	private void setBackGround() {
 
 		if (getResources().getConfiguration().orientation == 1) {
-			mainLayout.setBackgroundResource(Select.note_bg_images[style - 1]);
+			mainLayout.setBackgroundResource(Namespace.note_bg_images[style - 1]);
 		} else {
 			mainLayout
-					.setBackgroundResource(Select.note_bg_images_1[style - 1]);
+					.setBackgroundResource(Namespace.note_bg_images_1[style - 1]);
 		}
 	}
 
 	private void xSave() {
-		FragmentSaver fs = new FragmentSaver(fm);
+		FragmentSaver fs = new FragmentSaver(fm, fragList);
 
 		Bundle titleBundle = fs.getTitleBundle();
 		loaderManager.restartLoader(MyLoaderManager.EDIT_REC_TITLE,
@@ -512,7 +514,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	private Bundle save() {
 
 		Bundle bundle = new Bundle();
-		bundle.putInt("style", style);
+		bundle.putInt(Namespace.STYLE, style);
 
 		/* xSave(); */
 		return bundle;
@@ -526,7 +528,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 		fTrans.remove(tempFragment);
 		fTrans.commit();
 
-		if (fragList.get(s) == Select.Frags.PicFragment.name()) {
+		if (fragList.get(s) == Namespace.Frags.PicFragment.name()) {
 			String imName = String.valueOf(id) + "_" + s;
 
 			sc.new DeleteFile().execute(imName);
@@ -538,12 +540,12 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 		xSave();
 	}
 
-	public static Select.Frags setFragType(String type) {
+	public static Namespace.Frags setFragType(String type) {
 
-		Select.Frags[] frags = Select.Frags.values();
-		Select.Frags eType = null;
+		Namespace.Frags[] frags = Namespace.Frags.values();
+		Namespace.Frags eType = null;
 
-		for (Select.Frags frag : frags) {
+		for (Namespace.Frags frag : frags) {
 			if (type.equalsIgnoreCase(frag.name())) {
 				eType = frag;
 			}
@@ -556,13 +558,13 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 
 	public void playNextAudio(String cur, String flag) {
 
-		String id = "";
+		String id = Namespace.BLANK;
 		ArrayList<String> keys = new ArrayList<String>();
 		int l = 0;
 		int k = 0;
 		for (Map.Entry<String, String> entry : fragList.entrySet()) {
 			if (entry.getValue().equalsIgnoreCase(
-					Select.Frags.AudioFragment.name())) {
+					Namespace.Frags.AudioFragment.name())) {
 
 				keys.add(entry.getKey());
 
@@ -577,7 +579,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 		}
 
 		switch (flag) {
-		case "next":
+		case Namespace.NEXT:
 			if (keys.size() > l + 1) {
 
 				id = keys.get(l + 1);
@@ -586,7 +588,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 				id = keys.get(0);
 			}
 			break;
-		case "prev":
+		case Namespace.PREVIOUS:
 			if (l != 0) {
 
 				id = keys.get(l - 1);
@@ -595,10 +597,10 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 				id = keys.get(keys.size() - 1);
 			}
 			break;
-		case "replay":
+		case Namespace.REPLAY:
 			id = cur;
 			break;
-		case "shuffle":
+		case Namespace.SHUFFLE_AUDIO:
 			id = keys.get(MainActivity.randInt(0, keys.size() - 1));
 			break;
 
@@ -614,10 +616,10 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 
 			String fragId = entry.getKey();
 			String type = entry.getValue();
-			Select.Frags[] frags = Select.Frags.values();
-			Select.Frags eType = null;
+			Namespace.Frags[] frags = Namespace.Frags.values();
+			Namespace.Frags eType = null;
 
-			for (Select.Frags frag : frags) {
+			for (Namespace.Frags frag : frags) {
 				if (type.equalsIgnoreCase(frag.name())) {
 					eType = frag;
 				}
@@ -644,10 +646,10 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 			String fragId = entry.getKey();
 			String type = entry.getValue();
 
-			Select.Frags[] frags = Select.Frags.values();
-			Select.Frags eType = null;
+			Namespace.Frags[] frags = Namespace.Frags.values();
+			Namespace.Frags eType = null;
 
-			for (Select.Frags frag : frags) {
+			for (Namespace.Frags frag : frags) {
 				if (type.equalsIgnoreCase(frag.name())) {
 					eType = frag;
 				}
@@ -678,10 +680,10 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 
 			String fragId = entry.getKey();
 			String type = entry.getValue();
-			Select.Frags[] frags = Select.Frags.values();
-			Select.Frags eType = null;
+			Namespace.Frags[] frags = Namespace.Frags.values();
+			Namespace.Frags eType = null;
 
-			for (Select.Frags frag : frags) {
+			for (Namespace.Frags frag : frags) {
 				if (type.equalsIgnoreCase(frag.name())) {
 					eType = frag;
 				}

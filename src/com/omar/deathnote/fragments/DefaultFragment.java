@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.omar.deathnote.R;
-import com.omar.deathnote.Select;
+import com.omar.deathnote.Namespace;
 
 @SuppressLint("InflateParams")
 public class DefaultFragment extends Fragment {
@@ -23,7 +23,7 @@ public class DefaultFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (savedInstanceState != null)
-			fragId = savedInstanceState.getString("fragId");
+			fragId = savedInstanceState.getString(Namespace.FRAGMENT_ID);
 		
 		
 		View v = inflater.inflate(R.layout.note_elem_default, null);
@@ -40,7 +40,7 @@ public class DefaultFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (fragId != null)
-			outState.putString("fragId", fragId);
+			outState.putString(Namespace.FRAGMENT_ID, fragId);
 	}
 
 	public TreeMap<String, String> saveContent() {
@@ -48,9 +48,9 @@ public class DefaultFragment extends Fragment {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		if (title.equalsIgnoreCase("")) {
-			content.put(Select.Flags.Cont1.name(), "No Title");
+			content.put(Namespace.Flags.Cont1.name(), "No Title");
 		} else {
-			content.put(Select.Flags.Cont1.name(), title);
+			content.put(Namespace.Flags.Cont1.name(), title);
 		}
 
 		return content;
@@ -59,7 +59,7 @@ public class DefaultFragment extends Fragment {
 
 	public void loadContent(TreeMap<String, String> temp) {
 
-		title = temp.get(Select.Flags.Cont1.name());
+		title = temp.get(Namespace.Flags.Cont1.name());
 
 	}
 
