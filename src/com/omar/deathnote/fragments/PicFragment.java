@@ -41,9 +41,9 @@ import android.widget.LinearLayout;
 
 import com.omar.deathnote.DB;
 import com.omar.deathnote.FileManager;
+import com.omar.deathnote.Namespace;
 import com.omar.deathnote.NoteActivity;
 import com.omar.deathnote.R;
-import com.omar.deathnote.Namespace;
 import com.omar.deathnote.picview.SingleViewActivity;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
@@ -52,22 +52,21 @@ import com.omar.deathnote.utility.SaveNote;
 public class PicFragment extends Fragment {
 
 	private LinearLayout picLayout;
-	private static String fragId;
-	private String noteId;
-	private String imName;
+	private     String fragId;
+	private   String noteId;
+	private   String imName;
 
 	private static OnDeleteFragment OnDeleteFragment;
 
 	private View v;
 
-	private static Context thiscontext;
+	private   Context thiscontext;
 
 	private FileManager sc;
 
 	private int w, h;
 	private String cam;
-	private DB db;
-	private Cursor cursor;
+
 	private SaveNote sX;
 	private ImageView del;
 
@@ -100,7 +99,7 @@ public class PicFragment extends Fragment {
 
 			@Override
 			public void onClick(View arg0) {
-				sX.saveRun();
+
 				openViewer();
 			}
 		});
@@ -154,7 +153,7 @@ public class PicFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		
+
 		if (NoteActivity.class.isInstance(activity)) {
 			sX = NoteActivity.getSaveNote();
 
@@ -168,10 +167,6 @@ public class PicFragment extends Fragment {
 		super.onAttach(activity);
 
 	}
-	
-	
-
- 
 
 	public void loadContent(TreeMap<String, String> temp) {
 		if (temp.get(Namespace.Flags.Cont1.name()) != null) {
@@ -186,10 +181,12 @@ public class PicFragment extends Fragment {
 
 	public void loadFragId(String str) {
 		fragId = str;
+		Log.d("fragid", str);
 	}
 
 	public void loadNoteId(String str) {
 		noteId = str;
+		Log.d("noteid", str);
 	}
 
 	public void loadUnscaledImage() {
@@ -242,6 +239,7 @@ public class PicFragment extends Fragment {
 
 					}
 					Log.d("Result Code", String.valueOf(resultCode));
+					 
 					del.setVisibility(View.VISIBLE);
 				}
 
@@ -260,6 +258,7 @@ public class PicFragment extends Fragment {
 
 				InsertImageToMediaStore imageToMediaStore = new InsertImageToMediaStore();
 				imageToMediaStore.execute(values);
+				sX.saveRun();
 
 			}
 
@@ -269,10 +268,11 @@ public class PicFragment extends Fragment {
 			Log.d("deleteng        ======>", fragId);
 
 		}
+
 	}
 
 	public void openViewer() {
-		GetPositionToViewer getPositionToViewer = new GetPositionToViewer();
+		GetPositionToViewer getPositionToViewer = new GetPositionToViewer(imName);
 		getPositionToViewer.execute();
 
 	}
@@ -533,29 +533,40 @@ public class PicFragment extends Fragment {
 
 	}
 
-	class GetPositionToViewer extends AsyncTask<Void, Void, Void> {
-		Intent i = new Intent(thiscontext, SingleViewActivity.class);
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			i.putExtra(Namespace.ID, getPositionToViewer(loadImagesToViewer(), imName));
-
-			i.putStringArrayListExtra(Namespace.LIST, loadImagesToViewer());
-
-			return null;
+	class GetPositionToViewer extends AsyncTask<Void, Void, ArrayList<String>> {
+		String path;
+		GetPositionToViewer(String path){
+			this.path = path;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected ArrayList<String> doInBackground(Void... params) {
+			ArrayList<String> images;
+
+			images = loadImagesToViewer();
+
+			
+
+			return images;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<String> images) {
+			Intent i = new Intent(thiscontext, SingleViewActivity.class);
+			
+			i.putExtra(Namespace.ID, getPositionToViewer(images, path));
+
+			i.putStringArrayListExtra(Namespace.LIST, images);
+			
 			startActivity(i);
-			super.onPostExecute(result);
+			super.onPostExecute(images);
 		}
 
 		private ArrayList<String> loadImagesToViewer() {
-
+			DB db = DB.getInstance(thiscontext);
 			ArrayList<String> values = new ArrayList<String>();
 			db.open();
-			cursor = db.getAllNoteData(noteId);
+			Cursor cursor = db.getAllNoteData(noteId);
 			while (cursor.moveToNext()) {
 				if (cursor.getString(cursor.getColumnIndex(DB.COLUMN_TYPE))
 						.equalsIgnoreCase(Namespace.Frags.PicFragment.name())) {
@@ -576,8 +587,10 @@ public class PicFragment extends Fragment {
 			int position = 0;
 
 			for (int i = 0; i < values.size(); i++) {
-				if (values.get(i).equals(path)) {
+				if (values.get(i).equalsIgnoreCase(imName)) {
 					position = i;
+					Log.d("i",String.valueOf(i));
+					Log.d("imName",imName);
 				}
 			}
 			Log.d("curretn image position", String.valueOf(position));

@@ -316,9 +316,9 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onStop() {
 		xSave();
-		super.onPause();
+		super.onStop();
 
 	}
 
@@ -527,13 +527,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 		fTrans.hide(tempFragment);
 		fTrans.remove(tempFragment);
 		fTrans.commit();
-
-		if (fragList.get(s) == Namespace.Frags.PicFragment.name()) {
-			String imName = String.valueOf(id) + "_" + s;
-
-			sc.new DeleteFile().execute(imName);
-
-		}
+ 
 		tempFragment = null;
 
 		fragList.remove(s);

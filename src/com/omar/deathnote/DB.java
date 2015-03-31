@@ -46,15 +46,27 @@ public class DB {
 	private static DBHelper mDBHelper;
 	private SQLiteDatabase mDB;
 
-	public DB(Context ctx) {
+	private static DB instance;
+	
+	
+	private DB(Context ctx) {
 		mCtx = ctx;
 		
 	}
-		
+	
+	public static DB getInstance(Context context){
+		if(instance == null ){
+			instance = new DB(context);
+		}
+		return instance;
+	} 
+	 
 	
 	
 	
-	Namespace sel = new Namespace();
+	
+	
+ 
 	public void beginTransaction(){
 	mDB.beginTransaction();
 	}

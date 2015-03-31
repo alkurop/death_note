@@ -44,7 +44,7 @@ public class MyLoaderManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		DB db = new DB(context);
+		DB db =  DB.getInstance(context);
 		db.open();
 
 		switch (id) {

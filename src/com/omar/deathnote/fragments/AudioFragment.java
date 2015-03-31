@@ -954,7 +954,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	}
 
 	private class PlayAudio extends AsyncTask<Void, Void, ArrayList<String>> {
-		private DB db = new DB(thiscontext);
+		private DB db = DB.getInstance(thiscontext);
 		private Cursor cursor = null;
 
 		@Override
@@ -1005,7 +1005,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	}
 
 	private class RecAudio extends AsyncTask<Void, Void, ArrayList<String>> {
-		private DB db = new DB(thiscontext);
+		private DB db = DB.getInstance(thiscontext);
 		private Cursor cursor = null;
 
 		@Override
