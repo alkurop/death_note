@@ -7,7 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.omar.deathnote.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity;
 import com.omar.deathnote.R;
 
 public class AddPicDialog extends DialogFragment {

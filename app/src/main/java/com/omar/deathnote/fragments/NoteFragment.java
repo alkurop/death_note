@@ -19,9 +19,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.omar.deathnote.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity;
 import com.omar.deathnote.R;
-import com.omar.deathnote.Namespace;
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.utility.OnDeleteFragment;
 
 @SuppressLint("InflateParams")
@@ -50,7 +50,7 @@ public class NoteFragment extends Fragment {
 			Bundle savedInstanceState) {
 
 		if (savedInstanceState != null)
-			fragId = savedInstanceState.getString(Namespace.FRAGMENT_ID);
+			fragId = savedInstanceState.getString(Constants.FRAGMENT_ID);
 		View v = inflater.inflate(R.layout.note_elem_note, null);
 		etText = (EditText) v.findViewById(R.id.etTxt);
 		etText.setText(text);
@@ -118,9 +118,9 @@ public class NoteFragment extends Fragment {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
 		if (text != null) {
-			content.put(Namespace.Flags.Cont1.name(), text);
+			content.put(Constants.Flags.Cont1.name(), text);
 		} else {
-			content.put(Namespace.Flags.Cont1.name(), "No Text");
+			content.put(Constants.Flags.Cont1.name(), "No Text");
 		}
 		 
 
@@ -132,13 +132,13 @@ public class NoteFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (fragId != null)
-			outState.putString(Namespace.FRAGMENT_ID, fragId);
+			outState.putString(Constants.FRAGMENT_ID, fragId);
 	}
 
 	public void loadContent(TreeMap<String, String> temp) {
-		if (temp.get(Namespace.Flags.Cont1.name()) != null) {
+		if (temp.get(Constants.Flags.Cont1.name()) != null) {
 
-			text = temp.get(Namespace.Flags.Cont1.name());
+			text = temp.get(Constants.Flags.Cont1.name());
 
 		}
 

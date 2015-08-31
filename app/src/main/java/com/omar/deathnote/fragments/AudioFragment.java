@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
 
-import org.xml.sax.helpers.NamespaceSupport;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -34,12 +32,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.omar.deathnote.DB;
-import com.omar.deathnote.FileManager;
-import com.omar.deathnote.NoteActivity;
+import com.omar.deathnote.db.DB;
+import com.omar.deathnote.utils.FileManager;
+import com.omar.deathnote.notes.ui.NoteActivity;
 import com.omar.deathnote.R;
-import com.omar.deathnote.Namespace;
-import com.omar.deathnote.Namespace.Frags;
+import com.omar.deathnote.Constants;
+import com.omar.deathnote.Constants.Frags;
 import com.omar.deathnote.audioplay.AudioPlayService;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
@@ -81,10 +79,10 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 		}
 
 		private void updateUI(Intent serviceIntent) {
-			String counter = serviceIntent.getStringExtra(Namespace.COUNTER);
-			String mediamax = serviceIntent.getStringExtra(Namespace.MEDIA_MAX);
+			String counter = serviceIntent.getStringExtra(Constants.COUNTER);
+			String mediamax = serviceIntent.getStringExtra(Constants.MEDIA_MAX);
 			String strSongEnded = serviceIntent
-					.getStringExtra(Namespace.SONG_ENDED);
+					.getStringExtra(Constants.SONG_ENDED);
 			int seekProgress = Integer.parseInt(counter);
 
 			seekMax = Integer.parseInt(mediamax);
@@ -104,7 +102,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		private void updateRecUi(Intent serviceIntent) {
 			String recCounter = serviceIntent
-					.getStringExtra(Namespace.RECORDING_COUNTER);
+					.getStringExtra(Constants.RECORDING_COUNTER);
 			songTime.setText(recCounter);
 
 		}
@@ -127,11 +125,11 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 		@Override
 		public void onReceive(Context arg0, Intent intent) {
 
-			musicPaused = intent.getBooleanExtra(Namespace.PAUSED, false);
-			repeatAudio = intent.getBooleanExtra(Namespace.AUDIO_REPEAT, false);
-			shuffleAudio = intent.getBooleanExtra(Namespace.AUDIO_SHUFFLE,
+			musicPaused = intent.getBooleanExtra(Constants.PAUSED, false);
+			repeatAudio = intent.getBooleanExtra(Constants.AUDIO_REPEAT, false);
+			shuffleAudio = intent.getBooleanExtra(Constants.AUDIO_SHUFFLE,
 					false);
-			int audioNumber = intent.getIntExtra(Namespace.AUDIO_NUMBER, 0);
+			int audioNumber = intent.getIntExtra(Constants.AUDIO_NUMBER, 0);
 
 			playerMode();
 
@@ -175,9 +173,9 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 				} else if (recorderMode && recording) {
 					recStop();
-					nextAudio.stopAllAudio(Namespace.BLANK);
+					nextAudio.stopAllAudio(Constants.BLANK);
 				} else {
-					nextAudio.stopAllAudio(Namespace.BLANK);
+					nextAudio.stopAllAudio(Constants.BLANK);
 				}
 
 				break;
@@ -235,7 +233,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 			if (fromUser) {
 
 				int seekPos = seekBar.getProgress();
-				seekBarChanged.putExtra(Namespace.SEEK_POSITION, seekPos);
+				seekBarChanged.putExtra(Constants.SEEK_POSITION, seekPos);
 				getActivity().sendBroadcast(seekBarChanged);
 
 			}
@@ -290,39 +288,39 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		songTime = (TextView) v.findViewById(R.id.songTime);
 
-		seekBarChanged = new Intent(Namespace.BROADCAST_SEEKBAR);
+		seekBarChanged = new Intent(Constants.BROADCAST_SEEKBAR);
 
 		hidable = (LinearLayout) v.findViewById(R.id.hidable);
 
 		if (savedInstanceState != null) {
 
-			noteId = savedInstanceState.getString(Namespace.NOTE_ID);
-			fragId = savedInstanceState.getString(Namespace.FRAGMENT_ID);
-			audioName = savedInstanceState.getString(Namespace.AUDIO_NAME);
-			audioPath = savedInstanceState.getString(Namespace.AUDIO_PATH);
+			noteId = savedInstanceState.getString(Constants.NOTE_ID);
+			fragId = savedInstanceState.getString(Constants.FRAGMENT_ID);
+			audioName = savedInstanceState.getString(Constants.AUDIO_NAME);
+			audioPath = savedInstanceState.getString(Constants.AUDIO_PATH);
 			musicPlaying = savedInstanceState.getBoolean(
-					Namespace.MUSIC_PLAYING);
+					Constants.MUSIC_PLAYING);
 
-			musicPaused = savedInstanceState.getBoolean(Namespace.MUSIC_PAUSED);
+			musicPaused = savedInstanceState.getBoolean(Constants.MUSIC_PAUSED);
 
-			repeatAudio = savedInstanceState.getBoolean(Namespace.REPEAT_AUDIO);
+			repeatAudio = savedInstanceState.getBoolean(Constants.REPEAT_AUDIO);
 			shuffleAudio = savedInstanceState
-					.getBoolean(Namespace.SHUFFLE_AUDIO);
+					.getBoolean(Constants.SHUFFLE_AUDIO);
 			recorderMode = savedInstanceState
-					.getBoolean(Namespace.RECORDER_MODE);
-			recording = savedInstanceState.getBoolean(Namespace.RECORD, true);
+					.getBoolean(Constants.RECORDER_MODE);
+			recording = savedInstanceState.getBoolean(Constants.RECORD, true);
 
 			if (audioPath == null) {
-				audioPath = Namespace.BLANK;
+				audioPath = Constants.BLANK;
 				audioName = "";
-				nextAudio.stopAllAudio(Namespace.BLANK);
+				nextAudio.stopAllAudio(Constants.BLANK);
 
 				loadAudioFromBrowser();
-			} else if (audioPath.equalsIgnoreCase(Namespace.RECORD)) {
+			} else if (audioPath.equalsIgnoreCase(Constants.RECORD)) {
 
-				audioPath = Namespace.BLANK;
-				audioName = Namespace.BLANK;
-				nextAudio.stopAllAudio(Namespace.BLANK);
+				audioPath = Constants.BLANK;
+				audioName = Constants.BLANK;
+				nextAudio.stopAllAudio(Constants.BLANK);
 
 				recMode();
 			}
@@ -334,16 +332,16 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		} else {
 			if (audioPath == null) {
-				audioPath = Namespace.BLANK;
-				audioName = Namespace.BLANK;
-				nextAudio.stopAllAudio(Namespace.BLANK);
+				audioPath = Constants.BLANK;
+				audioName = Constants.BLANK;
+				nextAudio.stopAllAudio(Constants.BLANK);
 
 				loadAudioFromBrowser();
-			} else if (audioPath.equalsIgnoreCase(Namespace.RECORD)) {
+			} else if (audioPath.equalsIgnoreCase(Constants.RECORD)) {
 
-				audioPath = Namespace.BLANK;
-				audioName = Namespace.BLANK;
-				nextAudio.stopAllAudio(Namespace.BLANK);
+				audioPath = Constants.BLANK;
+				audioName = Constants.BLANK;
+				nextAudio.stopAllAudio(Constants.BLANK);
 
 				recMode();
 			}
@@ -381,9 +379,9 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 		if (musicPlaying) {
 			seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(Namespace.BROADCAST_ACTION));
+					new IntentFilter(Constants.BROADCAST_ACTION));
 			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(Namespace.BROADCAST_ENDOFSONG));
+					new IntentFilter(Constants.BROADCAST_ENDOFSONG));
 
 			if (!musicPaused) {
 				play.setBackgroundResource(R.drawable.media_pause);
@@ -400,7 +398,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 		}
 		if (recording) {
 			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(Namespace.BROADCAST_ACTION));
+					new IntentFilter(Constants.BROADCAST_ACTION));
 			play.setBackgroundResource(R.drawable.ic_action_recording);
 
 		}
@@ -420,10 +418,10 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		if (musicPlaying) {
 			seekBar.setOnSeekBarChangeListener(null);
-			audioAutonome = new Intent(Namespace.BROADCAST_AUTONOME);
-			audioAutonome.putExtra(Namespace.FLAG, true);
-			audioAutonome.putExtra(Namespace.AUDIO_REPEAT, repeatAudio);
-			audioAutonome.putExtra(Namespace.AUDIO_SHUFFLE, shuffleAudio);
+			audioAutonome = new Intent(Constants.BROADCAST_AUTONOME);
+			audioAutonome.putExtra(Constants.FLAG, true);
+			audioAutonome.putExtra(Constants.AUDIO_REPEAT, repeatAudio);
+			audioAutonome.putExtra(Constants.AUDIO_SHUFFLE, shuffleAudio);
 			getActivity().sendBroadcast(audioAutonome);
 		}
 		super.onPause();
@@ -451,14 +449,14 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		if (musicPlaying) {
 			getActivity().registerReceiver(refreshUI,
-					new IntentFilter(Namespace.BROADCAST_REFRESHUI));
+					new IntentFilter(Constants.BROADCAST_REFRESHUI));
 			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(Namespace.BROADCAST_ACTION));
+					new IntentFilter(Constants.BROADCAST_ACTION));
 			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(Namespace.BROADCAST_ENDOFSONG));
+					new IntentFilter(Constants.BROADCAST_ENDOFSONG));
 
-			audioAutonome = new Intent(Namespace.BROADCAST_AUTONOME);
-			audioAutonome.putExtra(Namespace.FLAG, false);
+			audioAutonome = new Intent(Constants.BROADCAST_AUTONOME);
+			audioAutonome.putExtra(Constants.FLAG, false);
 			getActivity().sendBroadcast(audioAutonome);
 		}
 
@@ -484,17 +482,17 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		outState.putString(Namespace.NOTE_ID, noteId);
+		outState.putString(Constants.NOTE_ID, noteId);
 		if (fragId != null)
-			outState.putString(Namespace.FRAGMENT_ID, fragId);
+			outState.putString(Constants.FRAGMENT_ID, fragId);
 
 		if (audioName != null)
-			outState.putString(Namespace.AUDIO_NAME, audioName);
+			outState.putString(Constants.AUDIO_NAME, audioName);
 
 		if (audioPath != null)
-			outState.putString(Namespace.AUDIO_PATH, audioPath);
+			outState.putString(Constants.AUDIO_PATH, audioPath);
 		if (musicPlaying) {
-			outState.putBoolean(Namespace.MUSIC_PLAYING, true);
+			outState.putBoolean(Constants.MUSIC_PLAYING, true);
 
 			try {
 
@@ -515,23 +513,23 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		}
 		if (musicPaused) {
-			outState.putBoolean(Namespace.MUSIC_PAUSED, true);
+			outState.putBoolean(Constants.MUSIC_PAUSED, true);
 
 		}
 		if (repeatAudio) {
-			outState.putBoolean(Namespace.REPEAT_AUDIO, true);
+			outState.putBoolean(Constants.REPEAT_AUDIO, true);
 
 		}
 		if (shuffleAudio) {
-			outState.putBoolean(Namespace.SHUFFLE_AUDIO, true);
+			outState.putBoolean(Constants.SHUFFLE_AUDIO, true);
 
 		}
 		if (recorderMode) {
-			outState.putBoolean(Namespace.RECORDER_MODE, true);
+			outState.putBoolean(Constants.RECORDER_MODE, true);
 
 		}
 		if (recording) {
-			outState.putBoolean(Namespace.RECORD, true);
+			outState.putBoolean(Constants.RECORD, true);
 
 		}
 
@@ -570,14 +568,14 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 	public void prevAudio() {
 		seekBar.setOnSeekBarChangeListener(null);
-		nextAudio.next(fragId, Namespace.PREVIOUS);
+		nextAudio.next(fragId, Constants.PREVIOUS);
 
 	}
 
 	protected void resumeAudio() {
 		play.setBackgroundResource(R.drawable.media_pause);
-		songPause = new Intent(Namespace.BROADCAST_PAUSESONG);
-		songPause.putExtra(Namespace.FLAG, Namespace.RESUME);
+		songPause = new Intent(Constants.BROADCAST_PAUSESONG);
+		songPause.putExtra(Constants.FLAG, Constants.RESUME);
 		musicPaused = true;
 		getActivity().sendBroadcast(songPause);
 		musicPaused = false;
@@ -585,8 +583,8 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 	public void pauseAudio() {
 		play.setBackgroundResource(R.drawable.media_play);
-		songPause = new Intent(Namespace.BROADCAST_PAUSESONG);
-		songPause.putExtra(Namespace.FLAG, Namespace.PAUSE);
+		songPause = new Intent(Constants.BROADCAST_PAUSESONG);
+		songPause.putExtra(Constants.FLAG, Constants.PAUSE);
 		getActivity().sendBroadcast(songPause);
 		musicPaused = true;
 	}
@@ -600,9 +598,9 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 			play.setBackgroundResource(R.drawable.media_pause);
 		try {
 			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(Namespace.BROADCAST_ACTION));
+					new IntentFilter(Constants.BROADCAST_ACTION));
 			getActivity().registerReceiver(endSongReceiver,
-					new IntentFilter(Namespace.BROADCAST_ENDOFSONG));
+					new IntentFilter(Constants.BROADCAST_ENDOFSONG));
 			musicPlaying = true;
 
 		} catch (Exception e) {
@@ -612,7 +610,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 		try {
 			getActivity().registerReceiver(refreshUI,
-					new IntentFilter(Namespace.BROADCAST_REFRESHUI));
+					new IntentFilter(Constants.BROADCAST_REFRESHUI));
 		} catch (Exception e) {
 			Log.d("Audio Intent Error1",
 					e.getClass().getName() + "  ___  " + e.getMessage());
@@ -623,19 +621,19 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	public void nextAudio() {
 		seekBar.setOnSeekBarChangeListener(null);
 		if (repeatAudio) {
-			nextAudio.next(fragId, Namespace.REPLAY);
+			nextAudio.next(fragId, Constants.REPLAY);
 		} else if (shuffleAudio) {
-			nextAudio.next(fragId, Namespace.SHUFFLE_AUDIO);
+			nextAudio.next(fragId, Constants.SHUFFLE_AUDIO);
 		} else {
-			nextAudio.next(fragId, Namespace.NEXT);
+			nextAudio.next(fragId, Constants.NEXT);
 		}
 	}
 
 	public void superNextAudio() {
 		if (shuffleAudio) {
-			nextAudio.next(fragId, Namespace.SHUFFLE_AUDIO);
+			nextAudio.next(fragId, Constants.SHUFFLE_AUDIO);
 		} else {
-			nextAudio.next(fragId, Namespace.NEXT);
+			nextAudio.next(fragId, Constants.NEXT);
 		}
 	}
 
@@ -759,15 +757,15 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	public TreeMap<String, String> saveContent() {
 
 		TreeMap<String, String> content = new TreeMap<String, String>();
-		if (audioPath.equalsIgnoreCase(Namespace.BLANK)) {
-			content.put(Namespace.Flags.Cont1.name(), "No Audio");
+		if (audioPath.equalsIgnoreCase(Constants.BLANK)) {
+			content.put(Constants.Flags.Cont1.name(), "No Audio");
 		} else {
-			content.put(Namespace.Flags.Cont1.name(), audioPath);
+			content.put(Constants.Flags.Cont1.name(), audioPath);
 		}
-		if (audioName.equalsIgnoreCase(Namespace.BLANK)) {
-			content.put(Namespace.Flags.Cont2.name(), "No Audio");
+		if (audioName.equalsIgnoreCase(Constants.BLANK)) {
+			content.put(Constants.Flags.Cont2.name(), "No Audio");
 		} else {
-			content.put(Namespace.Flags.Cont2.name(), audioName);
+			content.put(Constants.Flags.Cont2.name(), audioName);
 		}
 
 		return content;
@@ -776,8 +774,8 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 
 	public void loadContent(TreeMap<String, String> temp) {
 
-		audioPath = temp.get(Namespace.Flags.Cont1.name());
-		audioName = temp.get(Namespace.Flags.Cont2.name());
+		audioPath = temp.get(Constants.Flags.Cont1.name());
+		audioName = temp.get(Constants.Flags.Cont2.name());
 
 	}
 
@@ -975,19 +973,19 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 			nextAudio.stopAllAudio(fragId);
 			play.setBackgroundResource(R.drawable.media_pause);
 
-			audioPlayIntent.putStringArrayListExtra(Namespace.AUDIO_PATH,
+			audioPlayIntent.putStringArrayListExtra(Constants.AUDIO_PATH,
 					result);
-			audioPlayIntent.putExtra(Namespace.AUDIO_NUMBER,
+			audioPlayIntent.putExtra(Constants.AUDIO_NUMBER,
 					getPositionToViewer(result, audioPath));
-			audioPlayIntent.putExtra(Namespace.MODE, Namespace.PLAY);
+			audioPlayIntent.putExtra(Constants.MODE, Constants.PLAY);
 
 			try {
 				getActivity().registerReceiver(progressbarReceiver,
-						new IntentFilter(Namespace.BROADCAST_ACTION));
+						new IntentFilter(Constants.BROADCAST_ACTION));
 				getActivity().registerReceiver(endSongReceiver,
-						new IntentFilter(Namespace.BROADCAST_ENDOFSONG));
+						new IntentFilter(Constants.BROADCAST_ENDOFSONG));
 				getActivity().registerReceiver(refreshUI,
-						new IntentFilter(Namespace.BROADCAST_REFRESHUI));
+						new IntentFilter(Constants.BROADCAST_REFRESHUI));
 				musicPlaying = true;
 				getActivity().startService((audioPlayIntent));
 			} catch (Exception e) {
@@ -1025,7 +1023,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 			recording = true;
 
 			getActivity().registerReceiver(progressbarReceiver,
-					new IntentFilter(Namespace.BROADCAST_ACTION));
+					new IntentFilter(Constants.BROADCAST_ACTION));
 
 			SimpleDateFormat time = new SimpleDateFormat("_dd_MMMM_HH-MM-ss");
 			FileManager fileManager = new FileManager(thiscontext);
@@ -1049,21 +1047,21 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 			play.setBackgroundResource(R.drawable.ic_action_recording);
 			songName.setText(audioName);
 
-			audioPlayIntent.putStringArrayListExtra(Namespace.AUDIO_PATH,
+			audioPlayIntent.putStringArrayListExtra(Constants.AUDIO_PATH,
 					result);
-			audioPlayIntent.putExtra(Namespace.AUDIO_NUMBER,
+			audioPlayIntent.putExtra(Constants.AUDIO_NUMBER,
 					getPositionToViewer(result, audioPath));
 
-			audioPlayIntent.putExtra(Namespace.MODE, Namespace.RECORD);
+			audioPlayIntent.putExtra(Constants.MODE, Constants.RECORD);
 
 			try {
 
 				getActivity().registerReceiver(progressbarReceiver,
-						new IntentFilter(Namespace.BROADCAST_ACTION));
+						new IntentFilter(Constants.BROADCAST_ACTION));
 				getActivity().registerReceiver(endSongReceiver,
-						new IntentFilter(Namespace.BROADCAST_ENDOFSONG));
+						new IntentFilter(Constants.BROADCAST_ENDOFSONG));
 				getActivity().registerReceiver(refreshUI,
-						new IntentFilter(Namespace.BROADCAST_REFRESHUI));
+						new IntentFilter(Constants.BROADCAST_REFRESHUI));
 
 				getActivity().startService((audioPlayIntent));
 			} catch (Exception e) {

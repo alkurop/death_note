@@ -2,7 +2,7 @@ package com.omar.deathnote.picview;
 
 import java.util.ArrayList;
 
-import com.omar.deathnote.Namespace;
+import com.omar.deathnote.Constants;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +21,7 @@ public class ImagesPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int i) {
 		Bundle args = new Bundle();
-		args.putString(Namespace.PATH, values.get(i));
+		args.putString(Constants.PATH, values.get(i));
 
 		SingleViewFragment fragment = new SingleViewFragment();
 		fragment.setArguments(args);

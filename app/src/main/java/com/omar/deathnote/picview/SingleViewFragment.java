@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.omar.deathnote.Namespace;
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 
 public class SingleViewFragment extends Fragment {
@@ -22,7 +22,7 @@ public class SingleViewFragment extends Fragment {
     public static SingleViewFragment buildWithResource(String path){
         Bundle args = new Bundle();
        
-        args.putString (Namespace.PATH, path);
+        args.putString (Constants.PATH, path);
 
         SingleViewFragment fragment = new SingleViewFragment();
         fragment.setArguments(args);
@@ -39,7 +39,7 @@ public class SingleViewFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-    	String path =  getArguments().getString (Namespace.PATH);
+    	String path =  getArguments().getString (Constants.PATH);
         ImageView imageView = (ImageView) getView().findViewById(R.id.imageview);   
         imageView.setImageURI(Uri.fromFile(new File(path)));
       

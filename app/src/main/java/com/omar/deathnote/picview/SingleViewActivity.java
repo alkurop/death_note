@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.omar.deathnote.Namespace;
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 
 public class SingleViewActivity extends FragmentActivity {
@@ -22,10 +22,10 @@ public class SingleViewActivity extends FragmentActivity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_viewpager);
 
-		int position = getIntent().getIntExtra(Namespace.ID, 0);
+		int position = getIntent().getIntExtra(Constants.ID, 0);
 
 		ArrayList<String> list = getIntent()
-				.getStringArrayListExtra(Namespace.LIST);
+				.getStringArrayListExtra(Constants.LIST);
 		
 		
 		

@@ -18,7 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.omar.deathnote.Namespace;
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.DefaultFragment;
 import com.omar.deathnote.fragments.LinkFragment;
@@ -78,10 +78,10 @@ public class SharingModule {
 
 			String cont1 = "";
 
-			Namespace.Frags[] frags = Namespace.Frags.values();
-			Namespace.Frags eType = null;
+			Constants.Frags[] frags = Constants.Frags.values();
+			Constants.Frags eType = null;
 
-			for (Namespace.Frags frag : frags) {
+			for (Constants.Frags frag : frags) {
 
 				if (type.equalsIgnoreCase(frag.name())) {
 					eType = frag;
@@ -97,8 +97,8 @@ public class SharingModule {
 
 				temp = ((DefaultFragment) tempFragment).saveContent();
 
-				if (temp.get(Namespace.Flags.Cont1.name()) != null) {
-					cont1 = temp.get(Namespace.Flags.Cont1.name());
+				if (temp.get(Constants.Flags.Cont1.name()) != null) {
+					cont1 = temp.get(Constants.Flags.Cont1.name());
 				} else {
 					cont1 = "No Title";
 				}
@@ -106,7 +106,7 @@ public class SharingModule {
 				subject = cont1;
 
 				Bundle titleBundle = new Bundle();
-				titleBundle.putString(Namespace.Flags.Cont1.name(), cont1);
+				titleBundle.putString(Constants.Flags.Cont1.name(), cont1);
 
 				break;
 			case PicFragment:
@@ -114,7 +114,7 @@ public class SharingModule {
 				tempFragment = (PicFragment) fm.findFragmentByTag(fragId);
 				temp = ((PicFragment) tempFragment).saveContent();
 
-				cont1 = temp.get(Namespace.Flags.Cont1.name());
+				cont1 = temp.get(Constants.Flags.Cont1.name());
 				if (cont1 != null)
 					;
 				fileIn = new File(cont1);
@@ -128,8 +128,8 @@ public class SharingModule {
 				tempFragment = (NoteFragment) fm.findFragmentByTag(fragId);
 				temp = ((NoteFragment) tempFragment).saveContent();
 
-				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Namespace.Flags.Cont1.name());
+				if (!temp.get(Constants.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Constants.Flags.Cont1.name());
 				} else {
 					cont1 = "No Content";
 				}
@@ -143,8 +143,8 @@ public class SharingModule {
 				tempFragment = (LinkFragment) fm.findFragmentByTag(fragId);
 				temp = ((LinkFragment) tempFragment).saveContent();
 
-				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Namespace.Flags.Cont1.name());
+				if (!temp.get(Constants.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Constants.Flags.Cont1.name());
 				} else {
 					cont1 = "No Link";
 				}
@@ -157,8 +157,8 @@ public class SharingModule {
 				tempFragment = (AudioFragment) fm.findFragmentByTag(fragId);
 				temp = ((AudioFragment) tempFragment).saveContent();
 
-				if (!temp.get(Namespace.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Namespace.Flags.Cont1.name());
+				if (!temp.get(Constants.Flags.Cont1.name()).equalsIgnoreCase("")) {
+					cont1 = temp.get(Constants.Flags.Cont1.name());
 				} else {
 					cont1 = "No Audio";
 				}
