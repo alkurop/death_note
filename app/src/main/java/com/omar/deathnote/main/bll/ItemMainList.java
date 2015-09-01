@@ -17,6 +17,28 @@ public class ItemMainList {
     public int img;
 
 
+    public static ItemMainList Create(Cursor _cursor) {
+        ItemMainList item = new ItemMainList();
 
+        {
+            item.title = _cursor.getString(_cursor.getColumnIndex(DB.COLUMN_TITLE));
+            item.timedate = _cursor.getString(_cursor.getColumnIndex(DB.COLUMN_TIMEDATE));
+            item.id = _cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_ID));
+            item.img = Constants.select_images[_cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_STYLE))];
+
+        }
+        return item;
+
+    }
+
+    public static List<ItemMainList> CreateList(Cursor cursor) {
+        List<ItemMainList> data = new ArrayList<>();
+        if (cursor != null) while (!cursor.isAfterLast()) {
+            data.add(Create(cursor));
+            cursor.moveToNext();
+        }
+
+        return data;
+    }
 
 }

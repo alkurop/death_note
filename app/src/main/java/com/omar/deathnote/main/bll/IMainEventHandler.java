@@ -13,6 +13,6 @@ public interface IMainEventHandler {
 
     void FabClicked();
 
-    void SetList();
+
 
 }

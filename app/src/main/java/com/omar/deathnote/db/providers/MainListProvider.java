@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class MainListProvider {
 
-    private static List<MainListProvider> mMainListProviders;
     private   LoaderManager.LoaderCallbacks<Cursor> loaderCallback;
     private IMainListCallback mainListCallback;
     private LoaderManager loaderManager;
@@ -33,44 +32,16 @@ public class MainListProvider {
 
 
     public static MainListProvider I(LoaderManager loaderManager) {
-        if (mMainListProviders == null) mMainListProviders = new ArrayList<>();
-
-        for(MainListProvider item : mMainListProviders)
-            if(item.loaderManager == loaderManager)
-                return item;
 
         MainListProvider mainListProvider = new MainListProvider();
 
         mainListProvider.loaderManager  = loaderManager;
-        mMainListProviders.add(mainListProvider);
-        mainListProvider.ID = mMainListProviders.indexOf(mainListProvider);
+        mainListProvider.ID = Constants.LOADERS.LOAD_NOTE.ordinal();
 
         return mainListProvider;
     }
 
-    private ItemMainList create(Cursor _cursor) {
-        ItemMainList item = new ItemMainList();
 
-        {
-            item.title = _cursor.getString(_cursor.getColumnIndex(DB.COLUMN_TITLE));
-            item.timedate = _cursor.getString(_cursor.getColumnIndex(DB.COLUMN_TIMEDATE));
-            item.id = _cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_ID));
-            item.img = Constants.select_images[_cursor.getInt(_cursor.getColumnIndex(DB.COLUMN_STYLE))];
-
-        }
-        return item;
-
-    }
-
-    public List<ItemMainList> createList(Cursor cursor) {
-        List<ItemMainList> data = new ArrayList<>();
-        if (cursor != null) while (!cursor.isAfterLast()) {
-            data.add(create(cursor));
-            cursor.moveToNext();
-        }
-
-        return data;
-    }
 
     public void GetMainList(IMainListCallback callback,  int style) {
         loaderCallback = getLoaderCallback(style);
@@ -95,7 +66,7 @@ public class MainListProvider {
 
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                mainListCallback.onSuccess(createList(cursor));
+                mainListCallback.onSuccess(ItemMainList.CreateList(cursor));
 
             }
 
