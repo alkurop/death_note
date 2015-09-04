@@ -71,7 +71,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 
 		case LOAD_LIST:
 
-			return new MainListLoader(context, db);
+			return new MainListLoader(context, db,0);
 
 		case DELETE_SOME_NOTE:
 

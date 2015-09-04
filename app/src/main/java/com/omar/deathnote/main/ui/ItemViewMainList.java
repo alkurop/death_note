@@ -44,12 +44,12 @@ public class ItemViewMainList extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.del)
-    private void delClicked() {
+    public void delClicked() {
         callback.DeleteItem(dataHolder.id);
     }
 
     @OnClick(R.id.container)
-    private void itemClicked() {
+    public void itemClicked() {
         callback.OpenNote(dataHolder.id);
     }
 

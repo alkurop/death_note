@@ -48,12 +48,12 @@ public class MainPresenter implements IMainEventHandler{
     public void setAdapterCallback(){
         mainAdapterCallback = new IMainAdapterCallback() {
             @Override
-            public void DeleteItem(String id) {
+            public void DeleteItem(int id) {
 
             }
 
             @Override
-            public void OpenNote(String id) {
+            public void OpenNote(int id) {
 
             }
         };

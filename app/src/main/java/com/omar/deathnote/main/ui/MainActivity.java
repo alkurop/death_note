@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     }
 
     @OnClick(R.id.fab)
-    private void FabClicked() {
+    public void FabClicked() {
         presenter.FabClicked();
     }
 

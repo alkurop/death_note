@@ -14,6 +14,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -164,9 +165,9 @@ public class NoteActivity extends Activity implements INoteView, OnNavigationLis
 				id = extras.getLong(Constants.ID);
 
 				loaderManager.restartLoader(LoaderCallback.LOAD_NOTE, null,
-						callbacks);
+						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
 				loaderManager.restartLoader(LoaderCallback.LOAD_STYLE, null,
-						callbacks);
+						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
 
 			} else {
 				 
@@ -174,7 +175,7 @@ public class NoteActivity extends Activity implements INoteView, OnNavigationLis
 				actionBar.setSelectedNavigationItem(style - 1);
 
 				loaderManager.restartLoader(LoaderCallback.ADD_NEW_NOTE, null,
-						callbacks);
+						(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);
 
 				createFragment(extras.getString(Constants.TITLE), Constants.SPACE,
 						Constants.Frags.DefaultFragment);
@@ -507,11 +508,11 @@ public class NoteActivity extends Activity implements INoteView, OnNavigationLis
 
 		Bundle titleBundle = fs.getTitleBundle();
 		loaderManager.restartLoader(LoaderCallback.EDIT_REC_TITLE,
-				titleBundle, callbacks);
+				titleBundle,(LoaderManager.LoaderCallbacks<Cursor>) callbacks);
 
 		Bundle saveBundle = fs.saveFragment();
 		loaderManager.restartLoader(LoaderCallback.SAVE_NOTE, saveBundle,
-				callbacks);
+				(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);
 
 	}
 
