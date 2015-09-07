@@ -24,7 +24,7 @@ import com.omar.deathnote.R;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.pref.PrefActivity;
 import com.omar.deathnote.rate.RateMeMaybe;
 import com.omar.deathnote.utility.LoaderCallback;
@@ -217,7 +217,7 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 		bundle.putInt(Constants.STYLE, style);
 		Intent intent;
 
-		intent = new Intent(this, NoteActivity.class);
+		intent = new Intent(this, NoteActivity_old.class);
 		intent.putExtras(bundle);
 		startActivityForResult(intent, addItem);
 
@@ -267,7 +267,7 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 				bundle.putLong(Constants.ID, id);
 
 				Intent intent;
-				intent = new Intent(getApplicationContext(), NoteActivity.class);
+				intent = new Intent(getApplicationContext(), NoteActivity_old.class);
 				intent.putExtras(bundle);
 
 				startActivityForResult(intent, editItem);

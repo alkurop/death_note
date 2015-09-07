@@ -32,7 +32,7 @@ public class ItemViewMainList extends RecyclerView.ViewHolder {
 
     public ItemViewMainList(View view) {
         super(view);
-        ButterKnife.inject(view);
+        ButterKnife.inject(this,view);
     }
 
     public void BindData( ItemMainList dataHolder, IMainAdapterCallback callback) {

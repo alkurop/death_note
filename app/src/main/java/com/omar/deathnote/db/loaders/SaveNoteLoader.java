@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.DB;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.utility.FragContent;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class SaveNoteLoader extends CursorLoader {
     @Override
     public Cursor loadInBackground() {
 
-        db.deleteNoteTable(NoteActivity.getId());
-        db.createNoteTable(NoteActivity.getId());
+        db.deleteNoteTable(NoteActivity_old.getId());
+        db.createNoteTable(NoteActivity_old.getId());
         for (FragContent listItem : fragsArrayList) {
 
-            db.addFragment(NoteActivity.getId(), listItem.getType(),
+            db.addFragment(NoteActivity_old.getId(), listItem.getType(),
                     listItem.getCont1(), listItem.getCont2());
 
         }

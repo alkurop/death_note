@@ -33,11 +33,13 @@ public class ItemMainList {
 
     public static List<ItemMainList> CreateList(Cursor cursor) {
         List<ItemMainList> data = new ArrayList<>();
-        if (cursor != null) while (!cursor.isAfterLast()) {
-            data.add(Create(cursor));
-            cursor.moveToNext();
-        }
+        if (cursor.moveToFirst()) {
+            do {
+                data.add(Create(cursor));
+            }
+            while(cursor.moveToNext());
 
+        }
         return data;
     }
 

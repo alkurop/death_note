@@ -34,7 +34,7 @@ import android.widget.Toast;
 
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.utils.FileManager;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.Constants.Frags;
@@ -430,11 +430,11 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (NoteActivity.class.isInstance(activity)) {
+		if (NoteActivity_old.class.isInstance(activity)) {
 
-			sX = NoteActivity.getSaveNote();
-			OnDeleteFragment = NoteActivity.getOnDeleteFragment();
-			nextAudio = NoteActivity.getNextAudio();
+			sX = NoteActivity_old.getSaveNote();
+			OnDeleteFragment = NoteActivity_old.getOnDeleteFragment();
+			nextAudio = NoteActivity_old.getNextAudio();
 		} else {
 			throw new IllegalArgumentException(
 					"Activity must implement NextAudio interface ");

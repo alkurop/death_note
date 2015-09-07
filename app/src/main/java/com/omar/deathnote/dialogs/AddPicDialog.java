@@ -7,7 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 
 public class AddPicDialog extends DialogFragment {
@@ -22,9 +22,9 @@ public class AddPicDialog extends DialogFragment {
 
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (NoteActivity.class.isInstance(activity)) {
+		if (NoteActivity_old.class.isInstance(activity)) {
 
-			mListener = NoteActivity.getPicDialogListener();}
+			mListener = NoteActivity_old.getPicDialogListener();}
 		
 		else if (PicDialogListener.class.isInstance(activity)) {
 

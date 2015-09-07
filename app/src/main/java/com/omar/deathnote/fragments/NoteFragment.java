@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.utility.OnDeleteFragment;
@@ -37,9 +37,9 @@ public class NoteFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (	NoteActivity.class.isInstance(
+		if (	NoteActivity_old.class.isInstance(
 				activity)) {
-			OnDeleteFragment = NoteActivity.getOnDeleteFragment();
+			OnDeleteFragment = NoteActivity_old.getOnDeleteFragment();
 		} else {
 			throw new IllegalArgumentException(
 					"Activity must implement OnDeleteFragment interface ");

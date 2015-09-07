@@ -42,7 +42,7 @@ import android.widget.LinearLayout;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.utils.FileManager;
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 import com.omar.deathnote.picview.SingleViewActivity;
 import com.omar.deathnote.utility.OnDeleteFragment;
@@ -154,10 +154,10 @@ public class PicFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 
-		if (NoteActivity.class.isInstance(activity)) {
-			sX = NoteActivity.getSaveNote();
+		if (NoteActivity_old.class.isInstance(activity)) {
+			sX = NoteActivity_old.getSaveNote();
 
-			OnDeleteFragment = NoteActivity.getOnDeleteFragment();
+			OnDeleteFragment = NoteActivity_old.getOnDeleteFragment();
 		} else {
 			throw new IllegalArgumentException(
 					"Activity must implement OnDeleteFragment interface ");

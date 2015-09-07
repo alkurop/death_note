@@ -1,7 +1,18 @@
 package com.omar.deathnote.notes.ui;
 
-import android.app.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,6 +25,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
+
+import com.omar.deathnote.main.ui.MainActivity_old;
+import com.omar.deathnote.utils.FileManager;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.dialogs.AddAudioDialog;
@@ -22,17 +36,15 @@ import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.AudioFragment.NextAudio;
-import com.omar.deathnote.main.ui.MainActivity_old;
-import com.omar.deathnote.utility.*;
-import com.omar.deathnote.utils.FileManager;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import com.omar.deathnote.utility.FragmentCreator;
+import com.omar.deathnote.utility.FragmentSaver;
+import com.omar.deathnote.utility.LoaderCallback;
+import com.omar.deathnote.utility.OnDeleteFragment;
+import com.omar.deathnote.utility.SaveNote;
+import com.omar.deathnote.utility.SharingModule;
 
 @SuppressWarnings({ "deprecation", "incomplete-switch" })
-public class NoteActivity extends Activity implements OnNavigationListener {
+public class NoteActivity_old extends Activity implements INoteView, OnNavigationListener {
 
 	
 	
@@ -100,7 +112,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	}
 
 	public static void setId(long id) {
-		NoteActivity.id = id;
+		NoteActivity_old.id = id;
 	}
 
 	public static int getStyle() {
@@ -108,7 +120,7 @@ public class NoteActivity extends Activity implements OnNavigationListener {
 	}
 
 	public static void setStyle(int style) {
-		NoteActivity.style = style;
+		NoteActivity_old.style = style;
 		actionBar.setSelectedNavigationItem(style - 1);
 	}
 

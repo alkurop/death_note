@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.utility.OnDeleteFragment;
@@ -37,8 +37,8 @@ public class LinkFragment extends Fragment   {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
-		if (NoteActivity.class.isInstance(activity)) {
-			OnDeleteFragment = NoteActivity.getOnDeleteFragment();}
+		if (NoteActivity_old.class.isInstance(activity)) {
+			OnDeleteFragment = NoteActivity_old.getOnDeleteFragment();}
 		
 		
 		

@@ -12,7 +12,7 @@ import android.view.Window;
 
 import com.omar.deathnote.main.ui.MainActivity;
 import com.omar.deathnote.main.ui.MainActivity_old;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 
 @SuppressLint("InflateParams")
@@ -29,10 +29,10 @@ public class DialogOnDelete extends DialogFragment implements OnClickListener {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 
-		if (NoteActivity.class.isInstance(activity))
+		if (NoteActivity_old.class.isInstance(activity))
 
 		{
-			deleteDialog = NoteActivity.getDeleteDialog();
+			deleteDialog = NoteActivity_old.getDeleteDialog();
 		} else if (MainActivity.class.isInstance(activity)) {
 			deleteDialog = MainActivity_old.getDeleteDialog();
 		} else {

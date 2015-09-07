@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.DB;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 
 /**
  * Created by omar on 8/31/15.
@@ -24,7 +24,7 @@ public class EditNoteTitleLoader  extends CursorLoader {
     @Override
     public Cursor loadInBackground() {
 
-        db.editRec(NoteActivity.getId(), NoteActivity.getStyle(), bundle.getString(Constants.Flags.Cont1.name()));
+        db.editRec(NoteActivity_old.getId(), NoteActivity_old.getStyle(), bundle.getString(Constants.Flags.Cont1.name()));
 
         return null;
     }

@@ -7,7 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
 
 public class AddAudioDialog extends DialogFragment {
@@ -24,9 +24,9 @@ public class AddAudioDialog extends DialogFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 
-		if (NoteActivity.class.isInstance(activity)) {
+		if (NoteActivity_old.class.isInstance(activity)) {
 
-			mListener = NoteActivity.getAudioDialogListener();
+			mListener = NoteActivity_old.getAudioDialogListener();
 
 		} else {
 			// The activity doesn't implement the interface, throw exception

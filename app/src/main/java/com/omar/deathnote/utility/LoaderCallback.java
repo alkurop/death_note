@@ -17,7 +17,7 @@ import android.util.Log;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.loaders.MainListLoader;
 import com.omar.deathnote.main.ui.MainActivity_old;
-import com.omar.deathnote.notes.ui.NoteActivity;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.Constants;
 
 public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -91,8 +91,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		int loaderId = loader.getId();
 		switch (loaderId) {
 		case ADD_NEW_NOTE:
-			NoteActivity.setId(cursor.getInt(cursor
-					.getColumnIndex(DB.COLUMN_ID)));
+			NoteActivity_old.setId(cursor.getInt(cursor.getColumnIndex(DB.COLUMN_ID)));
 
 			break;
 
@@ -107,24 +106,21 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 					String cont2 = cursor.getString(cursor
 							.getColumnIndex(DB.COLUMN_CONT2));
 
-					Constants.Frags eType = NoteActivity.setFragType(type);
+					Constants.Frags eType = NoteActivity_old.setFragType(type);
 
-					NoteActivity.createFragment(cont1, cont2, eType);
+					NoteActivity_old.createFragment(cont1, cont2, eType);
 
 				}
 			} else {
 				/* Log.d ("loading saved note  ", "cursor == null"); */
-				NoteActivity.createFragment("", null,
-						Constants.Frags.DefaultFragment);
-				NoteActivity.createFragment(" ", null,
-						Constants.Frags.NoteFragment);
+				NoteActivity_old.createFragment("", null, Constants.Frags.DefaultFragment);
+				NoteActivity_old.createFragment(" ", null, Constants.Frags.NoteFragment);
 			}
 
 			break;
 
 		case LOAD_STYLE:
-			NoteActivity.setStyle(cursor.getInt(cursor
-					.getColumnIndex(DB.COLUMN_STYLE)));
+			NoteActivity_old.setStyle(cursor.getInt(cursor.getColumnIndex(DB.COLUMN_STYLE)));
 
 		case LOAD_LIST:
 			MainActivity_old.swapCursor(cursor);
@@ -170,7 +166,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		@Override
 		public Cursor loadInBackground() {
 			Cursor cursor;
-			cursor = db.getAllNoteData(NoteActivity.getId());
+			cursor = db.getAllNoteData(NoteActivity_old.getId());
 			return cursor;
 		}
 
@@ -187,7 +183,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		@Override
 		public Cursor loadInBackground() {
 			Cursor cursor;
-			cursor = db.fetchRec(NoteActivity.getId());
+			cursor = db.fetchRec(NoteActivity_old.getId());
 			return cursor;
 		}
 
@@ -204,7 +200,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		@Override
 		public Cursor loadInBackground() {
 			Cursor cursor;
-			db.addRec(NoteActivity.getStyle(), "");
+			db.addRec(NoteActivity_old.getStyle(), "");
 			cursor = db.fetchLast();
 			return cursor;
 		}
@@ -224,7 +220,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		@Override
 		public Cursor loadInBackground() {
 
-			db.editRec(NoteActivity.getId(), NoteActivity.getStyle(), bundle.getString(Constants.Flags.Cont1.name()));
+			db.editRec(NoteActivity_old.getId(), NoteActivity_old.getStyle(), bundle.getString(Constants.Flags.Cont1.name()));
 
 			return null;
 		}
@@ -246,11 +242,11 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 		@Override
 		public Cursor loadInBackground() {
 
-			db.deleteNoteTable(NoteActivity.getId());
-			db.createNoteTable(NoteActivity.getId());
+			db.deleteNoteTable(NoteActivity_old.getId());
+			db.createNoteTable(NoteActivity_old.getId());
 			for (FragContent listItem : fragsArrayList) {
 
-				db.addFragment(NoteActivity.getId(), listItem.getType(),
+				db.addFragment(NoteActivity_old.getId(), listItem.getType(),
 						listItem.getCont1(), listItem.getCont2());
 
 			}
