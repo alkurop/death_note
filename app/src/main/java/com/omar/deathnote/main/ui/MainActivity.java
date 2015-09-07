@@ -1,6 +1,7 @@
 package com.omar.deathnote.main.ui;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -15,6 +16,7 @@ import butterknife.OnClick;
 import com.omar.deathnote.App;
 import com.omar.deathnote.R;
 import com.omar.deathnote.main.bll.IMainEventHandler;
+import com.omar.deathnote.notes.ui.NoteActivity;
 
 
 public class MainActivity extends AppCompatActivity implements IMainView {
@@ -53,6 +55,13 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Override
     public android.support.v4.app.LoaderManager GetLoaderManager() {
        return getSupportLoaderManager();
+    }
+
+    @Override
+    public void OpenEmptyNote(){
+
+        startActivity(new Intent(this,NoteActivity.class));
+        App.getNotePresenter().CreateEmptyContent();
     }
 
 }

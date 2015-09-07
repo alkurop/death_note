@@ -185,7 +185,7 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 	}
 
 	@Override
-	public boolean onNavigationItemSelected(int pos, long id) {
+	public boolean onNavigationItemSelected(int pos, int id) {
 
 		orderStatus = pos;
 		reloadList();
@@ -260,11 +260,11 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 		lvData.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
+					int position, int id) {
 
 				Bundle bundle = new Bundle();
 
-				bundle.putLong(Constants.ID, id);
+				bundle.putint(Constants.ID, id);
 
 				Intent intent;
 				intent = new Intent(getApplicationContext(), NoteActivity_old.class);

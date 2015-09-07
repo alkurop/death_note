@@ -49,7 +49,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 	
 	
 	
-	private static long id;
+	private static int id;
 	private static int style;
 	private static TreeMap<String, String> fragList;
 	private static int fragCount;
@@ -107,11 +107,11 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 		return audioDialogListener;
 	}
 
-	public static long getId() {
+	public static int getId() {
 		return id;
 	}
 
-	public static void setId(long id) {
+	public static void setId(int id) {
 		NoteActivity_old.id = id;
 	}
 
@@ -160,9 +160,9 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 			Bundle extras = getIntent().getExtras();
 			fragCount = 0;
 
-			if (extras.getLong(Constants.ID) != 0) {
+			if (extras.getint(Constants.ID) != 0) {
 
-				id = extras.getLong(Constants.ID);
+				id = extras.getint(Constants.ID);
 
 				loaderManager.restartLoader(LoaderCallback.LOAD_NOTE, null,
 						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
@@ -187,7 +187,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 		} else {
 
 			fragCount = savedInstanceState.getInt(Constants.FRAGMENT_COUNTER);
-			id = savedInstanceState.getLong(Constants.ID);
+			id = savedInstanceState.getint(Constants.ID);
 			keys = savedInstanceState.getStringArray(Constants.FRAGMENT_LIST_KEYS);
 			values = savedInstanceState.getStringArray(Constants.FRAGMENT_LIST_VALUES);
 			style = savedInstanceState.getInt(Constants.STYLE);
@@ -225,7 +225,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 		super.onSaveInstanceState(outState);
 		outState.putInt(Constants.STYLE, style);
 		outState.putInt(Constants.FRAGMENT_COUNTER, fragCount);
-		outState.putLong(Constants.ID, id);
+		outState.putint(Constants.ID, id);
 		outState.putBoolean(Constants.AUDIO_SHUFFLE, audioShuffle);
 		outState.putBoolean(Constants.AUDIO_REPEAT, audioRepeat);
 
@@ -253,7 +253,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 	}
 
 	@Override
-	public boolean onNavigationItemSelected(int pos, long id) {
+	public boolean onNavigationItemSelected(int pos, int id) {
 		style = (pos + 1);
 		setBackGround();
 

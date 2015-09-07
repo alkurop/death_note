@@ -8,9 +8,8 @@ import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.loaders.MainListLoader;
-import com.omar.deathnote.main.bll.ItemMainList;
+import com.omar.deathnote.models.ItemMainList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

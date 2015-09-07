@@ -9,7 +9,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 import com.omar.deathnote.main.bll.IMainAdapterCallback;
-import com.omar.deathnote.main.bll.ItemMainList;
+import com.omar.deathnote.models.ItemMainList;
 
 /**
  * Created by omar on 8/29/15.

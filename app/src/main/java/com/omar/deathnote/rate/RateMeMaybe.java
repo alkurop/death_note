@@ -267,18 +267,18 @@ public class RateMeMaybe implements RMMFragInterface {
 		int totalLaunchCount = mPreferences.getInt(PREF.TOTAL_LAUNCH_COUNT, 0) + 1;
 		editor.putInt(PREF.TOTAL_LAUNCH_COUNT, totalLaunchCount);
 
-		long currentMillis = System.currentTimeMillis();
+		int currentMillis = System.currentTimeMillis();
 
-		long timeOfAbsoluteFirstLaunch = mPreferences.getLong(
+		int timeOfAbsoluteFirstLaunch = mPreferences.getint(
 				PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH, 0);
 		if (timeOfAbsoluteFirstLaunch == 0) {
 			// this is the first launch!
 			timeOfAbsoluteFirstLaunch = currentMillis;
-			editor.putLong(PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH,
+			editor.putint(PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH,
 					timeOfAbsoluteFirstLaunch);
 		}
 
-		long timeOfLastPrompt = mPreferences.getLong(PREF.TIME_OF_LAST_PROMPT,
+		int timeOfLastPrompt = mPreferences.getint(PREF.TIME_OF_LAST_PROMPT,
 				0);
 
 		int launchesSinceLastPrompt = mPreferences.getInt(
@@ -290,7 +290,7 @@ public class RateMeMaybe implements RMMFragInterface {
 			// requirements for initial launch are met
 			if (timeOfLastPrompt == 0 /* user was not yet shown a prompt */
 					|| (launchesSinceLastPrompt >= mMinLaunchesUntilNextPrompt && ((currentMillis - timeOfLastPrompt) >= (mMinDaysUntilNextPrompt * DateUtils.DAY_IN_MILLIS)))) {
-				editor.putLong(PREF.TIME_OF_LAST_PROMPT, currentMillis);
+				editor.putint(PREF.TIME_OF_LAST_PROMPT, currentMillis);
 				editor.putInt(PREF.LAUNCHES_SINCE_LAST_PROMPT, 0);
 				editor.commit();
 				showDialog();

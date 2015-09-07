@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.bll;
+package com.omar.deathnote.models;
 
 import android.database.Cursor;
 import com.omar.deathnote.Constants;

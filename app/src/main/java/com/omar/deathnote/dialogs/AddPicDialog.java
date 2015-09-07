@@ -48,21 +48,21 @@ public class AddPicDialog extends DialogFragment {
 						case 0:
 							/*
 							 * Toast.makeText(getActivity(), "From Galery",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							mListener.onDialogClickBrowsePic(AddPicDialog.this);
 							break;
 						case 1:
 							/*
 							 * Toast.makeText(getActivity(), "From Camera",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							mListener.onDialogClickCameraPic(AddPicDialog.this);
 							break;
 						case 2:
 							/*
 							 * Toast.makeText(getActivity(), "Cancel",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							break;
 						}

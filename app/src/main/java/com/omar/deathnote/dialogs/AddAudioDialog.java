@@ -48,7 +48,7 @@ public class AddAudioDialog extends DialogFragment {
 						case 0:
 							/*
 							 * Toast.makeText(getActivity(), "From Galery",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							mListener
 									.onDialogClickAudioBrowse(AddAudioDialog.this);
@@ -56,7 +56,7 @@ public class AddAudioDialog extends DialogFragment {
 						case 1:
 							/*
 							 * Toast.makeText(getActivity(), "From Camera",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							mListener
 									.onDialogClickAudioRecord(AddAudioDialog.this);
@@ -64,7 +64,7 @@ public class AddAudioDialog extends DialogFragment {
 						case 2:
 							/*
 							 * Toast.makeText(getActivity(), "Cancel",
-							 * Toast.LENGTH_LONG).show();
+							 * Toast.LENGTH_int).show();
 							 */
 							break;
 						}

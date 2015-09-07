@@ -132,11 +132,11 @@ public class DB {
 		
 	}
 
-	public void delRec(long id) {
+	public void delRec(int id) {
 		mDB.delete(DB_TABLE, COLUMN_ID + " = " + id, null);
 	}
 
-	public Cursor fetchRec(long rowId) {
+	public Cursor fetchRec(int rowId) {
 
 		Cursor mCursor = mDB.query(DB_TABLE, new String[] { COLUMN_ID,
 				COLUMN_STYLE, COLUMN_TITLE, COLUMN_TIMEDATE  },
@@ -164,7 +164,7 @@ public class DB {
 
 	
 	
-	public boolean editRec(long rowId, int style, String title ) {
+	public boolean editRec(int rowId, int style, String title ) {
 
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_STYLE, style);
@@ -184,7 +184,7 @@ public class DB {
 	/*note table*/
 	
 	
-	public void createNoteTable(Long id) {
+	public void createNoteTable(int id) {
 		String TABLE_CREATE =
 				"create table " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
 				+ " integer primary key autoincrement, " + COLUMN_TYPE
@@ -197,14 +197,14 @@ public class DB {
 		
 
 	}
-	public void deleteNoteTable(Long id){
+	public void deleteNoteTable(int id){
 		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE" + String.valueOf(id));
 	}
  
 	public void deleteNoteTable(int id){
 		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE" + String.valueOf(id));
 	}
-	public void addFragment(Long id, String type, String cont1, String cont2) {
+	public void addFragment(int id, String type, String cont1, String cont2) {
 
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_TYPE, type);
@@ -217,7 +217,7 @@ public class DB {
 	
 	
 	
-	public Cursor getAllNoteData(Long id) {
+	public Cursor getAllNoteData(int id) {
 		String TABLE_CREATE =
 				"create table if not exists " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
 				+ " integer primary key autoincrement, " + COLUMN_TYPE

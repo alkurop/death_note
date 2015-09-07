@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.omar.deathnote.R;
 import com.omar.deathnote.main.ui.ItemViewMainList;
+import com.omar.deathnote.models.ItemMainList;
 
 import java.util.List;
 

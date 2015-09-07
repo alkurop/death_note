@@ -12,4 +12,6 @@ public interface IMainView {
 
     LoaderManager GetLoaderManager();
 
+    void OpenEmptyNote();
+
 }

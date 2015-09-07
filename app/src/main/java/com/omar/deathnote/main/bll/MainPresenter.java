@@ -6,16 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import com.omar.deathnote.App;
 import com.omar.deathnote.db.providers.MainListProvider;
 import com.omar.deathnote.main.ui.IMainView;
+import com.omar.deathnote.models.ItemMainList;
+
 import java.util.List;
 
 /**
  * Created by omar on 8/27/15.
  */
-public class MainPresenter implements IMainEventHandler{
+public class MainPresenter implements IMainEventHandler {
     private IMainView view;
     private RecyclerView rv_Main;
     private IMainAdapterCallback mainAdapterCallback;
-     private MainListProvider.IMainListCallback mainListCallback;
+    private MainListProvider.IMainListCallback mainListCallback;
     private AdapterMainList adapterMainList;
 
 
@@ -38,6 +40,7 @@ public class MainPresenter implements IMainEventHandler{
 
     @Override
     public void FabClicked() {
+
     }
 
     public void setList() {
@@ -45,7 +48,7 @@ public class MainPresenter implements IMainEventHandler{
         rv_Main.setLayoutManager(new LinearLayoutManager(App.getContext(), LinearLayoutManager.VERTICAL, false));
     }
 
-    public void setAdapterCallback(){
+    public void setAdapterCallback() {
         mainAdapterCallback = new IMainAdapterCallback() {
             @Override
             public void DeleteItem(int id) {
@@ -62,16 +65,15 @@ public class MainPresenter implements IMainEventHandler{
 
     public void getData(int style) {
 
-        MainListProvider.I(view.GetLoaderManager()).  GetMainList(mainListCallback, style);
+        MainListProvider.I(view.GetLoaderManager()).GetMainList(mainListCallback, style);
     }
 
-    public void setMainListProviderCallback()
-    {
+    public void setMainListProviderCallback() {
         mainListCallback = new MainListProvider.IMainListCallback() {
             @Override
             public void onSuccess(List<ItemMainList> data) {
 
-                    getData(data);
+                getData(data);
 
             }
 
@@ -82,20 +84,18 @@ public class MainPresenter implements IMainEventHandler{
         };
     }
 
-    public void setAdapter(List<ItemMainList> data){
-        adapterMainList = new AdapterMainList(data,mainAdapterCallback);
-         rv_Main.setAdapter(adapterMainList);
+    public void setAdapter(List<ItemMainList> data) {
+        adapterMainList = new AdapterMainList(data, mainAdapterCallback);
+        rv_Main.setAdapter(adapterMainList);
     }
 
-    public void updateAdapter(List<ItemMainList> data){
+    public void updateAdapter(List<ItemMainList> data) {
         adapterMainList.SetDataList(data);
     }
 
-    public void getData(List<ItemMainList> data){
-        if (adapterMainList == null)
-            setAdapter(data);
-            else
-        updateAdapter(data);
+    public void getData(List<ItemMainList> data) {
+        if (adapterMainList == null) setAdapter(data);
+        else updateAdapter(data);
     }
 
- }
+}
