@@ -60,7 +60,7 @@ public class LinkFragment extends Fragment   {
 		main = (LinearLayout) v.findViewById(R.id.noteElemAudio);
 		main.setFocusable(true);
 		main.requestFocus();
-		etLink = (EditText) v.findViewById(R.id.link);
+		etLink = (EditText) v.findViewById(R.id.tvTitle);
 		etLink.setText(link);
 		etLink.setFocusable(true);
 		etLink.setLinksClickable(true);

@@ -1,19 +1,10 @@
 package com.omar.deathnote.notes.item.bll;
 
+import com.omar.deathnote.notes.item.bll.base.ContentItemPresenter;
+
 /**
  * Created by omar on 9/7/15.
  */
-public class AudioEventHandler extends BaseContentItemPresenter {
-
-
-    @Override
-    public void SetContent1() {
-
-    }
-
-    @Override
-    public void SetContent2() {
-
-    }
+public class AudioEventHandler extends ContentItemPresenter {
 
 }

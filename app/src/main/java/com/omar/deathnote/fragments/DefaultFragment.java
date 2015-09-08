@@ -28,7 +28,7 @@ public class DefaultFragment extends Fragment {
 		
 		View v = inflater.inflate(R.layout.note_elem_default, null);
 
-		etTitle = (EditText) v.findViewById(R.id.link);
+		etTitle = (EditText) v.findViewById(R.id.tvTitle);
 		etTitle.setText(title);
 		
 		etTitle.requestFocus();

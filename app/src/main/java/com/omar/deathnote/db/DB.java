@@ -201,9 +201,7 @@ public class DB {
 		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE" + String.valueOf(id));
 	}
  
-	public void deleteNoteTable(int id){
-		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE" + String.valueOf(id));
-	}
+
 	public void addFragment(int id, String type, String cont1, String cont2) {
 
 		ContentValues cv = new ContentValues();

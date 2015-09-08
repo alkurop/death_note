@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".notes.ui.NoteActivity_old"
+                android:name=".notes.ui.NoteActivity"
                 android:label=" "
                 android:launchMode="singleTop"
                 android:screenOrientation="sensorPortrait">

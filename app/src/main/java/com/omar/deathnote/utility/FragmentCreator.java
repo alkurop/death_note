@@ -39,7 +39,8 @@ public class FragmentCreator {
 	 * @param fragList
 	 * @return fragList   - back to the activity
 	 */
-	public TreeMap<String, String> createFragment(String cont1, String cont2, Constants.Frags type, int fragCount, int noteId, TreeMap<String, String> list ) {
+	public TreeMap<String, String> createFragment(String cont1, String cont2, Constants.Frags type, int fragCount, long
+			noteId, TreeMap<String, String> list ) {
 		if(fragList != null)
 		Log.d("fraglist length", String.valueOf(fragList.size()));
 		

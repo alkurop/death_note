@@ -60,8 +60,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Override
     public void OpenEmptyNote(){
 
-        startActivity(new Intent(this,NoteActivity.class));
-        App.getNotePresenter().CreateEmptyContent();
+        startActivity(new Intent(this, NoteActivity.class));
+
+
     }
 
 }

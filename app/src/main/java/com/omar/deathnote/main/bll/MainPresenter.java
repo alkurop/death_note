@@ -40,7 +40,7 @@ public class MainPresenter implements IMainEventHandler {
 
     @Override
     public void FabClicked() {
-
+        view.OpenEmptyNote();
     }
 
     public void setList() {

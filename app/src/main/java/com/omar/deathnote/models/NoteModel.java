@@ -10,7 +10,7 @@ public class NoteModel {
 
    private  int id;
 
-  private   List <ContentItem> contentList = new ArrayList();
+  private   List <Content> contentList = new ArrayList();
 
 
     public int getId() {
@@ -21,11 +21,11 @@ public class NoteModel {
         this.id = id;
     }
 
-    public List<ContentItem> getContentList() {
+    public List<Content> getContentList() {
         return contentList;
     }
 
-    public void setContentList(List<ContentItem> contentList) {
+    public void setContentList(List<Content> contentList) {
         this.contentList = contentList;
     }
 }

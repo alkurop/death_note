@@ -184,14 +184,14 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
+/*	@Override
 	public boolean onNavigationItemSelected(int pos, int id) {
 
 		orderStatus = pos;
 		reloadList();
 		return false;
 
-	}
+	}*/
 
 	public static void swapCursor(Cursor cursor) {
 		scAdapter.swapCursor(cursor);
@@ -260,11 +260,11 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 		lvData.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
-					int position, int id) {
+					int position, long id) {
 
 				Bundle bundle = new Bundle();
 
-				bundle.putint(Constants.ID, id);
+				bundle.putLong(Constants.ID, id);
 
 				Intent intent;
 				intent = new Intent(getApplicationContext(), NoteActivity_old.class);
@@ -307,6 +307,11 @@ public class MainActivity_old extends AppCompatActivity implements OnNavigationL
 		RateMeMaybe rmm = new RateMeMaybe(this);
 		rmm.setPromptMinimums(10, 10, 10, 10);
 		rmm.run();
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		return false;
 	}
 
 	private class MainListCursorAdapter extends SimpleCursorAdapter {

@@ -267,19 +267,16 @@ public class RateMeMaybe implements RMMFragInterface {
 		int totalLaunchCount = mPreferences.getInt(PREF.TOTAL_LAUNCH_COUNT, 0) + 1;
 		editor.putInt(PREF.TOTAL_LAUNCH_COUNT, totalLaunchCount);
 
-		int currentMillis = System.currentTimeMillis();
+		long currentMillis = System.currentTimeMillis();
 
-		int timeOfAbsoluteFirstLaunch = mPreferences.getint(
-				PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH, 0);
+		long timeOfAbsoluteFirstLaunch = mPreferences.getLong(PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH, 0);
 		if (timeOfAbsoluteFirstLaunch == 0) {
 			// this is the first launch!
 			timeOfAbsoluteFirstLaunch = currentMillis;
-			editor.putint(PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH,
-					timeOfAbsoluteFirstLaunch);
+			editor.putLong(PREF.TIME_OF_ABSOLUTE_FIRST_LAUNCH, timeOfAbsoluteFirstLaunch);
 		}
 
-		int timeOfLastPrompt = mPreferences.getint(PREF.TIME_OF_LAST_PROMPT,
-				0);
+		long timeOfLastPrompt = mPreferences.getLong(PREF.TIME_OF_LAST_PROMPT, 0);
 
 		int launchesSinceLastPrompt = mPreferences.getInt(
 				PREF.LAUNCHES_SINCE_LAST_PROMPT, 0) + 1;
@@ -290,7 +287,7 @@ public class RateMeMaybe implements RMMFragInterface {
 			// requirements for initial launch are met
 			if (timeOfLastPrompt == 0 /* user was not yet shown a prompt */
 					|| (launchesSinceLastPrompt >= mMinLaunchesUntilNextPrompt && ((currentMillis - timeOfLastPrompt) >= (mMinDaysUntilNextPrompt * DateUtils.DAY_IN_MILLIS)))) {
-				editor.putint(PREF.TIME_OF_LAST_PROMPT, currentMillis);
+				editor.putLong(PREF.TIME_OF_LAST_PROMPT, currentMillis);
 				editor.putInt(PREF.LAUNCHES_SINCE_LAST_PROMPT, 0);
 				editor.commit();
 				showDialog();

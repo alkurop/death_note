@@ -44,7 +44,7 @@ import com.omar.deathnote.utility.SaveNote;
 import com.omar.deathnote.utility.SharingModule;
 
 @SuppressWarnings({ "deprecation", "incomplete-switch" })
-public class NoteActivity_old extends Activity implements INoteView, OnNavigationListener {
+public class NoteActivity_old extends Activity implements   OnNavigationListener {
 
 	
 	
@@ -160,9 +160,9 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 			Bundle extras = getIntent().getExtras();
 			fragCount = 0;
 
-			if (extras.getint(Constants.ID) != 0) {
+			if (extras.getLong(Constants.ID) != 0) {
 
-				id = extras.getint(Constants.ID);
+				id = extras.getInt(Constants.ID);
 
 				loaderManager.restartLoader(LoaderCallback.LOAD_NOTE, null,
 						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
@@ -187,7 +187,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 		} else {
 
 			fragCount = savedInstanceState.getInt(Constants.FRAGMENT_COUNTER);
-			id = savedInstanceState.getint(Constants.ID);
+			id = savedInstanceState.getInt(Constants.ID);
 			keys = savedInstanceState.getStringArray(Constants.FRAGMENT_LIST_KEYS);
 			values = savedInstanceState.getStringArray(Constants.FRAGMENT_LIST_VALUES);
 			style = savedInstanceState.getInt(Constants.STYLE);
@@ -225,7 +225,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 		super.onSaveInstanceState(outState);
 		outState.putInt(Constants.STYLE, style);
 		outState.putInt(Constants.FRAGMENT_COUNTER, fragCount);
-		outState.putint(Constants.ID, id);
+		outState.putLong(Constants.ID, id);
 		outState.putBoolean(Constants.AUDIO_SHUFFLE, audioShuffle);
 		outState.putBoolean(Constants.AUDIO_REPEAT, audioRepeat);
 
@@ -253,7 +253,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 	}
 
 	@Override
-	public boolean onNavigationItemSelected(int pos, int id) {
+	public boolean onNavigationItemSelected(int pos, long id) {
 		style = (pos + 1);
 		setBackGround();
 
@@ -265,7 +265,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 
 		switch (item.getItemId()) {
 
-		case R.id.action_share:
+		/*case R.id.action_share:
 			SharingModule sM = new SharingModule(fm, this, fragList);
 			sM.share();
 
@@ -314,7 +314,7 @@ public class NoteActivity_old extends Activity implements INoteView, OnNavigatio
 			aud.show(fm, Constants.Frags.NoticeDialogFragment.name());
 
 			break;
-
+*/
 		}
 
 		return super.onOptionsItemSelected(item);
