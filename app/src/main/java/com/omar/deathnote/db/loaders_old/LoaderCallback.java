@@ -1,24 +1,21 @@
-package com.omar.deathnote.utility;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
+package com.omar.deathnote.db.loaders_old;
 
 import android.content.Context;
-
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.DB;
-import com.omar.deathnote.loaders.MainListLoader;
+import com.omar.deathnote.db.loaders.MainListLoader;
 import com.omar.deathnote.main.ui.MainActivity_old;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
-import com.omar.deathnote.Constants;
+import com.omar.deathnote.utility.FragContent;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 	private static LoaderCallback loaderCallback;
@@ -71,7 +68,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 
 		case LOAD_LIST:
 
-			return new MainListLoader(context, db,0);
+			return new MainListLoader(0);
 
 		case DELETE_SOME_NOTE:
 
@@ -246,8 +243,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 			db.createNoteTable(NoteActivity_old.getId());
 			for (FragContent listItem : fragsArrayList) {
 
-				db.addFragment(NoteActivity_old.getId(), listItem.getType(),
-						listItem.getCont1(), listItem.getCont2());
+				db.addContentItem(NoteActivity_old.getId(), 0, listItem.getCont1(), listItem.getCont2());
 
 			}
 

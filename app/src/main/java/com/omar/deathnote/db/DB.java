@@ -1,8 +1,5 @@
 package com.omar.deathnote.db;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import com.omar.deathnote.utils.FileManager;
+import com.omar.deathnote.utility.FileManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class DB {
@@ -37,22 +37,13 @@ public class DB {
 			+ " text  "  +
 
 			");";
-	
- 
-	
-	
 
 	private final Context mCtx;
-
 	private static DBHelper mDBHelper;
 	private SQLiteDatabase mDB;
-
 	private static DB instance;
-	
-	
 	private DB(Context ctx) {
 		mCtx = ctx;
-		
 	}
 	
 	public static DB getInstance(Context context){
@@ -60,14 +51,9 @@ public class DB {
 			instance = new DB(context);
 		}
 		return instance;
-	} 
-	 
+	}
 	
-	
-	
-	
-	
- 
+
 	public void beginTransaction(){
 	mDB.beginTransaction();
 	}
@@ -78,22 +64,25 @@ public class DB {
 		mDB.setTransactionSuccessful();
 	}
 	public synchronized void open() {
-		
 		 if (mDBHelper == null) {
 			 mDBHelper = new DBHelper(mCtx, DB_NAME, null, DB_VERSION);
 				 
 		    }
-		   
-		
-		
-		 
 		mDB = mDBHelper.getWritableDatabase();
 		Log.d("db", "open");
 	}
 
+	public   boolean openForProvider() {
+		if (mDBHelper == null) {
+			mDBHelper = new DBHelper(mCtx, DB_NAME, null, DB_VERSION);
+
+		}
+		mDB = mDBHelper.getWritableDatabase();
+		Log.d("db", "open");
+		return mDB.isOpen();
+	}
 	public void close() {
-			
-			mDBHelper.close();
+			//mDBHelper.close();
 		Log.d("db", "close");
 		 
 	}
@@ -160,10 +149,6 @@ public class DB {
 		return mCursor;
 	}
 
- 
-
-	
-	
 	public boolean editRec(int rowId, int style, String title ) {
 
 		ContentValues cv = new ContentValues();
@@ -202,7 +187,7 @@ public class DB {
 	}
  
 
-	public void addFragment(int id, String type, String cont1, String cont2) {
+	public void addContentItem (int id, int type, String cont1, String cont2) {
 
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_TYPE, type);
@@ -216,31 +201,17 @@ public class DB {
 	
 	
 	public Cursor getAllNoteData(int id) {
-		String TABLE_CREATE =
-				"create table if not exists " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
-				+ " integer primary key autoincrement, " + COLUMN_TYPE
-				+ " text, " + COLUMN_CONT1 + " text, " + COLUMN_CONT2
-				+ " text  " +
-
-				");";
-	 
-		mDB.execSQL(TABLE_CREATE);
-		
-		
-		
-		
-		
-		return mDB.query( "NOTE" + String.valueOf(id), null, null, null, null, null,
-			null);
+		return mDB.query( "NOTE" + id, null, null, null, null, null,
+				null);
 
 	}
 
 	public Cursor getAllNoteData(String id) {
 		return mDB.query( "NOTE" + id, null, null, null, null, null,
-			null);
+				null);
 
 	}
-	
+
 	/*note table*/
 	
 
@@ -250,11 +221,6 @@ public class DB {
 				int version) {
 			super(context, name, factory, version);
 		}
-
-		
-	 
-		
-		
 		
 		@Override
 		public void onCreate(SQLiteDatabase db) {

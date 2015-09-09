@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.DialogFragment;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,12 +21,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.db.DB;
+import com.omar.deathnote.db.loaders_old.LoaderCallback;
 import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.pref.PrefActivity;
 import com.omar.deathnote.rate.RateMeMaybe;
-import com.omar.deathnote.utility.LoaderCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;

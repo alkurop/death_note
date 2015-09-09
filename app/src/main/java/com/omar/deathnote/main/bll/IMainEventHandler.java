@@ -7,11 +7,11 @@ import com.omar.deathnote.main.ui.IMainView;
  */
 public interface IMainEventHandler {
 
-    void Init(IMainView _view);
+    void init(IMainView _view);
 
-    void DisplayView();
+    void fabClicked();
 
-    void FabClicked();
+    void loadData();
 
 
 

@@ -6,9 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 
 public class AddAudioDialog extends DialogFragment {
 
@@ -70,7 +69,7 @@ public class AddAudioDialog extends DialogFragment {
 						}
 					}
 				});
-		// Create the AlertDialog object and return it
+		// create the AlertDialog object and return it
 
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();

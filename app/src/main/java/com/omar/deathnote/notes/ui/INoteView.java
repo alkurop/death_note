@@ -1,6 +1,7 @@
 package com.omar.deathnote.notes.ui;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import com.omar.deathnote.models.Content;
 
 import java.util.List;
@@ -10,13 +11,18 @@ import java.util.List;
  */
 public interface INoteView {
 
-    void DisplayFragment(Content content, Fragment fragment);
+    void displayFragment(Content content, Fragment fragment);
 
-    void RemoveFragment(Content content);
+    void removeFragment(Content content);
 
-    void ClearList(List<Content> contentList);
+    void clearList(List<Content> contentList);
 
-    void InitToolbar();
+    void initToolbar();
+
+    LoaderManager getSupportLoaderManager();
+
+    void onBackPressed();
+
 
 
 

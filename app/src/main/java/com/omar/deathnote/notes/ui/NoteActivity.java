@@ -3,23 +3,19 @@ package com.omar.deathnote.notes.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.support.v7.widget.Toolbar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.omar.deathnote.App;
-import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.dialogs.AddAudioDialog;
-import com.omar.deathnote.dialogs.AddPicDialog;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
-import com.omar.deathnote.utility.SharingModule;
 
 import java.util.List;
 
@@ -39,21 +35,21 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
         setContentView(R.layout.activity_note);
         ButterKnife.inject(this);
         presenter = App.getNotePresenter();
-        presenter.SetView(this);
+        presenter.setView(this);
 
-        if (savedInstanceState == null) presenter.GetContentId(getIntent());
-        else presenter.DisplayView();
+        if (savedInstanceState == null) presenter.getContentId(getIntent());
+        else presenter.displayView();
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        presenter.SaveContent();
+        presenter.saveContent();
     }
 
     @Override
-    public void DisplayFragment(Content item, Fragment fragment) {
+    public void displayFragment(Content item, Fragment fragment) {
         FrameLayout container = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.content_container, null, false);
         container.setId(item.getUID());
         ll_main.addView(container);
@@ -62,7 +58,7 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
 
 
     @Override
-    public void RemoveFragment(Content item) {
+    public void removeFragment(Content item) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(item.getUID());
         View view = ll_main.findViewById(item.getUID());
 
@@ -71,19 +67,20 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     }
 
     @Override
-    public void ClearList(List<Content> contentList) {
+    public void clearList(List<Content> contentList) {
         for (Content item : contentList) {
-            RemoveFragment(item);
+            removeFragment(item);
         }
     }
 
     @Override
-    public void InitToolbar() {
+    public void initToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,14 +90,15 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        presenter.SaveContent();
+        presenter.saveContent();
         switch (item.getItemId()) {
 
             case R.id.action_share:
+                presenter.shareClicked();
                 break;
 
             case R.id.save:
-                onBackPressed();
+                presenter.saveClicked();
                 break;
 
             case android.R.id.home:

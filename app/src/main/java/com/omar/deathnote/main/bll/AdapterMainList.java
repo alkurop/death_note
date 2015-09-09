@@ -24,7 +24,7 @@ public class AdapterMainList extends RecyclerView.Adapter<ItemViewMainList> {
 
     }
 
-    public void SetDataList(List<ItemMainList> dataList) {
+    public void setDataList(List<ItemMainList> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
@@ -37,7 +37,7 @@ public class AdapterMainList extends RecyclerView.Adapter<ItemViewMainList> {
 
     @Override
     public void onBindViewHolder(ItemViewMainList holder, int position) {
-            holder.BindData(dataList.get(position),callback);
+            holder.bindData(dataList.get(position), callback);
     }
 
     @Override

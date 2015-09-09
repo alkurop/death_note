@@ -1,4 +1,4 @@
-package com.omar.deathnote.db.loaders;
+package com.omar.deathnote.db.loaders_old;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -33,8 +33,7 @@ public class SaveNoteLoader extends CursorLoader {
         db.createNoteTable(NoteActivity_old.getId());
         for (FragContent listItem : fragsArrayList) {
 
-            db.addFragment(NoteActivity_old.getId(), listItem.getType(),
-                    listItem.getCont1(), listItem.getCont2());
+            db.addContentItem(NoteActivity_old.getId(), 0, listItem.getCont1(), listItem.getCont2());
 
         }
 

@@ -2,10 +2,7 @@ package com.omar.deathnote.main.ui;
 
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.omar.deathnote.App;
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.main.bll.IMainEventHandler;
 import com.omar.deathnote.notes.ui.NoteActivity;
@@ -38,31 +36,39 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         ButterKnife.inject(this);
 
         presenter = App.getMainPresenter();
-        presenter.Init(this);
-        presenter.DisplayView();
+        presenter.init(this);
+        presenter.loadData();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @OnClick(R.id.fab)
     public void FabClicked() {
-        presenter.FabClicked();
+        presenter.fabClicked();
     }
 
     @Override
-    public RecyclerView GetRecyclerView() {
+    public RecyclerView getRecyclerView() {
         return rv_MainList;
     }
 
-    @Override
-    public android.support.v4.app.LoaderManager GetLoaderManager() {
-       return getSupportLoaderManager();
-    }
 
     @Override
-    public void OpenEmptyNote(){
-
+    public void openEmptyNote(){
         startActivity(new Intent(this, NoteActivity.class));
-
-
     }
+
+    @Override
+    public void openNote(int id) {
+        Intent intent = new Intent(this, NoteActivity.class);
+        intent.putExtra(Constants.ID, id);
+        startActivity(intent);
+    }
+
 
 }

@@ -17,7 +17,7 @@ public class ItemMainList {
     public int img;
 
 
-    public static ItemMainList Create(Cursor _cursor) {
+    public static ItemMainList create(Cursor _cursor) {
         ItemMainList item = new ItemMainList();
 
         {
@@ -31,15 +31,17 @@ public class ItemMainList {
 
     }
 
-    public static List<ItemMainList> CreateList(Cursor cursor) {
+    public static List<ItemMainList> createList(Cursor cursor) {
         List<ItemMainList> data = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                data.add(Create(cursor));
+                data.add(create(cursor));
             }
             while(cursor.moveToNext());
 
         }
+        if(!cursor.isClosed())
+        cursor.close();
         return data;
     }
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
-import com.omar.deathnote.notes.item.bll.base.IContentEventHandler;
+import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 
 /**
  * Created by omar on 9/8/15.
@@ -22,22 +22,22 @@ abstract public class BaseItemFragment extends Fragment implements IContentView{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(GetLayout(), container, false);
+        View v = inflater.inflate(getLayout(), container, false);
         ButterKnife.inject(this, v);
-        eventHandler.DisplayView();
+        eventHandler.displayView();
         return v;
     }
 
     @Override
-    public void SetEventHandler(IContentEventHandler eventHandler) {
+    public void setEventHandler(IContentEventHandler eventHandler) {
         this.eventHandler = eventHandler;
     }
 
 
 
     @OnClick(R.id.del)
-    public void OnDeleteClicked() {
-        eventHandler.Delete();
+    public void onDeleteClicked() {
+        eventHandler.delete();
     }
 
 

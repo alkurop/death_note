@@ -1,12 +1,5 @@
 package com.omar.deathnote.fragments;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.TreeMap;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -25,22 +18,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
+import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.omar.deathnote.db.DB;
-import com.omar.deathnote.utils.FileManager;
-import com.omar.deathnote.notes.ui.NoteActivity_old;
-import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.Constants.Frags;
+import com.omar.deathnote.R;
 import com.omar.deathnote.audioplay.AudioPlayService;
+import com.omar.deathnote.db.DB;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
+import com.omar.deathnote.utility.FileManager;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TreeMap;
 
 @SuppressLint({ "SimpleDateFormat", "InflateParams" })
 public class AudioFragment extends Fragment implements OnFocusChangeListener {

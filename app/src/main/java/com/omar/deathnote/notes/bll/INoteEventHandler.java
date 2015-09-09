@@ -2,6 +2,7 @@ package com.omar.deathnote.notes.bll;
 
 import android.content.Intent;
 import com.omar.deathnote.models.Content;
+import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.ui.INoteView;
 
 /**
@@ -9,23 +10,29 @@ import com.omar.deathnote.notes.ui.INoteView;
  */
 public interface INoteEventHandler {
 
-      void Init(int id);
+      void init(NoteModel noteModel);
 
-      void InitEmpty();
+      void initEmpty();
 
-      void DisplayView();
+      void displayView();
 
-      void SetView(INoteView view);
+      void setView(INoteView view);
 
-      void GetContentId(Intent intent);
+      void getContentId(Intent intent);
 
-      void LoadContent(int id);
+      void loadContent(int id);
 
-      void CreateEmptyContent();
+      void createEmptyContent();
 
-      void DeleteContentItem(Content content);
+      void deleteContentItem(Content content);
 
-      void DisplayContent();
+      void displayContent();
 
-      void SaveContent();
+      void saveContent();
+
+      void saveDB(NotePresenter.SaveDbCallback callback);
+
+      void shareClicked();
+
+      void saveClicked();
 }

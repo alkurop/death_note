@@ -1,14 +1,5 @@
 package com.omar.deathnote.fragments;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.TreeMap;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,15 +7,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.graphics.*;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -38,15 +23,19 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.omar.deathnote.db.DB;
-import com.omar.deathnote.utils.FileManager;
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.R;
+import com.omar.deathnote.db.DB;
+import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.picview.SingleViewActivity;
+import com.omar.deathnote.utility.FileManager;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
+
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 @SuppressLint("InflateParams")
 public class PicFragment extends Fragment {

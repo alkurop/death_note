@@ -8,10 +8,12 @@ import android.support.v7.widget.RecyclerView;
  * Created by omar on 8/27/15.
  */
 public interface IMainView {
-    RecyclerView GetRecyclerView();
+    RecyclerView getRecyclerView();
 
-    LoaderManager GetLoaderManager();
+    LoaderManager getSupportLoaderManager();
 
-    void OpenEmptyNote();
+    void openEmptyNote();
+
+    void openNote(int id);
 
 }

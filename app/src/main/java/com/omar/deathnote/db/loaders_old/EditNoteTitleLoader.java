@@ -1,4 +1,4 @@
-package com.omar.deathnote.db.loaders;
+package com.omar.deathnote.db.loaders_old;
 
 import android.content.Context;
 import android.database.Cursor;

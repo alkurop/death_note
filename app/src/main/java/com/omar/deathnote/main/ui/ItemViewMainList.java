@@ -35,7 +35,7 @@ public class ItemViewMainList extends RecyclerView.ViewHolder {
         ButterKnife.inject(this,view);
     }
 
-    public void BindData( ItemMainList dataHolder, IMainAdapterCallback callback) {
+    public void bindData(ItemMainList dataHolder, IMainAdapterCallback callback) {
         this.callback = callback;
         this.dataHolder = dataHolder;
         itemTitle.setText(dataHolder.title);
@@ -45,12 +45,12 @@ public class ItemViewMainList extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.del)
     public void delClicked() {
-        callback.DeleteItem(dataHolder.id);
+        callback.deleteItem(dataHolder.id);
     }
 
     @OnClick(R.id.container)
     public void itemClicked() {
-        callback.OpenNote(dataHolder.id);
+        callback.openNote(dataHolder.id);
     }
 
 

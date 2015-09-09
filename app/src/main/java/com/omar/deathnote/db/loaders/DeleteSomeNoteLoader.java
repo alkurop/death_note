@@ -1,8 +1,8 @@
-package com.omar.deathnote.loaders;
+package com.omar.deathnote.db.loaders;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
+import com.omar.deathnote.App;
 import com.omar.deathnote.db.DB;
 
 import java.util.concurrent.TimeUnit;
@@ -15,9 +15,9 @@ public class DeleteSomeNoteLoader  extends CursorLoader {
     private DB db;
     private int id;
 
-    public DeleteSomeNoteLoader(Context context, DB db, int id) {
-        super(context);
-        this.db = db;
+    public DeleteSomeNoteLoader( int id) {
+        super(App.getContext());
+        this.db =DB.getInstance(App.getContext());
         this.id = id;
 
     }

@@ -1,18 +1,7 @@
 package com.omar.deathnote.notes.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import android.app.ActionBar;
+import android.app.*;
 import android.app.ActionBar.OnNavigationListener;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.LoaderManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,23 +14,22 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
-
-import com.omar.deathnote.main.ui.MainActivity_old;
-import com.omar.deathnote.utils.FileManager;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
+import com.omar.deathnote.db.loaders_old.LoaderCallback;
 import com.omar.deathnote.dialogs.AddAudioDialog;
 import com.omar.deathnote.dialogs.AddPicDialog;
 import com.omar.deathnote.dialogs.DialogOnDelete;
 import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.AudioFragment.NextAudio;
-import com.omar.deathnote.utility.FragmentCreator;
-import com.omar.deathnote.utility.FragmentSaver;
-import com.omar.deathnote.utility.LoaderCallback;
-import com.omar.deathnote.utility.OnDeleteFragment;
-import com.omar.deathnote.utility.SaveNote;
-import com.omar.deathnote.utility.SharingModule;
+import com.omar.deathnote.main.ui.MainActivity_old;
+import com.omar.deathnote.utility.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @SuppressWarnings({ "deprecation", "incomplete-switch" })
 public class NoteActivity_old extends Activity implements   OnNavigationListener {

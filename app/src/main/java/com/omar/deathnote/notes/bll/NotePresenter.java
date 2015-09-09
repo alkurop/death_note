@@ -2,10 +2,15 @@ package com.omar.deathnote.notes.bll;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import com.omar.deathnote.Constants;
+import com.omar.deathnote.db.providers.OpenNoteProvider;
+import com.omar.deathnote.db.providers.SaveNoteProvider;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
-import com.omar.deathnote.notes.item.bll.base.ContentItemPresenter;
-import com.omar.deathnote.notes.item.bll.base.IContentEventHandler;
+import com.omar.deathnote.notes.item.bll.AudioItemPresenter;
+import com.omar.deathnote.notes.item.bll.ContentItemPresenter;
+import com.omar.deathnote.notes.item.bll.IContentEventHandler;
+import com.omar.deathnote.notes.item.bll.PicItemPresenter;
 import com.omar.deathnote.notes.item.ui.IContentView;
 import com.omar.deathnote.notes.item.ui.NoteFragment;
 import com.omar.deathnote.notes.item.ui.TitleFragment;
@@ -22,73 +27,102 @@ public class NotePresenter implements INoteEventHandler {
     private NoteModel noteModel;
     private INoteView view;
     private List<IContentEventHandler> eventHandlers;
+    boolean allowDB = true;
 
     @Override
-    public void Init(int id) {
+    public void init(NoteModel noteModel) {
+        this.noteModel = noteModel;
+        displayView();
+
     }
 
     @Override
-    public void InitEmpty() {
-        CreateEmptyContent();
+    public void initEmpty() {
+        createEmptyContent();
+        displayView();
     }
 
     @Override
-    public void DisplayView() {
-        view.InitToolbar();
-        view.ClearList(noteModel.getContentList());
+    public void displayView() {
+        view.initToolbar();
+        view.clearList(noteModel.getContentList());
         GenerateEventHandlers();
-        DisplayContent();
+        displayContent();
     }
 
     @Override
-    public void SetView(INoteView _view) {
+    public void setView(INoteView _view) {
         view = _view;
     }
 
     @Override
-    public void GetContentId(Intent intent) {
-        int id = intent.getIntExtra("id", -1);
+    public void getContentId(Intent intent) {
+        int id = intent.getIntExtra(Constants.ID, -1);
         if (id == -1) {
-            InitEmpty();
-            DisplayView();
-        }
+            initEmpty();
+
+        }else
+            loadContent(id);
     }
 
     @Override
-    public void LoadContent(int id) {
+    public void loadContent(int id) {
+        OpenNoteProvider.I(view.getSupportLoaderManager()).LoadNote(id, new OpenNoteProvider.IOpenNoteCallback() {
+            @Override
+            public void onSuccess(NoteModel noteModel) {
+                init(noteModel);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     @Override
-    public void CreateEmptyContent() {
+    public void createEmptyContent() {
         noteModel = new NoteModel();
         noteModel.getContentList().add(new Content(Content.ContentType.TITLE));
         noteModel.getContentList().add(new Content(Content.ContentType.NOTE));
     }
 
     @Override
-    public void DeleteContentItem(Content item) {
+    public void deleteContentItem(Content item) {
         if (noteModel.getContentList().size() > 2) {
-            int index =  noteModel.getContentList().indexOf(item);
+            int index = noteModel.getContentList().indexOf(item);
             noteModel.getContentList().remove(index);
             eventHandlers.remove(index);
-            view.RemoveFragment(item);
+            view.removeFragment(item);
         }
     }
 
     private void GenerateEventHandlers() {
         eventHandlers = new ArrayList<>();
+        IContentEventHandler eventHandler;
         for (Content item : noteModel.getContentList()) {
-            IContentEventHandler eventHandler = new ContentItemPresenter();
-            eventHandler.Init(item, this);
+            switch (item.getType()) {
+                case AUDIO:
+                    eventHandler = new AudioItemPresenter();
+                    break;
+                case PICTURE:
+                    eventHandler = new PicItemPresenter();
+                    break;
+                default:
+                    eventHandler = new ContentItemPresenter();
+                    break;
+
+            }
+            eventHandler.init(item, this);
             eventHandlers.add(eventHandler);
         }
     }
 
     @Override
-    public void DisplayContent() {
+    public void displayContent() {
         for (IContentEventHandler item : eventHandlers) {
             Fragment fragment = null;
-            switch (item.GetContent().getType()) {
+            switch (item.getContent().getType()) {
                 case LINK:
                     break;
                 case TITLE:
@@ -102,18 +136,65 @@ public class NotePresenter implements INoteEventHandler {
                     fragment = new NoteFragment();
                     break;
             }
-            ((IContentView) fragment).SetEventHandler(item);
-            item.SetView((IContentView) fragment);
-            view.DisplayFragment(item.GetContent(), fragment);
+            ((IContentView) fragment).setEventHandler(item);
+            item.setView((IContentView) fragment);
+            view.displayFragment(item.getContent(), fragment);
         }
     }
 
     @Override
-    public void SaveContent() {
+    public void saveContent() {
         noteModel.setContentList(new ArrayList<Content>());
-        for(IContentEventHandler item : eventHandlers){
-            item.SaveData();
-            noteModel.getContentList().add(item.GetContent());
+        for (IContentEventHandler item : eventHandlers) {
+            item.saveData();
+            noteModel.getContentList().add(item.getContent());
         }
     }
+
+    @Override
+    public void saveDB(final SaveDbCallback callback) {
+        if(allowDB){
+            allowDB = false;
+        SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
+            @Override
+            public void onSuccess(int id) {
+                noteModel.setId(id);
+                callback.Success();
+                allowDB = true;
+            }
+
+            @Override
+            public void onError(String error) {
+                allowDB = true;
+            }
+        });}
+    }
+
+    @Override
+    public void shareClicked() {
+        saveContent();
+        saveDB(new SaveDbCallback() {
+            @Override
+            public void Success() {
+
+            }
+        });
+    }
+
+    @Override
+    public void saveClicked() {
+        saveContent();
+        saveDB(new SaveDbCallback() {
+            @Override
+            public void Success() {
+                view.onBackPressed();
+            }
+        });
+
+    }
+
+    public interface SaveDbCallback{
+        void Success();
+    }
+
 }

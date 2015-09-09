@@ -1,11 +1,11 @@
-package com.omar.deathnote.utils;
-
-import java.io.File;
+package com.omar.deathnote.utility;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
 
 public class FileManager {
 
@@ -55,7 +55,7 @@ public class FileManager {
 			if (file.delete()) {
 				Log.d(file.getName(), " is deleted!");
 			} else {
-				Log.d(file.getName(), " Delete operation is failed.");
+				Log.d(file.getName(), " delete operation is failed.");
 			}
 
 			file = new File(sdPath + "/" + ImageFolder + "/" + imName + ".jpg");
@@ -63,14 +63,14 @@ public class FileManager {
 			if (file.delete()) {
 				Log.d(file.getName(), " is deleted!");
 			} else {
-				Log.d(file.getName(), " Delete operation is failed.");
+				Log.d(file.getName(), " delete operation is failed.");
 			}
 
 			file = new File(sdPath + "/" + ImageFolder + "/" + imName + ".jpeg");
 			if (file.delete()) {
 				Log.d(file.getName(), " is deleted!");
 			} else {
-				Log.d(file.getName(), " Delete operation is failed.");
+				Log.d(file.getName(), " delete operation is failed.");
 			}
 
 		} catch (Exception e) {
