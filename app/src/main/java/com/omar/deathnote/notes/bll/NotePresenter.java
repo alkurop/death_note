@@ -43,8 +43,7 @@ public class NotePresenter implements INoteEventHandler {
         createEmptyContent();
         displayView();
         setUpSpinner(0);
-      //  view.setBackGround(0);
-        noteModel.setStyle(1);
+         noteModel.setStyle(1);
 
     }
 

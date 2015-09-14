@@ -28,7 +28,8 @@
                 android:name=".notes.ui.NoteActivity"
                 android:label=" "
                 android:launchMode="singleTop"
-                android:screenOrientation="sensorPortrait">
+                android:screenOrientation="sensorPortrait"
+                android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
                 android:name="com.omar.deathnote.pref.PrefActivity"

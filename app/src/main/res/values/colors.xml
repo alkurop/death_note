@@ -8,4 +8,6 @@
     <color name="secondary_text">#ffffff</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+
+    <color name="dialog_frame_background">#101010</color>
 </resources>

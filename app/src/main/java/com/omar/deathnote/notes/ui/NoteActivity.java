@@ -1,5 +1,6 @@
 package com.omar.deathnote.notes.ui;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -11,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
@@ -35,11 +38,30 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     Toolbar toolbar;
     @InjectView(R.id.spinner)
     Spinner spinner;
+
+    @InjectView(R.id.iv_BackGround)
+    ImageView iv_Background;
+
     @InjectView(R.id.scrollView1)
-    ScrollView scrollView;
+    ScrollView scrollView1;
+
 
     private INoteEventHandler presenter;
     private Target bgTarget;
+
+    @OnClick(R.id.toolbar)public void hideKeyboard(){
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+
+    }
+    @OnClick(R.id.fab)
+    public void fabCliked(){
+        hideKeyboard();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +70,9 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
         ButterKnife.inject(this);
         presenter = App.getNotePresenter();
         presenter.setView(this);
-        bgTarget = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                scrollView.setBackground(new BitmapDrawable(bitmap) );
-            }
+        scrollView1.setEnabled(false);
 
-            @Override
-            public void onBitmapFailed(Drawable drawable) {
 
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable drawable) {
-
-            }
-        };
         if (savedInstanceState == null) presenter.getContentId(getIntent());
         else presenter.displayView();
 
@@ -150,6 +159,7 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spinnerCallback.onItemSelected(i);
+                hideKeyboard();
             }
 
             @Override
@@ -161,6 +171,7 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
 
     @Override
     public void setBackGround(int index) {
-        Picasso.with(this).load(Constants.note_bg_images[index]).into(bgTarget);
+        Picasso.with(this).load(Constants.note_bg_images[index]).into(iv_Background);
     }
+
 }
