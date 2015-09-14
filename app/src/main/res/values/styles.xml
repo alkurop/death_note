@@ -31,6 +31,9 @@
         <item name="android:layout_margin">16dp</item>
         <item name="rippleColor">@android:color/white</item>
     </style>
-   
+    <style name="spinner_style">
+        <item name="android:popupBackground">#00000000</item>
+        <item name="android:dropDownVerticalOffset">50dp</item>
+    </style>
 
 </resources>

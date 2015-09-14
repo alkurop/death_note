@@ -33,7 +33,7 @@ public class SaveNoteLoader extends CursorLoader {
         db.createNoteTable(NoteActivity_old.getId());
         for (FragContent listItem : fragsArrayList) {
 
-            db.addContentItem(NoteActivity_old.getId(), 0, listItem.getCont1(), listItem.getCont2());
+           // db.addContentItem(NoteActivity_old.getId(), 0, listItem.getCont1(), listItem.getCont2());
 
         }
 

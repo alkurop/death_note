@@ -7,5 +7,7 @@
                                    android:id="@+id/toolbar"
 
         >
-
+    <Spinner android:layout_width="wrap_content" android:layout_height="wrap_content"
+             android:id="@+id/spinner"
+             style="@style/spinner_style"/>
 </android.support.v7.widget.Toolbar>

@@ -172,7 +172,11 @@ public class DB {
 	public void createNoteTable(int id) {
 		String TABLE_CREATE =
 				"create table " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
-				+ " integer primary key autoincrement, " + COLUMN_TYPE
+				+ " integer primary key autoincrement, "
+						+ COLUMN_STYLE
+						+ " integer, "
+
+						+ COLUMN_TYPE
 				+ " text, " + COLUMN_CONT1 + " text, " + COLUMN_CONT2
 				+ " text  " +
 
@@ -187,9 +191,10 @@ public class DB {
 	}
  
 
-	public void addContentItem (int id, int type, String cont1, String cont2) {
+	public void addContentItem (int id, int type,int style, String cont1, String cont2) {
 
 		ContentValues cv = new ContentValues();
+		cv.put(COLUMN_STYLE, style);
 		cv.put(COLUMN_TYPE, type);
 		cv.put(COLUMN_CONT1, cont1);
 		cv.put(COLUMN_CONT2,	cont2 );

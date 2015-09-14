@@ -117,7 +117,8 @@ public class MyContentProvider extends ContentProvider {
 
         db.createNoteTable(id);
         for (Content item : noteModel.getContentList()) {
-            db.addContentItem(id, item.getType().ordinal(), item.getContent1(), item.getContent2());
+            db.addContentItem(id, item.getType().ordinal(),noteModel.getStyle(), item.getContent1(), item.getContent2
+                    ());
         }
 
     }

@@ -1,7 +1,8 @@
  
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+        android:background="#aa000000">
 
     <ImageView
         android:id="@+id/itemImg"
@@ -17,7 +18,8 @@
         android:layout_weight="0.14"
         android:padding="10dp"
         android:text="@string/hello_world"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+            android:textColor="#fff"/>
 
 </LinearLayout>
 

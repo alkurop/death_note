@@ -15,6 +15,7 @@ import com.omar.deathnote.notes.item.ui.IContentView;
 import com.omar.deathnote.notes.item.ui.NoteFragment;
 import com.omar.deathnote.notes.item.ui.TitleFragment;
 import com.omar.deathnote.notes.ui.INoteView;
+import com.omar.deathnote.spinner.MySpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class NotePresenter implements INoteEventHandler {
     public void init(NoteModel noteModel) {
         this.noteModel = noteModel;
         displayView();
+        setUpSpinner(noteModel.getStyle()-1);
 
     }
 
@@ -40,16 +42,31 @@ public class NotePresenter implements INoteEventHandler {
     public void initEmpty() {
         createEmptyContent();
         displayView();
+        setUpSpinner(0);
+      //  view.setBackGround(0);
+        noteModel.setStyle(1);
+
     }
 
     @Override
     public void displayView() {
         view.initToolbar();
+
         view.clearList(noteModel.getContentList());
         GenerateEventHandlers();
         displayContent();
     }
 
+    private void setUpSpinner(final int pos){
+        view.setUpSpinner(pos,new MySpinnerAdapter.SpinnerCallback() {
+            @Override
+            public void onItemSelected(int position) {
+
+                view.setBackGround(position);
+                noteModel.setStyle(position + 1);
+            }
+        });
+    }
     @Override
     public void setView(INoteView _view) {
         view = _view;

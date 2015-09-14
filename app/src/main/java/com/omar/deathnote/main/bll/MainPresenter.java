@@ -8,6 +8,7 @@ import com.omar.deathnote.db.providers.DeleteNoteProvider;
 import com.omar.deathnote.db.providers.MainListProvider;
 import com.omar.deathnote.main.ui.IMainView;
 import com.omar.deathnote.models.ItemMainList;
+import com.omar.deathnote.spinner.MySpinnerAdapter;
 
 import java.util.List;
 
@@ -29,8 +30,16 @@ public class MainPresenter implements IMainEventHandler {
         setMainListProviderCallback();
         setAdapterCallback();
         setList();
+        setUpSpinner(0);
     }
-
+    private void setUpSpinner(final int pos){
+        view.setUpSpinner(pos, new MySpinnerAdapter.SpinnerCallback() {
+            @Override
+            public void onItemSelected(int position) {
+                setData(position);
+            }
+        });
+    }
     @Override
     public void fabClicked() {
         view.openEmptyNote();

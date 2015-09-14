@@ -1,6 +1,7 @@
 package com.omar.deathnote.models;
 
 import android.database.Cursor;
+import com.omar.deathnote.db.DB;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class NoteModel implements Serializable{
         if (cursor != null) {
 
             while (cursor.moveToNext()) {
+                noteModel.setStyle(cursor.getInt(cursor.getColumnIndex(DB.COLUMN_STYLE)));
                 contentList.add(Content.create(cursor));
             }
         }
