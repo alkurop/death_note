@@ -34,7 +34,7 @@ public class NotePresenter implements INoteEventHandler {
     public void init(NoteModel noteModel) {
         this.noteModel = noteModel;
         displayView();
-        setUpSpinner(noteModel.getStyle()-1);
+        setUpSpinner(noteModel.getStyle() - 1);
 
     }
 
@@ -52,12 +52,12 @@ public class NotePresenter implements INoteEventHandler {
         view.initToolbar();
 
         view.clearList(noteModel.getContentList());
-        GenerateEventHandlers();
-        displayContent();
+        generateEventHandlersList();
+        displayEventHandlerList();
     }
 
     private void setUpSpinner(final int pos){
-        view.setUpSpinner(pos,new MySpinnerAdapter.SpinnerCallback() {
+        view.setUpSpinner(pos, new MySpinnerAdapter.SpinnerCallback() {
             @Override
             public void onItemSelected(int position) {
 
@@ -113,49 +113,65 @@ public class NotePresenter implements INoteEventHandler {
         }
     }
 
-    private void GenerateEventHandlers() {
-        eventHandlers = new ArrayList<>();
-        IContentEventHandler eventHandler;
-        for (Content item : noteModel.getContentList()) {
-            switch (item.getType()) {
-                case AUDIO:
-                    eventHandler = new AudioItemPresenter();
-                    break;
-                case PICTURE:
-                    eventHandler = new PicItemPresenter();
-                    break;
-                default:
-                    eventHandler = new ContentItemPresenter();
-                    break;
+    @Override
+    public void addContentItem(Content content) {
+        noteModel.getContentList().add(content);
+        generateEventHandler(content);
+    }
 
-            }
-            eventHandler.init(item, this);
-            eventHandlers.add(eventHandler);
+    private void generateEventHandlersList() {
+        eventHandlers = new ArrayList<>();
+
+        for (Content item : noteModel.getContentList()) {
+            generateEventHandler(item);
         }
     }
 
-    @Override
-    public void displayContent() {
-        for (IContentEventHandler item : eventHandlers) {
-            Fragment fragment = null;
-            switch (item.getContent().getType()) {
-                case LINK:
-                    break;
-                case TITLE:
-                    fragment = new TitleFragment();
-                    break;
-                case AUDIO:
-                    break;
-                case PICTURE:
-                    break;
-                case NOTE:
-                    fragment = new NoteFragment();
-                    break;
-            }
-            ((IContentView) fragment).setEventHandler(item);
-            item.setView((IContentView) fragment);
-            view.displayFragment(item.getContent(), fragment);
+    private IContentEventHandler generateEventHandler(Content content){
+        IContentEventHandler eventHandler;
+        switch (content.getType()) {
+            case AUDIO:
+                eventHandler = new AudioItemPresenter();
+                break;
+            case PICTURE:
+                eventHandler = new PicItemPresenter();
+                break;
+            default:
+                eventHandler = new ContentItemPresenter();
+                break;
+
         }
+        eventHandler.init(content, this);
+        eventHandlers.add(eventHandler);
+        return eventHandler;
+    }
+
+    @Override
+    public void displayEventHandlerList() {
+        for (IContentEventHandler item : eventHandlers) {
+            displayEventHandler(item);
+        }
+    }
+
+    private void displayEventHandler(IContentEventHandler eventHandler){
+        Fragment fragment = null;
+        switch (eventHandler.getContent().getType()) {
+            case LINK:
+                break;
+            case TITLE:
+                fragment = new TitleFragment();
+                break;
+            case AUDIO:
+                break;
+            case PICTURE:
+                break;
+            case NOTE:
+                fragment = new NoteFragment();
+                break;
+        }
+        ((IContentView) fragment).setEventHandler(eventHandler);
+        eventHandler.setView((IContentView) fragment);
+        view.displayFragment(eventHandler.getContent(), fragment);
     }
 
     @Override

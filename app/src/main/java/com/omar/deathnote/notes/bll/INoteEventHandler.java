@@ -26,7 +26,9 @@ public interface INoteEventHandler {
 
       void deleteContentItem(Content content);
 
-      void displayContent();
+      void addContentItem(Content content);
+
+      void displayEventHandlerList();
 
       void saveContent();
 

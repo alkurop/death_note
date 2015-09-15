@@ -94,10 +94,9 @@
     <string name="no">No</string>
     <string name="maybe">Maybe</string>
     <string name="new_pic"> Picture  </string>
-    <string name="new_link">Web Link </string>
     <string name="new_text">Text  </string>
     <string name="str_search">Search</string>
-    <string name="new_audio">       Audio File</string>
+
     <string name="add_new_note"><b>Add New Note</b></string>
     <string name="add_pic_dialog">       Add Picture</string>
     <string name="audio_add_dialog">       Add Audio</string>
@@ -116,5 +115,12 @@
     <color name="link">#003366</color>
     <color  name ="song_numbers">#00aad0</color>
      <color  name ="red">#f00000</color>
+
+
+    <string name="new_picture">New picture</string>
+    <string name="new_audio">New audio</string>
+    <string name="new_note">New Note</string>
+    <string name="new_link">New web link</string>
+    <string name="back">Back</string>
 
 </resources>
