@@ -22,8 +22,6 @@ public interface INoteEventHandler {
 
       void loadContent(int id);
 
-      void createEmptyContent();
-
       void deleteContentItem(Content content);
 
       void addContentItem(Content content);
@@ -37,4 +35,6 @@ public interface INoteEventHandler {
       void shareClicked();
 
       void saveClicked();
+
+      void fabClicked();
 }

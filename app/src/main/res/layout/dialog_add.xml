@@ -2,15 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="350dp"
+
+        >
 
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_addDialog_title"/>
-    <ListView
+            android:id="@+id/tv_addDialog_title"
+            style="@style/AddDialogEditTextSytle"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="@dimen/add_dialog_content_padding"
+            android:paddingRight="@dimen/add_dialog_content_padding"
+            android:textSize="32dp"
+            />
+
+    <View android:layout_width="wrap_content" android:layout_height="1dp"
+            android:background="#fff"/>
+    <android.support.v7.widget.RecyclerView
+            android:paddingLeft="@dimen/add_dialog_content_padding"
+            android:paddingRight="@dimen/add_dialog_content_padding"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lv_addDialog_list"/>
+            android:layout_height="350dp"
+            android:id="@+id/lv_addDialog_list"
+             android:overScrollMode="never"
+            />
 </LinearLayout>

@@ -9,5 +9,5 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
-    <color name="dialog_frame_background">#101010</color>
+    <color name="dialog_frame_background">#80101010</color>
 </resources>

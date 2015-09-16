@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.providers.OpenNoteProvider;
 import com.omar.deathnote.db.providers.SaveNoteProvider;
+import com.omar.deathnote.dialogs.add_dialog.bll.AddDialogPresenter;
+import com.omar.deathnote.dialogs.add_dialog.ui.AddDialog;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.item.bll.AudioItemPresenter;
@@ -28,7 +30,8 @@ public class NotePresenter implements INoteEventHandler {
     private NoteModel noteModel;
     private INoteView view;
     private List<IContentEventHandler> eventHandlers;
-    boolean allowDB = true;
+
+
 
     @Override
     public void init(NoteModel noteModel) {
@@ -40,7 +43,7 @@ public class NotePresenter implements INoteEventHandler {
 
     @Override
     public void initEmpty() {
-        createEmptyContent();
+        noteModel = NoteModel.createEmpty();
         displayView();
         setUpSpinner(0);
          noteModel.setStyle(1);
@@ -50,7 +53,6 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void displayView() {
         view.initToolbar();
-
         view.clearList(noteModel.getContentList());
         generateEventHandlersList();
         displayEventHandlerList();
@@ -97,13 +99,6 @@ public class NotePresenter implements INoteEventHandler {
     }
 
     @Override
-    public void createEmptyContent() {
-        noteModel = new NoteModel();
-        noteModel.getContentList().add(new Content(Content.ContentType.TITLE));
-        noteModel.getContentList().add(new Content(Content.ContentType.NOTE));
-    }
-
-    @Override
     public void deleteContentItem(Content item) {
         if (noteModel.getContentList().size() > 2) {
             int index = noteModel.getContentList().indexOf(item);
@@ -130,10 +125,12 @@ public class NotePresenter implements INoteEventHandler {
     private IContentEventHandler generateEventHandler(Content content){
         IContentEventHandler eventHandler;
         switch (content.getType()) {
-            case AUDIO:
+            case AUDIO_FILE:
+            case AUDIO_RECORD:
                 eventHandler = new AudioItemPresenter();
                 break;
-            case PICTURE:
+            case PICTURE_FILE:
+            case PICTURE_CAPTURE:
                 eventHandler = new PicItemPresenter();
                 break;
             default:
@@ -161,9 +158,13 @@ public class NotePresenter implements INoteEventHandler {
             case TITLE:
                 fragment = new TitleFragment();
                 break;
-            case AUDIO:
+            case AUDIO_FILE:
+            case AUDIO_RECORD:
+
                 break;
-            case PICTURE:
+            case PICTURE_FILE:
+            case PICTURE_CAPTURE:
+
                 break;
             case NOTE:
                 fragment = new NoteFragment();
@@ -185,21 +186,18 @@ public class NotePresenter implements INoteEventHandler {
 
     @Override
     public void saveDB(final SaveDbCallback callback) {
-        if(allowDB){
-            allowDB = false;
+
         SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
             @Override
             public void onSuccess(int id) {
                 noteModel.setId(id);
                 callback.Success();
-                allowDB = true;
             }
 
             @Override
             public void onError(String error) {
-                allowDB = true;
             }
-        });}
+        });
     }
 
     @Override
@@ -224,6 +222,27 @@ public class NotePresenter implements INoteEventHandler {
         });
 
     }
+
+    @Override
+    public void fabClicked() {
+        AddDialogPresenter dialogPresenter = new AddDialogPresenter();
+        dialogPresenter.init(new AddDialogPresenter.IAddDialogCallback() {
+            @Override
+            public void addContent(Content content) {
+
+            }
+        });
+        AddDialog addDialog = new AddDialog();
+        addDialog.setEventHandler(dialogPresenter);
+        dialogPresenter.setView(addDialog);
+
+        addDialog.show(view.getSupportFragmentManager(), "");
+
+
+
+    }
+
+
 
     public interface SaveDbCallback{
         void Success();

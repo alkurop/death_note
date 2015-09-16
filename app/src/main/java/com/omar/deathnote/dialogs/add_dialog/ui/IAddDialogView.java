@@ -1,6 +1,5 @@
 package com.omar.deathnote.dialogs.add_dialog.ui;
 
-import android.widget.ListView;
 import com.omar.deathnote.dialogs.add_dialog.bll.IAddDialogPresenter;
 
 /**
@@ -10,7 +9,9 @@ public interface IAddDialogView {
 
     void setTitleLabel(String label);
 
-    ListView getListView();
+    <T> T getRecyclerView();
 
-    void setEventPresenter(IAddDialogPresenter presenter);
+    void setEventHandler(IAddDialogPresenter presenter);
+
+    void dismiss();
 }

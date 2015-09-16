@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by omar on 9/7/15.
  */
-public class NoteModel implements Serializable{
+public class NoteModel implements Serializable {
 
     private int id = -1;
 
@@ -60,5 +60,12 @@ public class NoteModel implements Serializable{
         return noteModel;
     }
 
+
+    public static NoteModel createEmpty() {
+        NoteModel noteModel = new NoteModel();
+        noteModel.getContentList().add(new Content(Content.ContentType.TITLE));
+        noteModel.getContentList().add(new Content(Content.ContentType.NOTE));
+        return noteModel;
+    }
 
 }

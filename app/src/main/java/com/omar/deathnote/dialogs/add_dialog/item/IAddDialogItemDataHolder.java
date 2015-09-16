@@ -5,9 +5,8 @@ package com.omar.deathnote.dialogs.add_dialog.item;
  */
 public interface IAddDialogItemDataHolder {
 
-    String getName();
     void doAction();
 
-    void setName(String name);
+    String getTitle();
 
 }

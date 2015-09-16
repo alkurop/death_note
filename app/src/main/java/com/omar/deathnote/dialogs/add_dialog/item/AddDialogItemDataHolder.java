@@ -1,19 +1,20 @@
 package com.omar.deathnote.dialogs.add_dialog.item;
 
 /**
- * Created by omar on 9/15/15.
+ * Created by omar on 9/16/15.
  */
 abstract public class AddDialogItemDataHolder implements IAddDialogItemDataHolder{
+    String name;
 
-    private String name;
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
+    public AddDialogItemDataHolder(String titles){
+        this.name = titles;
     }
 
+
+
     @Override
-    public String getName() {
+    public String getTitle() {
         return name;
     }
 }

@@ -13,8 +13,10 @@ public class Content implements Serializable{
         TITLE,
         NOTE,
         LINK,
-        AUDIO,
-        PICTURE
+        AUDIO_FILE,
+        PICTURE_FILE,
+        AUDIO_RECORD,
+        PICTURE_CAPTURE
     }
     private  ContentType  type;
     private  String content1;

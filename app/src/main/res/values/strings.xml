@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<string name="appName">Death Note  </string>
+<resources>
+    <string name="appName">Death Note</string>
     <string name="checkbox2_title">CheckBox 2</string>
     <string name="checkbox2_summary">Summary of CheckBox 2</string>
     <string name="edittext2_title">Creation date</string>
     <string name="edittext2_summary">
-             25 December 2014  \n 
-          </string>
-        
-    
- 
+        25 December 2014 \n
+    </string>
+
+
     <string name="edittext3_title">License type:</string>
     <string name="edittext3_summary">
-        FREE LICENSE\n 
-          </string>
-        
-     <string name="edittext1_title">Created by:</string>
-    <string name="edittext1_summary"> 
-      Alexey Kuropiatnyk  \n 
-          </string>
-    
-    
-         
-     <string name="edittext4_title">Version</string>
-    <string name="edittext4_summary"> 
-     1.01
-          </string>
-    
-    
-    <string name="contact_developer_uri"> alkurop@gmail.com   \n </string>
-    
-    
+        FREE LICENSE\n
+    </string>
+
+    <string name="edittext1_title">Created by:</string>
+    <string name="edittext1_summary">
+        Alexey Kuropiatnyk \n
+    </string>
+
+
+    <string name="edittext4_title">Version</string>
+    <string name="edittext4_summary">
+        1.01
+    </string>
+
+
+    <string name="contact_developer_uri">alkurop@gmail.com \n</string>
+
+
     <string name="list2_title">List 2</string>
     <string name="list2_summary">Summary of List 2</string>
     <string name="category1">Category 1</string>
@@ -43,10 +41,10 @@
     <string name="header1_summary">How sharing with other apps works</string>
     <string name="header2_title">About</string>
     <string name="header2_summary">Info about this app</string>
-    <string  name="rec_countet">00 : 00 : 00</string>
+    <string name="rec_countet">00 : 00 : 00</string>
     <string name="checkbox1_title">CheckBox 1</string>
     <string name="checkbox1_summary">Summary of CheckBox 1</string>
- 
+
     <string name="list1_title">List 1</string>
     <string name="list1_summary">Summary of List 1</string>
 
@@ -81,25 +79,35 @@
     <string name="action_about">About</string>
     <string name="action_pdf">Create PDF</string>
     <string name="save">save</string>
-    <string name="tvTitle"><b>Title</b></string>
-    <string name="tvLink"><b>Link</b></string>
-    <string name="tvNote"><b>Text</b></string>
-     <string name="tvAudio"><b>Record Audio</b></string>
+    <string name="tvTitle">
+        <b>Title</b>
+    </string>
+    <string name="tvLink">
+        <b>Link</b>
+    </string>
+    <string name="tvNote">
+        <b>Text</b>
+    </string>
+    <string name="tvAudio">
+        <b>Record Audio</b>
+    </string>
     <string name="add_element">Add Element</string>
     <string name="dialog_1">Dialog 1</string>
     <string name="dialog_2">Dialog 2</string>
-    <string name="message_text">Alert! Alert!  </string>
-    <string name="message_text2"> Sure to delete? </string>
+    <string name="message_text">Alert! Alert!</string>
+    <string name="message_text2">Sure to delete?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="maybe">Maybe</string>
-    <string name="new_pic"> Picture  </string>
-    <string name="new_text">Text  </string>
+    <string name="new_pic">Picture</string>
+    <string name="new_text">Text</string>
     <string name="str_search">Search</string>
 
-    <string name="add_new_note"><b>Add New Note</b></string>
-    <string name="add_pic_dialog">       Add Picture</string>
-    <string name="audio_add_dialog">       Add Audio</string>
+    <string name="add_new_note">
+        <b>Add New Note</b>
+    </string>
+    <string name="add_pic_dialog">Add Picture</string>
+    <string name="audio_add_dialog">Add Audio</string>
 
     <string-array name="pic_add_dialog">
         <item>From Gallery</item>
@@ -113,14 +121,19 @@
     </string-array>
 
     <color name="link">#003366</color>
-    <color  name ="song_numbers">#00aad0</color>
-     <color  name ="red">#f00000</color>
-
-
+    <color name="song_numbers">#00aad0</color>
+    <color name="red">#f00000</color>
+    <string name="audio_from_media">Open media</string>
+    <string name="audio_from_recorder">Record</string>
+    <string name="pic_from_gallery">Find in gallery</string>
+    <string name="pic_from_camera">Take a photo</string>
     <string name="new_picture">New picture</string>
-    <string name="new_audio">New audio</string>
-    <string name="new_note">New Note</string>
-    <string name="new_link">New web link</string>
+    <string name="new_audio">Audio</string>
+    <string name="new_note">Note</string>
+    <string name="new_link">Web link</string>
     <string name="back">Back</string>
+    <string name="add_content">Add new content</string>
+    <string name="add_audio">Add audio</string>
+    <string name="add_picture">Add picture</string>
 
 </resources>

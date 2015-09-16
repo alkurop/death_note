@@ -1,9 +1,6 @@
 package com.omar.deathnote.notes.ui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -38,10 +35,8 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     Toolbar toolbar;
     @InjectView(R.id.spinner)
     Spinner spinner;
-
     @InjectView(R.id.iv_BackGround)
     ImageView iv_Background;
-
     @InjectView(R.id.scrollView1)
     ScrollView scrollView1;
 
@@ -61,6 +56,7 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     @OnClick(R.id.fab)
     public void fabCliked(){
         hideKeyboard();
+        presenter.fabClicked();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.ui;
+package com.omar.deathnote.main.bll;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,7 +8,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
-import com.omar.deathnote.main.bll.IMainAdapterCallback;
 import com.omar.deathnote.models.ItemMainList;
 
 /**
