@@ -54,7 +54,6 @@ abstract public class BaseItemFragment extends Fragment implements IContentView 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (isRequestsFocus) {
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
