@@ -44,6 +44,8 @@ public class NoteFragment extends BaseItemFragment {
 
     @Override
     public void requestFocus() {
+
+
         etText.requestFocus();
     }
 

@@ -141,11 +141,11 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void displayEventHandlerList() {
         for (IContentEventHandler item : eventHandlers) {
-            displayEventHandler(item, false);
+            displayEventHandler(item);
         }
     }
 
-    private void displayEventHandler(IContentEventHandler eventHandler, boolean shouldRequestFocus) {
+    private void displayEventHandler(IContentEventHandler eventHandler ) {
         Fragment fragment = null;
         switch (eventHandler.getContent().getType()) {
             case LINK:
@@ -168,7 +168,7 @@ public class NotePresenter implements INoteEventHandler {
         }
         ((IContentView) fragment).setEventHandler(eventHandler);
         eventHandler.setView((IContentView) fragment);
-        view.displayFragment(eventHandler, fragment, shouldRequestFocus);
+        view.displayFragment(eventHandler, fragment );
     }
 
     @Override
@@ -215,7 +215,8 @@ public class NotePresenter implements INoteEventHandler {
             public void addContent(Content content) {
                 addContentItem(content);
                 IContentEventHandler eventHandler =  generateEventHandler(content);
-                displayEventHandler(eventHandler, true);
+                displayEventHandler(eventHandler);
+                eventHandler.requestFocus();
             }
         });
         AddDialog addDialog = new AddDialog();

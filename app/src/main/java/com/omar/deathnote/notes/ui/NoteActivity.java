@@ -28,7 +28,9 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteActivity extends AppCompatActivity implements INoteView {
+public class NoteActivity
+        extends AppCompatActivity
+        implements INoteView, IScrollCallback {
 
     @InjectView(R.id.noteList)
     LinearLayout ll_main;
@@ -84,19 +86,11 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     }
 
     @Override
-    public void displayFragment(IContentEventHandler eventHandler, Fragment fragment, boolean shouldRequestFocus) {
+    public void displayFragment(IContentEventHandler eventHandler, Fragment fragment ) {
         FrameLayout container = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.content_container, null, false);
         container.setId(eventHandler.getContent().getUID());
         ll_main.addView(container);
         getSupportFragmentManager().beginTransaction().add(eventHandler.getContent().getUID(), fragment).commit();
-
-        if (shouldRequestFocus) {
-            int h1 = ll_main.getHeight();
-            int h2 = container.getHeight();
-            scrollView1.smoothScrollTo(0,h1 + h2);
-            eventHandler.requestFocus();
-        }
-
     }
 
 
@@ -181,4 +175,9 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
         Picasso.with(this).load(Constants.note_bg_images[index]).into(iv_Background);
     }
 
+    @Override
+    public void scrollToBottom() {
+        int h1 = ll_main.getHeight();
+        scrollView1.smoothScrollTo(0,h1 );
+    }
 }

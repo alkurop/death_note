@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface INoteView {
 
-    void displayFragment(IContentEventHandler eventHandler, Fragment fragment, boolean shouldRequestFocus);
+    void displayFragment(IContentEventHandler eventHandler, Fragment fragment);
 
     void removeFragment(Content content);
 
