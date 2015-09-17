@@ -20,6 +20,7 @@ import com.omar.deathnote.R;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.SpinnerItem;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
+import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 import com.omar.deathnote.spinner.MySpinnerAdapter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -44,17 +45,19 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     private INoteEventHandler presenter;
     private Target bgTarget;
 
-    @OnClick(R.id.toolbar)public void hideKeyboard(){
+    @OnClick(R.id.toolbar)
+    public void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
 
     }
+
     @OnClick(R.id.fab)
-    public void fabCliked(){
+    public void fabCliked() {
         hideKeyboard();
         presenter.fabClicked();
     }
@@ -66,7 +69,7 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
         ButterKnife.inject(this);
         presenter = App.getNotePresenter();
         presenter.setView(this);
-        scrollView1.setEnabled(false);
+        scrollView1.setSmoothScrollingEnabled(true);
 
 
         if (savedInstanceState == null) presenter.getContentId(getIntent());
@@ -81,11 +84,19 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     }
 
     @Override
-    public void displayFragment(Content item, Fragment fragment) {
+    public void displayFragment(IContentEventHandler eventHandler, Fragment fragment, boolean shouldRequestFocus) {
         FrameLayout container = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.content_container, null, false);
-        container.setId(item.getUID());
+        container.setId(eventHandler.getContent().getUID());
         ll_main.addView(container);
-        getSupportFragmentManager().beginTransaction().add(item.getUID(), fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(eventHandler.getContent().getUID(), fragment).commit();
+
+        if (shouldRequestFocus) {
+            int h1 = ll_main.getHeight();
+            int h2 = container.getHeight();
+            scrollView1.smoothScrollTo(0,h1 + h2);
+            eventHandler.requestFocus();
+        }
+
     }
 
 
@@ -140,14 +151,14 @@ public class NoteActivity extends AppCompatActivity implements INoteView {
     }
 
     @Override
-    public void setUpSpinner(int pos,final MySpinnerAdapter.SpinnerCallback spinnerCallback) {
+    public void setUpSpinner(int pos, final MySpinnerAdapter.SpinnerCallback spinnerCallback) {
         List<SpinnerItem> spinnerItemList = new ArrayList<>();
 
-        for(int i =1 ; i <   Constants.select_images. length; i++){
-            spinnerItemList.add(new SpinnerItem(Constants.select_images[i],getString(Constants.select_names[i])));
+        for (int i = 1; i < Constants.select_images.length; i++) {
+            spinnerItemList.add(new SpinnerItem(Constants.select_images[i], getString(Constants.select_names[i])));
         }
 
-        MySpinnerAdapter spinnerAdatper = new MySpinnerAdapter(spinnerItemList );
+        MySpinnerAdapter spinnerAdatper = new MySpinnerAdapter(spinnerItemList);
 
         spinner.setAdapter(spinnerAdatper);
         spinner.setSelection(pos);

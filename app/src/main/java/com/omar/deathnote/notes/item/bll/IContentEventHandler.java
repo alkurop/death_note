@@ -21,4 +21,8 @@ public interface IContentEventHandler {
     Content getContent();
 
     void saveData();
+
+    void requestFocus();
+
+
 }

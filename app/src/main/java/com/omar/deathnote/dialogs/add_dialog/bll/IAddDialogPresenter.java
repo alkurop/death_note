@@ -18,7 +18,4 @@ public interface IAddDialogPresenter {
 
     void generatePicListItems();
 
-
-
-
 }

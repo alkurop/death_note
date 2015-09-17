@@ -36,4 +36,9 @@ public class TitleFragment extends BaseItemFragment {
     public int getLayout() {
         return  R.layout.note_elem_default;
     }
+
+    @Override
+    public void requestFocus() {
+        etTitle.requestFocus();
+    }
 }

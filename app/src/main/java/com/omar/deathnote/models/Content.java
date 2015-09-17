@@ -60,9 +60,7 @@ public class Content implements Serializable{
         String cont1 = cursor.getString(cursor.getColumnIndex(DB.COLUMN_CONT1));
         String cont2 = cursor.getString(cursor.getColumnIndex(DB.COLUMN_CONT2));
 
-
         ContentType type = ContentType.values()[typIndex];
-
         Content content = new Content(type);
         content.setContent1(cont1);
         content.setContent2(cont2);

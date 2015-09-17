@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 import com.omar.deathnote.spinner.MySpinnerAdapter;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface INoteView {
 
-    void displayFragment(Content content, Fragment fragment);
+    void displayFragment(IContentEventHandler eventHandler, Fragment fragment, boolean shouldRequestFocus);
 
     void removeFragment(Content content);
 
@@ -22,6 +23,7 @@ public interface INoteView {
     void initToolbar();
 
     LoaderManager getSupportLoaderManager();
+
     FragmentManager getSupportFragmentManager();
 
     void onBackPressed();
@@ -29,6 +31,5 @@ public interface INoteView {
     void setUpSpinner(int pos, MySpinnerAdapter.SpinnerCallback spinnerCallback);
 
     void setBackGround(int index);
-
 
 }

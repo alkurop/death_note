@@ -30,7 +30,7 @@ public interface INoteEventHandler {
 
       void saveContent();
 
-      void saveDB(NotePresenter.SaveDbCallback callback);
+      void saveDB();
 
       void shareClicked();
 

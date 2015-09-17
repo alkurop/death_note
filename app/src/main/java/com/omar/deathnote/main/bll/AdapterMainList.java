@@ -8,12 +8,12 @@ import com.omar.deathnote.R;
 import com.omar.deathnote.models.ItemMainList;
 
 import java.util.List;
-
 /**
  * Created by omar on 8/29/15.
  */
-public class AdapterMainList extends RecyclerView.Adapter<ItemViewMainList> {
-
+public class AdapterMainList
+        extends RecyclerView.Adapter<ItemViewMainList>
+{
     private List<ItemMainList> dataList;
     private IMainAdapterCallback callback;
 
@@ -26,7 +26,7 @@ public class AdapterMainList extends RecyclerView.Adapter<ItemViewMainList> {
     public void setDataList(List<ItemMainList> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
-    }
+     }
 
     @Override
     public ItemViewMainList onCreateViewHolder(ViewGroup parent, int viewType) {

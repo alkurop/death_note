@@ -19,9 +19,9 @@ import java.util.List;
 public class AddDialogPresenter implements IAddDialogPresenter {
     private IAddDialogCallback callback;
     private IAddDialogView view;
-
     private AddDialogAdaper adaper;
     private Context context;
+    private List<IAddDialogItemDataHolder> items = new ArrayList<>();
 
     @Override
     public void setView(IAddDialogView view) {
@@ -30,8 +30,8 @@ public class AddDialogPresenter implements IAddDialogPresenter {
 
     @Override
     public void displayView() {
-        adaper = new AddDialogAdaper();
-        (((RecyclerView) view.getRecyclerView())).setAdapter(adaper);
+        adaper = new AddDialogAdaper(items);
+        ((RecyclerView) view.getRecyclerView()).setAdapter(adaper);
         generateBaseListItems();
     }
 
@@ -39,13 +39,12 @@ public class AddDialogPresenter implements IAddDialogPresenter {
     public void init(IAddDialogCallback callback) {
         context = App.getContext();
         this.callback = callback;
-
     }
 
     @Override
     public void generateBaseListItems() {
         view.setTitleLabel(context.getString(R.string.add_content));
-        List<IAddDialogItemDataHolder>  items = new ArrayList<>();
+        items.clear();
         items.add(new AddDialogItemDataHolder(context.getString(R.string.new_pic)) {
             @Override
             public void doAction() {
@@ -78,13 +77,13 @@ public class AddDialogPresenter implements IAddDialogPresenter {
                 view.dismiss();
             }
         });
-        adaper.setContent(items);
+        adaper.notifyDataSetChanged();
     }
 
     @Override
     public void generateAudioListItems() {
         view.setTitleLabel(context.getString(R.string.add_audio));
-        List<IAddDialogItemDataHolder>  items = new ArrayList<>();
+        items.clear();
         items.add(new AddDialogItemDataHolder(context.getString(R.string.audio_from_media)) {
             @Override
             public void doAction() {
@@ -105,13 +104,13 @@ public class AddDialogPresenter implements IAddDialogPresenter {
                 generateBaseListItems();
             }
         });
-        adaper.setContent(items);
+        adaper.notifyDataSetChanged();
     }
 
     @Override
     public void generatePicListItems() {
         view.setTitleLabel(context.getString(R.string.add_picture));
-        List<IAddDialogItemDataHolder>  items = new ArrayList<>();
+        items.clear();
         items.add(new AddDialogItemDataHolder(context.getString(R.string.pic_from_gallery)) {
             @Override
             public void doAction() {
@@ -129,12 +128,11 @@ public class AddDialogPresenter implements IAddDialogPresenter {
         items.add(new AddDialogItemDataHolder(context.getString(R.string.back)) {
             @Override
             public void doAction() {
-                view.dismiss();
+                generateBaseListItems();
             }
         });
-        adaper.setContent(items);
+        adaper.notifyDataSetChanged();
     }
-
 
     public interface IAddDialogCallback {
         void addContent(Content content);

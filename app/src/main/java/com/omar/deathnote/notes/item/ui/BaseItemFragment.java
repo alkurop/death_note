@@ -18,6 +18,7 @@ abstract public class BaseItemFragment extends Fragment implements IContentView{
 
 
     private  IContentEventHandler eventHandler;
+    private boolean isRequestsFocus;
 
     @Nullable
     @Override
@@ -41,4 +42,33 @@ abstract public class BaseItemFragment extends Fragment implements IContentView{
     }
 
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(isRequestsFocus){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestFocus();
+                        }
+                    });
+                }
+            }).start();
+
+            isRequestsFocus = false;
+        }
+    }
+
+    @Override
+    public void shouldRequestFocus() {
+        isRequestsFocus = true;
+    }
 }

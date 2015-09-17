@@ -46,4 +46,9 @@ public class ContentItemPresenter implements IContentEventHandler {
         content.setContent1(contentView.getContent1());
         content.setContent2(contentView.getContent2());
     }
+
+    @Override
+    public void requestFocus() {
+        contentView.shouldRequestFocus();
+    }
 }

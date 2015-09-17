@@ -55,7 +55,6 @@ public class SaveNoteProvider {
                 return new AddNoteLoader( noteModel);
             }
 
-
             @Override
             public void onLoadFinished(Loader<Integer> loader, Integer data) {
                  handler.sendEmptyMessage(data);

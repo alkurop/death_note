@@ -15,4 +15,7 @@ public interface IContentView {
     void onDeleteClicked();
 
     int getLayout();
+
+    void shouldRequestFocus();
+    void requestFocus();
 }

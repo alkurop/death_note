@@ -14,6 +14,7 @@ import com.omar.deathnote.notes.item.bll.ContentItemPresenter;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 import com.omar.deathnote.notes.item.bll.PicItemPresenter;
 import com.omar.deathnote.notes.item.ui.IContentView;
+import com.omar.deathnote.notes.item.ui.LinkFragment;
 import com.omar.deathnote.notes.item.ui.NoteFragment;
 import com.omar.deathnote.notes.item.ui.TitleFragment;
 import com.omar.deathnote.notes.ui.INoteView;
@@ -31,8 +32,6 @@ public class NotePresenter implements INoteEventHandler {
     private INoteView view;
     private List<IContentEventHandler> eventHandlers;
 
-
-
     @Override
     public void init(NoteModel noteModel) {
         this.noteModel = noteModel;
@@ -46,8 +45,7 @@ public class NotePresenter implements INoteEventHandler {
         noteModel = NoteModel.createEmpty();
         displayView();
         setUpSpinner(0);
-         noteModel.setStyle(1);
-
+        noteModel.setStyle(1);
     }
 
     @Override
@@ -56,18 +54,19 @@ public class NotePresenter implements INoteEventHandler {
         view.clearList(noteModel.getContentList());
         generateEventHandlersList();
         displayEventHandlerList();
+
     }
 
-    private void setUpSpinner(final int pos){
+    private void setUpSpinner(final int pos) {
         view.setUpSpinner(pos, new MySpinnerAdapter.SpinnerCallback() {
             @Override
             public void onItemSelected(int position) {
-
                 view.setBackGround(position);
                 noteModel.setStyle(position + 1);
             }
         });
     }
+
     @Override
     public void setView(INoteView _view) {
         view = _view;
@@ -78,9 +77,7 @@ public class NotePresenter implements INoteEventHandler {
         int id = intent.getIntExtra(Constants.ID, -1);
         if (id == -1) {
             initEmpty();
-
-        }else
-            loadContent(id);
+        } else loadContent(id);
     }
 
     @Override
@@ -93,7 +90,6 @@ public class NotePresenter implements INoteEventHandler {
 
             @Override
             public void onError(String error) {
-
             }
         });
     }
@@ -111,18 +107,17 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void addContentItem(Content content) {
         noteModel.getContentList().add(content);
-        generateEventHandler(content);
+
     }
 
     private void generateEventHandlersList() {
         eventHandlers = new ArrayList<>();
-
         for (Content item : noteModel.getContentList()) {
             generateEventHandler(item);
         }
     }
 
-    private IContentEventHandler generateEventHandler(Content content){
+    private IContentEventHandler generateEventHandler(Content content) {
         IContentEventHandler eventHandler;
         switch (content.getType()) {
             case AUDIO_FILE:
@@ -146,14 +141,15 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void displayEventHandlerList() {
         for (IContentEventHandler item : eventHandlers) {
-            displayEventHandler(item);
+            displayEventHandler(item, false);
         }
     }
 
-    private void displayEventHandler(IContentEventHandler eventHandler){
+    private void displayEventHandler(IContentEventHandler eventHandler, boolean shouldRequestFocus) {
         Fragment fragment = null;
         switch (eventHandler.getContent().getType()) {
             case LINK:
+                fragment = new LinkFragment();
                 break;
             case TITLE:
                 fragment = new TitleFragment();
@@ -172,7 +168,7 @@ public class NotePresenter implements INoteEventHandler {
         }
         ((IContentView) fragment).setEventHandler(eventHandler);
         eventHandler.setView((IContentView) fragment);
-        view.displayFragment(eventHandler.getContent(), fragment);
+        view.displayFragment(eventHandler, fragment, shouldRequestFocus);
     }
 
     @Override
@@ -185,15 +181,13 @@ public class NotePresenter implements INoteEventHandler {
     }
 
     @Override
-    public void saveDB(final SaveDbCallback callback) {
+    public void saveDB( ) {
 
         SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
             @Override
             public void onSuccess(int id) {
                 noteModel.setId(id);
-                callback.Success();
             }
-
             @Override
             public void onError(String error) {
             }
@@ -203,24 +197,14 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void shareClicked() {
         saveContent();
-        saveDB(new SaveDbCallback() {
-            @Override
-            public void Success() {
-
-            }
-        });
+        saveDB();
     }
 
     @Override
     public void saveClicked() {
         saveContent();
-        saveDB(new SaveDbCallback() {
-            @Override
-            public void Success() {
-                view.onBackPressed();
-            }
-        });
-
+        saveDB();
+        view.onBackPressed();
     }
 
     @Override
@@ -229,23 +213,14 @@ public class NotePresenter implements INoteEventHandler {
         dialogPresenter.init(new AddDialogPresenter.IAddDialogCallback() {
             @Override
             public void addContent(Content content) {
-
+                addContentItem(content);
+                IContentEventHandler eventHandler =  generateEventHandler(content);
+                displayEventHandler(eventHandler, true);
             }
         });
         AddDialog addDialog = new AddDialog();
         addDialog.setEventHandler(dialogPresenter);
         dialogPresenter.setView(addDialog);
-
         addDialog.show(view.getSupportFragmentManager(), "");
-
-
-
     }
-
-
-
-    public interface SaveDbCallback{
-        void Success();
-    }
-
 }

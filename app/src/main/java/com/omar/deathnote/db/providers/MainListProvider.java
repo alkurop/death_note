@@ -35,7 +35,6 @@ public class MainListProvider {
         void onError(String error);
     }
 
-
     public   void initContentObserver(){
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -46,15 +45,11 @@ public class MainListProvider {
             }
         });
         contentObserver = new ContentObserver(handler) {
-
-
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
                 handler.sendEmptyMessage(0);
             }
-
-
         };
 
         App.getContext().getContentResolver().registerContentObserver(MyContentProvider.PROVIDER_URI, true, contentObserver);
@@ -67,7 +62,6 @@ public class MainListProvider {
         MainListProvider mainListProvider = new MainListProvider();
         mainListProvider.loaderManager = loaderManager;
         mainListProvider.ID = Constants.LOADERS.LOAD_NOTE.ordinal();
-
         return mainListProvider;
     }
 
@@ -81,7 +75,6 @@ public class MainListProvider {
 
     private LoaderManager.LoaderCallbacks<Cursor> getLoaderCallback(final int style) {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
-
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
                 loader = new MainListLoader(style);
@@ -91,7 +84,6 @@ public class MainListProvider {
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
                 mainListCallback.onSuccess(ItemMainList.createList(cursor));
-
             }
 
             @Override

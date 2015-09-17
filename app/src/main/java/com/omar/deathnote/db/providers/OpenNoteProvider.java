@@ -69,7 +69,6 @@ public class OpenNoteProvider {
                 handler.sendMessage(message);
             }
 
-
             @Override
             public void onLoaderReset(Loader<Cursor> loader) {
             }

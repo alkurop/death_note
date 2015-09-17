@@ -120,7 +120,6 @@ public class MyContentProvider extends ContentProvider {
             db.addContentItem(id, item.getType().ordinal(),noteModel.getStyle(), item.getContent1(), item.getContent2
                     ());
         }
-
     }
 
     @Override

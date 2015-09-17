@@ -19,8 +19,6 @@ public class DB {
 	private static final String DB_NAME = "deathnote";
 	private static final int DB_VERSION = 1;
 	private static final String DB_TABLE = "maintab";
-	 
-
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_STYLE = "style";
 	public static final String COLUMN_TITLE = "title";
@@ -30,13 +28,12 @@ public class DB {
 	public static final String COLUMN_CONT1 = "cont1";
 	public static final String COLUMN_CONT2 = "cont2";
 	public static final String COLUMN_LICENSE = "license";
-
 	private static final String DB_CREATE = "create table " + DB_TABLE + "("
 			+ COLUMN_ID + " integer primary key autoincrement, " + COLUMN_STYLE
 			+ " integer, " + COLUMN_TITLE + " text, " + COLUMN_TIMEDATE
 			+ " text  "  +
-
 			");";
+
 
 	private final Context mCtx;
 	private static DBHelper mDBHelper;
@@ -82,7 +79,7 @@ public class DB {
 		return mDB.isOpen();
 	}
 	public void close() {
-			//mDBHelper.close();
+			mDBHelper.close();
 		Log.d("db", "close");
 		 
 	}
@@ -92,12 +89,6 @@ public class DB {
 		Cursor cursor = mDB.query(DB_TABLE, null, null, null, null, null,
 				COLUMN_TIMEDATE + " DESC");
 		return cursor;
-
-	}
-
-	public Cursor getAllDataSort(String sort, String order) {
-
-		return mDB.query(DB_TABLE, null, null, null, null, null, sort + order);
 
 	}
 
@@ -118,7 +109,6 @@ public class DB {
 				new SimpleDateFormat("dd  MMMM  HH:mm:ss  ").format(new Date()));
 
 		mDB.insert(DB_TABLE, null, cv);
-		
 	}
 
 	public void delRec(int id) {
@@ -137,15 +127,12 @@ public class DB {
 	}
 
 	public Cursor fetchLast() {
-
 		Cursor mCursor = mDB.query(DB_TABLE, null, null, null, null, null,
 				COLUMN_ID);
-
 		if (mCursor != null) {
 			mCursor.moveToLast();
-			
-			
-		}else { Log.d("NullCUrsor","NullCUrsor");} 
+
+		}
 		return mCursor;
 	}
 
@@ -156,18 +143,9 @@ public class DB {
 		cv.put(COLUMN_TITLE, title);
 		/*cv.put(COLUMN_TIMEDATE,
 				new SimpleDateFormat("dd  MMMM  HH:mm  ").format(new Date()));*/
-		 
-		return mDB.update(DB_TABLE, cv, COLUMN_ID + "=" + rowId, null) > 0;
-		
-		
-		
-	}
-	 
 
-	
-	
-	/*note table*/
-	
+		return mDB.update(DB_TABLE, cv, COLUMN_ID + "=" + rowId, null) > 0;
+	}
 	
 	public void createNoteTable(int id) {
 		String TABLE_CREATE =
@@ -179,36 +157,28 @@ public class DB {
 						+ COLUMN_TYPE
 				+ " text, " + COLUMN_CONT1 + " text, " + COLUMN_CONT2
 				+ " text  " +
-
 				");";
 		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE"+ String.valueOf(id));
 		mDB.execSQL(TABLE_CREATE);
-		
-
 	}
+
 	public void deleteNoteTable(int id){
 		mDB.execSQL("DROP TABLE IF EXISTS "+ "NOTE" + String.valueOf(id));
 	}
  
 
 	public void addContentItem (int id, int type,int style, String cont1, String cont2) {
-
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_STYLE, style);
 		cv.put(COLUMN_TYPE, type);
 		cv.put(COLUMN_CONT1, cont1);
 		cv.put(COLUMN_CONT2,	cont2 );
-
 		mDB.insert("NOTE" + String.valueOf(id), null, cv);
 	}
-	
-	
-	
 	
 	public Cursor getAllNoteData(int id) {
 		return mDB.query( "NOTE" + id, null, null, null, null, null,
 				null);
-
 	}
 
 	public Cursor getAllNoteData(String id) {
@@ -216,9 +186,6 @@ public class DB {
 				null);
 
 	}
-
-	/*note table*/
-	
 
 	private class DBHelper extends SQLiteOpenHelper {
 
@@ -233,13 +200,6 @@ public class DB {
 			Log.d("db", "creating");
 			sc.startup();
 			db.execSQL(DB_CREATE);
-			
-		 
-			
-	/*		firstNote();*/
-		 
-		  
-			 
 		}
 
 		@Override

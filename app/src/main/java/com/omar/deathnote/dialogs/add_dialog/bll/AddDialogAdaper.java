@@ -8,7 +8,6 @@ import com.omar.deathnote.R;
 import com.omar.deathnote.dialogs.add_dialog.item.AddDialogItemViewHolder;
 import com.omar.deathnote.dialogs.add_dialog.item.IAddDialogItemDataHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +15,11 @@ import java.util.List;
  */
 public class AddDialogAdaper extends RecyclerView.Adapter<AddDialogItemViewHolder> {
 
-    private List<IAddDialogItemDataHolder> items = new ArrayList<>();
+    private List<IAddDialogItemDataHolder> items;
 
-    public void setContent(List<IAddDialogItemDataHolder> items) {
+    public AddDialogAdaper(List<IAddDialogItemDataHolder> items) {
         this.items = items;
-        notifyDataSetChanged();
     }
-
 
     @Override
     public AddDialogItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

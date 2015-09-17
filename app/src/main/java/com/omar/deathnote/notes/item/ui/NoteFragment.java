@@ -1,7 +1,11 @@
 package com.omar.deathnote.notes.item.ui;
 
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.omar.deathnote.R;
 
 /**
@@ -10,6 +14,7 @@ import com.omar.deathnote.R;
 public class NoteFragment extends BaseItemFragment {
     @InjectView(R.id.etTxt)
     EditText etText;
+
 
 
     @Override
@@ -36,6 +41,23 @@ public class NoteFragment extends BaseItemFragment {
     public int getLayout() {
         return  R.layout.note_elem_note;
     }
+
+    @Override
+    public void requestFocus() {
+        etText.requestFocus();
+    }
+
+
+    @OnClick(R.id.tvTitle)
+    void hideKeyboard(){
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
 
 
 }
