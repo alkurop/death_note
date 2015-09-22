@@ -10,9 +10,9 @@ import com.omar.deathnote.notes.item.ui.IContentView;
 public class ContentItemPresenter implements IContentEventHandler {
 
 
-    private Content content;
-    private INoteEventHandler noteEventHandler;
-    private IContentView contentView;
+    protected Content content;
+    protected INoteEventHandler noteEventHandler;
+    protected IContentView contentView;
 
     public void init(Content content, INoteEventHandler noteEventHandler) {
         this.content = content;

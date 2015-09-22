@@ -23,7 +23,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.Constants.Frags;
 import com.omar.deathnote.R;
-import com.omar.deathnote.audioplay.AudioPlayService;
+import com.omar.deathnote.audioplay_old.AudioPlayService;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.utility.FileManager;

@@ -13,7 +13,6 @@ public interface IContentEventHandler {
 
     void setView(IContentView contentView);
 
-
     void displayView();
 
     void delete();

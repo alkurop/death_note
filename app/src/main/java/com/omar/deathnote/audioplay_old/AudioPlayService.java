@@ -1,10 +1,4 @@
-package com.omar.deathnote.audioplay;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
+package com.omar.deathnote.audioplay_old;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -29,11 +23,16 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
+import com.omar.deathnote.R;
 import com.omar.deathnote.main.ui.MainActivity_old;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AudioPlayService extends Service implements OnCompletionListener,
 		OnPreparedListener, OnSeekCompleteListener {

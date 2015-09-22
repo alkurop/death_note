@@ -45,7 +45,7 @@
         </activity>
 
         <service
-                android:name="com.omar.deathnote.audioplay.AudioPlayService"
+                android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
                 android:enabled="true" >
         </service>
 

@@ -9,14 +9,11 @@ import com.omar.deathnote.dialogs.add_dialog.bll.AddDialogPresenter;
 import com.omar.deathnote.dialogs.add_dialog.ui.AddDialog;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
-import com.omar.deathnote.notes.item.bll.AudioItemPresenter;
+import com.omar.deathnote.notes.item.bll.AudioItemEventHandler;
 import com.omar.deathnote.notes.item.bll.ContentItemPresenter;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 import com.omar.deathnote.notes.item.bll.PicItemPresenter;
-import com.omar.deathnote.notes.item.ui.IContentView;
-import com.omar.deathnote.notes.item.ui.LinkFragment;
-import com.omar.deathnote.notes.item.ui.NoteFragment;
-import com.omar.deathnote.notes.item.ui.TitleFragment;
+import com.omar.deathnote.notes.item.ui.*;
 import com.omar.deathnote.notes.ui.INoteView;
 import com.omar.deathnote.spinner.MySpinnerAdapter;
 
@@ -122,7 +119,7 @@ public class NotePresenter implements INoteEventHandler {
         switch (content.getType()) {
             case AUDIO_FILE:
             case AUDIO_RECORD:
-                eventHandler = new AudioItemPresenter();
+                eventHandler = new AudioItemEventHandler();
                 break;
             case PICTURE_FILE:
             case PICTURE_CAPTURE:
@@ -156,6 +153,7 @@ public class NotePresenter implements INoteEventHandler {
                 break;
             case AUDIO_FILE:
             case AUDIO_RECORD:
+                fragment  = new AudioFragment();
 
                 break;
             case PICTURE_FILE:
