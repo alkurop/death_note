@@ -3,44 +3,59 @@ package com.omar.deathnote.audioPlay;
 /**
  * Created by omar on 9/17/15.
  */
-public class AudioClient implements IAudioClient, IMediaClient {
+abstract public class AudioClient implements IAudioClient, IMediaClient {
+    protected String filepath;
+    protected IMediaManager mediaManager;
+
+    public enum State {
+        IS_PLAYING_THIS,
+        IS_RECORDING_THIS,
+        IS_PAUSED_THIS,
+        NOT_THIS
+    }
+
+    public AudioClient(){ mediaManager = MediaManager.I();}
+
+
+    @Override
+    public void setFilePath(String filepath) {
+        this.filepath = filepath;
+    }
+
+
+    @Override
+    public State getThisState() {
+        if (mediaManager.getMediaState().getClient() != this) return State.NOT_THIS;
+        switch (mediaManager.getMediaState().getState()) {
+            case PAUSED_AUDIO:
+                return State.IS_PAUSED_THIS;
+            case RECORDING_AUDIO:
+                return State.IS_RECORDING_THIS;
+            case PLAYING_AUDIO:
+                return State.IS_PLAYING_THIS;
+            default:
+                return State.NOT_THIS;
+        }
+
+    }
+
     @Override
     public void stop() {
+        mediaManager.stopAudio();
+    }
 
+    @Override
+    public void record() {
+        mediaManager.recordAudio(this);
     }
 
     @Override
     public void play() {
-
+        mediaManager.playAudio(this);
     }
 
     @Override
-    public void setSeekbarMax(int max) {
-
-    }
-
-    @Override
-    public void setSeekbarProgress(int max) {
-
-    }
-
-    @Override
-    public void setAudioTitle(String title) {
-
-    }
-
-    @Override
-    public void setShuffleState(boolean state) {
-
-    }
-
-    @Override
-    public void setHidableState(boolean state) {
-
-    }
-
-    @Override
-    public void setAudioController(IMediaManager audioController) {
-
+    public void pause() {
+        mediaManager.stopAudio();
     }
 }

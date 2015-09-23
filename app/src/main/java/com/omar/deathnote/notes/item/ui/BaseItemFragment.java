@@ -19,7 +19,7 @@ import com.omar.deathnote.notes.ui.IScrollCallback;
 abstract public class BaseItemFragment extends Fragment implements IContentView {
 
 
-    private IContentEventHandler eventHandler;
+    protected IContentEventHandler eventHandler;
     private boolean isRequestsFocus;
     private IScrollCallback scrollCallback;
 

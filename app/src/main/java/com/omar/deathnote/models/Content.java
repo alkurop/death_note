@@ -18,6 +18,8 @@ public class Content implements Serializable{
         AUDIO_RECORD,
         PICTURE_CAPTURE
     }
+
+
     private  ContentType  type;
     private  String content1;
     private   String content2;

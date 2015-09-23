@@ -1,13 +1,13 @@
 package com.omar.deathnote.notes.item.bll;
 
-import com.omar.deathnote.audioPlay.IAudioClient;
+import com.omar.deathnote.audioPlay.IMediaClient;
 
 /**
  * Created by omar on 9/17/15.
  */
 public interface IAudioEventHandler {
 
-    IAudioClient getAudioClinet();
+    IMediaClient getMediaClient();
 
     void playCLicked();
 
@@ -22,6 +22,11 @@ public interface IAudioEventHandler {
     void shuffleClicked();
 
     void repeatClicked();
+
+
+    void setFilePath(String s);
+
+    String getFilePath();
 
 
 

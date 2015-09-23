@@ -3,16 +3,14 @@ package com.omar.deathnote.notes.bll;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import com.omar.deathnote.Constants;
+import com.omar.deathnote.audioPlay.MediaManager;
 import com.omar.deathnote.db.providers.OpenNoteProvider;
 import com.omar.deathnote.db.providers.SaveNoteProvider;
 import com.omar.deathnote.dialogs.add_dialog.bll.AddDialogPresenter;
 import com.omar.deathnote.dialogs.add_dialog.ui.AddDialog;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
-import com.omar.deathnote.notes.item.bll.AudioItemEventHandler;
-import com.omar.deathnote.notes.item.bll.ContentItemPresenter;
-import com.omar.deathnote.notes.item.bll.IContentEventHandler;
-import com.omar.deathnote.notes.item.bll.PicItemPresenter;
+import com.omar.deathnote.notes.item.bll.*;
 import com.omar.deathnote.notes.item.ui.*;
 import com.omar.deathnote.notes.ui.INoteView;
 import com.omar.deathnote.spinner.MySpinnerAdapter;
@@ -96,8 +94,11 @@ public class NotePresenter implements INoteEventHandler {
         if (noteModel.getContentList().size() > 2) {
             int index = noteModel.getContentList().indexOf(item);
             noteModel.getContentList().remove(index);
+            if(eventHandlers.get(index) instanceof IAudioEventHandler) MediaManager.I().remmoveMediaClient(((IAudioEventHandler)
+                    eventHandlers.get(index) ).getMediaClient());
             eventHandlers.remove(index);
             view.removeFragment(item);
+
         }
     }
 
@@ -132,6 +133,12 @@ public class NotePresenter implements INoteEventHandler {
         }
         eventHandler.init(content, this);
         eventHandlers.add(eventHandler);
+
+
+        if(eventHandler instanceof IAudioEventHandler) MediaManager.I().addMediaCLient(((IAudioEventHandler)
+                eventHandler).getMediaClient());
+
+
         return eventHandler;
     }
 
@@ -139,6 +146,7 @@ public class NotePresenter implements INoteEventHandler {
     public void displayEventHandlerList() {
         for (IContentEventHandler item : eventHandlers) {
             displayEventHandler(item);
+
         }
     }
 

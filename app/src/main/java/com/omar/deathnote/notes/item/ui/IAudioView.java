@@ -1,7 +1,5 @@
 package com.omar.deathnote.notes.item.ui;
 
-import android.support.annotation.DrawableRes;
-
 /**
  * Created by omar on 9/17/15.
  */
@@ -12,12 +10,21 @@ public interface IAudioView {
 
     void setTimerLabel(String label);
 
-    void setPlayBtnDrawable(@DrawableRes int drawable);
+    void setShuffle(boolean isSHuffle);
 
-    void setShuffleBtnDrawable(@DrawableRes int drawable);
+    void setRepeat (boolean isRepeat);
 
-    void setRepeatBtnDrawable(@DrawableRes int drawable);
 
-    void setHidableVisibility(boolean visible);
+    void getAudioMediaStore();
+
+    void setStopMode();
+
+    void setPlayingMode();
+
+    void setRecordMode();
+
+    void setRecordingMode();
+
+    void setPausedMode();
 
 }

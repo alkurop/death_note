@@ -10,22 +10,19 @@ public class MediaManager implements IMediaManager {
 
     private static MediaState mediaState;
     private List<IMediaClient> mediaClientList;
-
-
     private static MediaManager mediaManager;
     private boolean isShuffle;
     private boolean isRepeat;
 
     private MediaManager() {
         mediaClientList = new ArrayList<>();
+        mediaState = new MediaState();
     }
-
 
     public static IMediaManager I() {
         if (mediaManager == null) mediaManager = new MediaManager();
         return mediaManager;
     }
-
 
     @Override
     public void addMediaCLient(IMediaClient mediaClient) {
@@ -39,29 +36,25 @@ public class MediaManager implements IMediaManager {
 
     @Override
     public void playAudio(IMediaClient mediaClient) {
-        switch (mediaState.getState()) {
-            case PLAYING:
-            case PLAYING_REPEAT:
-            case RECORDING:
-            case PAUSED:
-            case PLAYING_SHUFFLE:
                 stopAudio();
-                mediaState.setState(MediaState.STATES.PLAYING);
                 mediaState.setClinet(mediaClient);
-                ((IAudioClient)mediaState.getClient()).play();
-        }
+                mediaState.setState(MediaState.STATES.PLAYING_AUDIO);
+                ((IAudioClient)(mediaState.getClient())).playCallback();
     }
 
     @Override
     public void stopAudio() {
+        if(mediaState.getState() == MediaState.STATES.STOPPED)
+            return;
         mediaState.setState(MediaState.STATES.STOPPED);
-        ((IAudioClient)mediaState.getClient()).stop();
-
+        ( (IAudioClient)  (mediaState.getClient())).stopCallback();
     }
 
     @Override
     public void recordAudio(IMediaClient mediaClient) {
-
+         mediaState.setClinet(mediaClient);
+        mediaState.setState(MediaState.STATES.RECORDING_AUDIO);
+        ((IAudioClient)(mediaState.getClient())).recordCallback();
     }
 
     @Override
@@ -71,7 +64,8 @@ public class MediaManager implements IMediaManager {
 
     @Override
     public void pause() {
-
+        mediaState.setState(MediaState.STATES.PAUSED_AUDIO);
+        ((IAudioClient)(mediaState.getClient())).pauseCallback();
     }
 
     @Override
@@ -81,16 +75,21 @@ public class MediaManager implements IMediaManager {
 
     @Override
     public void onPlayEnded() {
-
+        mediaState.setState(MediaState.STATES.STOPPED);
     }
 
     @Override
     public void setRepeat(boolean repeat) {
-
+        isRepeat = repeat;
     }
 
     @Override
     public void setShuffle(boolean shuffle) {
+        isShuffle = shuffle;
+    }
 
+    @Override
+    public MediaState getMediaState() {
+        return mediaState;
     }
 }

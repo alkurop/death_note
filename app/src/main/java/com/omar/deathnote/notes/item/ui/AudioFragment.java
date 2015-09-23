@@ -1,7 +1,12 @@
 package com.omar.deathnote.notes.item.ui;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -54,6 +59,7 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
 
     @Override
     public void setContent2(String content2) {
+        tvSongTitle.setText(content2);
     }
 
     @Override
@@ -97,24 +103,74 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
     }
 
     @Override
-    public void setPlayBtnDrawable(@DrawableRes int drawable) {
-        btnPlay.setImageResource(drawable);
-    }
-
-
-    @Override
-    public void setShuffleBtnDrawable(@DrawableRes int drawable) {
-        btnShuffle.setImageResource(drawable);
+    public void setShuffle(boolean isSHuffle) {
+        btnShuffle.setImageResource(isSHuffle ? R.drawable.ic_action_shuffle_dark : R.drawable.ic_action_shuffle);
     }
 
     @Override
-    public void setRepeatBtnDrawable(@DrawableRes int drawable) {
-        btnRepeat.setImageResource(drawable);
+    public void setRepeat(boolean isRepeat) {
+        btnRepeat.setImageResource(isRepeat ? R.drawable.ic_action_repeat_dark : R.drawable.ic_action_repeat);
+    }
+
+
+
+    @Override
+    public void getAudioMediaStore() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+            try {
+                getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.parse("file://" + Environment.getDataDirectory())));
+            } catch (Exception e) {
+            }
+        } else {
+            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+            try {
+                getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.parse("file://" + Environment.getDataDirectory())));
+            } catch (Exception e) {
+            }
+        }
+        Intent audioPicker = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(audioPicker, 1);
     }
 
     @Override
-    public void setHidableVisibility(boolean visible) {
-        hidable.setVisibility(visible ? View.VISIBLE : View.GONE);
+    public void setStopMode() {
+        btnPlay.setImageResource(R.drawable.media_play);
+        tvTimer.setVisibility(View.GONE);
+        seekBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setPlayingMode() {
+        btnPlay.setImageResource(R.drawable.media_pause);
+        tvTimer.setVisibility(View.GONE);
+        seekBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setRecordMode() {
+        btnPlay.setImageResource(R.drawable.ic_action_rec);
+        tvTimer.setVisibility(View.GONE);
+        seekBar.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void setRecordingMode() {
+        btnPlay.setImageResource(R.drawable.ic_action_recording);
+        tvTimer.setVisibility(View.VISIBLE);
+        seekBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setPausedMode() {
+        btnPlay.setImageResource(R.drawable.media_play);
+        tvTimer.setVisibility(View.GONE);
+        seekBar.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.btnPlay)
@@ -147,4 +203,27 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
         audioEventHandler.repeatClicked();
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -1) {
+            if (requestCode == 1) {
+                Uri audioUri = data.getData();
+                if (audioUri != null) {
+
+                    String[] filePathColumn = {MediaStore.Audio.Media.DATA};
+                    Cursor cursor = getActivity().getContentResolver().query(audioUri, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    audioEventHandler.setFilePath(cursor.getString(columnIndex));
+                    cursor.close();
+                }
+            }
+        } else {
+            eventHandler.delete();
+        }
+
+
+    }
 }

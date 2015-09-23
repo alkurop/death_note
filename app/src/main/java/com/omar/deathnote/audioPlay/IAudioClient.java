@@ -5,20 +5,32 @@ package com.omar.deathnote.audioPlay;
  */
 public interface IAudioClient {
 
+    void setFilePath(String filepath);
 
     void stop();
 
+    void record();
+
     void play();
+
+    void pause();
+
+    void stopCallback();
+
+    void recordCallback();
+
+    void playCallback();
+
+    void pauseCallback();
 
     void setSeekbarMax(int max);
 
     void setSeekbarProgress(int max);
 
-    void setAudioTitle(String title);
-
     void setShuffleState(boolean state);
 
-    void setHidableState(boolean state);
+    void setRepeatState(boolean state);
 
-    void setAudioController(IMediaManager audioController);
+
+    AudioClient.State getThisState();
 }

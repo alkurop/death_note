@@ -27,4 +27,7 @@ public interface IMediaManager {
 
     void setShuffle(boolean shuffle);
 
+
+    MediaState getMediaState();
+
 }

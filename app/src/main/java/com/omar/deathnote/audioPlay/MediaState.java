@@ -7,20 +7,19 @@ public class MediaState {
 
 
     public enum STATES {
-        PLAYING,
-        PLAYING_SHUFFLE,
-        PLAYING_REPEAT,
-        RECORDING,
-        PAUSED,
+        PLAYING_AUDIO,
+        RECORDING_AUDIO,
+        PAUSED_AUDIO,
         STOPPED
     }
 
     private STATES state;
     private IMediaClient audioClinet;
 
-    public MediaState(STATES state, IMediaClient client) {
-        this.state = state;
-        this.audioClinet = client;
+    public MediaState( ) {
+        this.state = STATES.STOPPED;
+        this.audioClinet = new IMediaClient() {
+        } ;
     }
 
     public void setClinet(IMediaClient audioClinet) {
