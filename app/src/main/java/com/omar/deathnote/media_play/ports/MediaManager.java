@@ -1,4 +1,4 @@
-package com.omar.deathnote.audioPlay;
+package com.omar.deathnote.media_play.ports;
 
 import java.util.ArrayList;
 import java.util.List;

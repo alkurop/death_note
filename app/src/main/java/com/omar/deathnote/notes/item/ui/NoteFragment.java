@@ -15,8 +15,6 @@ public class NoteFragment extends BaseItemFragment {
     @InjectView(R.id.etTxt)
     EditText etText;
 
-
-
     @Override
     public void setContent1(String content1) {
         etText.setText(content1);
@@ -24,7 +22,6 @@ public class NoteFragment extends BaseItemFragment {
 
     @Override
     public void setContent2(String content2) {
-
     }
 
     @Override
@@ -44,11 +41,8 @@ public class NoteFragment extends BaseItemFragment {
 
     @Override
     public void requestFocus() {
-
-
         etText.requestFocus();
     }
-
 
     @OnClick(R.id.tvTitle)
     void hideKeyboard(){
@@ -58,8 +52,5 @@ public class NoteFragment extends BaseItemFragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
-
-
 
 }

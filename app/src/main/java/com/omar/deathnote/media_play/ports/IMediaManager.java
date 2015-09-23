@@ -1,4 +1,4 @@
-package com.omar.deathnote.audioPlay;
+package com.omar.deathnote.media_play.ports;
 
 /**
  * Created by omar on 9/8/15.
@@ -27,7 +27,5 @@ public interface IMediaManager {
 
     void setShuffle(boolean shuffle);
 
-
     MediaState getMediaState();
-
 }

@@ -3,11 +3,11 @@ package com.omar.deathnote.notes.bll;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.audioPlay.MediaManager;
 import com.omar.deathnote.db.providers.OpenNoteProvider;
 import com.omar.deathnote.db.providers.SaveNoteProvider;
 import com.omar.deathnote.dialogs.add_dialog.bll.AddDialogPresenter;
 import com.omar.deathnote.dialogs.add_dialog.ui.AddDialog;
+import com.omar.deathnote.media_play.ports.MediaManager;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.item.bll.*;
@@ -98,14 +98,12 @@ public class NotePresenter implements INoteEventHandler {
                     eventHandlers.get(index) ).getMediaClient());
             eventHandlers.remove(index);
             view.removeFragment(item);
-
         }
     }
 
     @Override
     public void addContentItem(Content content) {
         noteModel.getContentList().add(content);
-
     }
 
     private void generateEventHandlersList() {
@@ -129,16 +127,12 @@ public class NotePresenter implements INoteEventHandler {
             default:
                 eventHandler = new ContentItemPresenter();
                 break;
-
         }
         eventHandler.init(content, this);
         eventHandlers.add(eventHandler);
 
-
         if(eventHandler instanceof IAudioEventHandler) MediaManager.I().addMediaCLient(((IAudioEventHandler)
                 eventHandler).getMediaClient());
-
-
         return eventHandler;
     }
 
@@ -162,11 +156,9 @@ public class NotePresenter implements INoteEventHandler {
             case AUDIO_FILE:
             case AUDIO_RECORD:
                 fragment  = new AudioFragment();
-
                 break;
             case PICTURE_FILE:
             case PICTURE_CAPTURE:
-
                 break;
             case NOTE:
                 fragment = new NoteFragment();

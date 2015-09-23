@@ -5,7 +5,6 @@ package com.omar.deathnote.notes.item.ui;
  */
 public interface IAudioView {
 
-
     void setTitleLabel(String label);
 
     void setTimerLabel(String label);
@@ -13,7 +12,6 @@ public interface IAudioView {
     void setShuffle(boolean isSHuffle);
 
     void setRepeat (boolean isRepeat);
-
 
     void getAudioMediaStore();
 

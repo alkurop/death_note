@@ -1,4 +1,4 @@
-package com.omar.deathnote.audioPlay;
+package com.omar.deathnote.media_play.ports;
 
 /**
  * Created by omar on 9/17/15.
@@ -16,12 +16,10 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
 
     public AudioClient(){ mediaManager = MediaManager.I();}
 
-
     @Override
     public void setFilePath(String filepath) {
         this.filepath = filepath;
     }
-
 
     @Override
     public State getThisState() {
@@ -36,7 +34,6 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
             default:
                 return State.NOT_THIS;
         }
-
     }
 
     @Override

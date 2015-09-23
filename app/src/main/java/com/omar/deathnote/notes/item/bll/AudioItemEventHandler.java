@@ -1,8 +1,8 @@
 package com.omar.deathnote.notes.item.bll;
 
-import com.omar.deathnote.audioPlay.AudioClient;
-import com.omar.deathnote.audioPlay.IAudioClient;
-import com.omar.deathnote.audioPlay.IMediaClient;
+import com.omar.deathnote.media_play.ports.AudioClient;
+import com.omar.deathnote.media_play.ports.IAudioClient;
+import com.omar.deathnote.media_play.ports.IMediaClient;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.ui.IAudioView;
@@ -119,7 +119,6 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
         }
     }
 
-
     @Override
     public void nextClicked() {
 
@@ -142,12 +141,10 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
     @Override
     public void shuffleClicked() {
-
     }
 
     @Override
     public void repeatClicked() {
-
     }
 
     @Override

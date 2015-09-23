@@ -11,7 +11,6 @@ public class TitleFragment extends BaseItemFragment {
     @InjectView(R.id.tvTitle)
     EditText etTitle;
 
-
     @Override
     public void setContent1(String content1) {
         etTitle.setText(content1);
@@ -19,7 +18,6 @@ public class TitleFragment extends BaseItemFragment {
 
     @Override
     public void setContent2(String content2) {
-
     }
 
     @Override

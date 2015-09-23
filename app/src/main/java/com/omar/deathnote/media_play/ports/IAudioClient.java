@@ -1,4 +1,4 @@
-package com.omar.deathnote.audioPlay;
+package com.omar.deathnote.media_play.ports;
 
 /**
  * Created by omar on 9/17/15.
@@ -30,7 +30,6 @@ public interface IAudioClient {
     void setShuffleState(boolean state);
 
     void setRepeatState(boolean state);
-
 
     AudioClient.State getThisState();
 }

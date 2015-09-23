@@ -23,7 +23,6 @@ import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 import com.omar.deathnote.spinner.MySpinnerAdapter;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +42,7 @@ public class NoteActivity
     @InjectView(R.id.scrollView1)
     ScrollView scrollView1;
 
-
     private INoteEventHandler presenter;
-    private Target bgTarget;
 
     @OnClick(R.id.toolbar)
     public void hideKeyboard() {
@@ -54,8 +51,6 @@ public class NoteActivity
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-
-
     }
 
     @OnClick(R.id.fab)
@@ -72,7 +67,6 @@ public class NoteActivity
         presenter = App.getNotePresenter();
         presenter.setView(this);
         scrollView1.setSmoothScrollingEnabled(true);
-
 
         if (savedInstanceState == null) presenter.getContentId(getIntent());
         else presenter.displayView();
@@ -128,15 +122,12 @@ public class NoteActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         presenter.saveContent();
         switch (item.getItemId()) {
-
             case R.id.action_share:
                 presenter.shareClicked();
                 break;
-
             case R.id.save:
                 presenter.saveClicked();
                 break;
-
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -147,13 +138,11 @@ public class NoteActivity
     @Override
     public void setUpSpinner(int pos, final MySpinnerAdapter.SpinnerCallback spinnerCallback) {
         List<SpinnerItem> spinnerItemList = new ArrayList<>();
-
         for (int i = 1; i < Constants.select_images.length; i++) {
             spinnerItemList.add(new SpinnerItem(Constants.select_images[i], getString(Constants.select_names[i])));
         }
 
         MySpinnerAdapter spinnerAdatper = new MySpinnerAdapter(spinnerItemList);
-
         spinner.setAdapter(spinnerAdatper);
         spinner.setSelection(pos);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,7 +151,6 @@ public class NoteActivity
                 spinnerCallback.onItemSelected(i);
                 hideKeyboard();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 

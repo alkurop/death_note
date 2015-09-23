@@ -44,7 +44,6 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
     @InjectView(R.id.btnRepeat)
     ImageView btnRepeat;
 
-
     private IAudioEventHandler audioEventHandler;
 
     @Override
@@ -77,10 +76,8 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
         return R.layout.note_elem_audio;
     }
 
-
     @Override
     public void requestFocus() {
-
     }
 
     @OnClick(R.id.songTitle)
@@ -112,8 +109,6 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
         btnRepeat.setImageResource(isRepeat ? R.drawable.ic_action_repeat_dark : R.drawable.ic_action_repeat);
     }
 
-
-
     @Override
     public void getAudioMediaStore() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -133,7 +128,6 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
             }
         }
         Intent audioPicker = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(audioPicker, 1);
     }
 
@@ -202,7 +196,6 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
     void repeatClicked() {
         audioEventHandler.repeatClicked();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

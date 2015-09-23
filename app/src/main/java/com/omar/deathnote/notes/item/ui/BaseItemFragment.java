@@ -18,7 +18,6 @@ import com.omar.deathnote.notes.ui.IScrollCallback;
  */
 abstract public class BaseItemFragment extends Fragment implements IContentView {
 
-
     protected IContentEventHandler eventHandler;
     private boolean isRequestsFocus;
     private IScrollCallback scrollCallback;
@@ -49,7 +48,6 @@ abstract public class BaseItemFragment extends Fragment implements IContentView 
         eventHandler.delete();
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,7 +75,6 @@ abstract public class BaseItemFragment extends Fragment implements IContentView 
                     }
                 }
             }).start();
-
             isRequestsFocus = false;
         }
     }

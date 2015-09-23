@@ -1,10 +1,9 @@
-package com.omar.deathnote.audioPlay;
+package com.omar.deathnote.media_play.ports;
 
 /**
  * Created by omar on 9/17/15.
  */
 public class MediaState {
-
 
     public enum STATES {
         PLAYING_AUDIO,
