@@ -31,9 +31,18 @@ public interface IAudioClient {
 
     void updateProgress(int position);
 
+    void updateShuffleState(boolean state);
+
+    void updateRepeatState(boolean state);
+
     void setShuffleState(boolean state);
 
     void setRepeatState(boolean state);
+
+
+    boolean isShuffle();
+
+    boolean isRepeat();
 
     AudioClient.State getThisState();
 

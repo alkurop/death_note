@@ -64,12 +64,12 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
 
             @Override
-            public void setShuffleState(boolean state) {
+            public void updateShuffleState(boolean state) {
                 audioView.setShuffle(state);
             }
 
             @Override
-            public void setRepeatState(boolean state) {
+            public void updateRepeatState(boolean state) {
                 audioView.setRepeat(state);
             }
         };
@@ -90,6 +90,9 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
                 break;
         }
+
+        audioView.setRepeat(audioClient.isRepeat());
+        audioView.setShuffle(audioClient.isShuffle());
     }
 
     @Override
@@ -150,10 +153,12 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
     @Override
     public void shuffleClicked() {
+        audioClient.setShuffleState(!audioClient.isShuffle());
     }
 
     @Override
     public void repeatClicked() {
+        audioClient.setRepeatState(!audioClient.isRepeat());
     }
 
     @Override

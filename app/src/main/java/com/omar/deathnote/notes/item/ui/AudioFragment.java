@@ -108,12 +108,12 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
 
     @Override
     public void setShuffle(boolean isSHuffle) {
-        btnShuffle.setImageResource(isSHuffle ? R.drawable.ic_action_shuffle_dark : R.drawable.ic_action_shuffle);
+        btnShuffle.setImageResource(!isSHuffle ? R.drawable.ic_action_shuffle_dark : R.drawable.ic_action_shuffle);
     }
 
     @Override
     public void setRepeat(boolean isRepeat) {
-        btnRepeat.setImageResource(isRepeat ? R.drawable.ic_action_repeat_dark : R.drawable.ic_action_repeat);
+        btnRepeat.setImageResource(!isRepeat ? R.drawable.ic_action_repeat_dark : R.drawable.ic_action_repeat);
     }
 
     @Override

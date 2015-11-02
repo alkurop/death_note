@@ -1,11 +1,16 @@
 package com.omar.deathnote.mediaplay.ports;
 
+import com.omar.deathnote.mediaplay.controls.IMediaManager;
+import com.omar.deathnote.mediaplay.controls.MediaManager;
+
 /**
  * Created by omar on 9/17/15.
  */
 abstract public class AudioClient implements IAudioClient, IMediaClient {
     protected String filepath;
     protected IMediaManager mediaManager;
+
+    private boolean isRepeat;
 
     public enum State {
         IS_PLAYING_THIS,
@@ -82,5 +87,26 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
     @Override
     public void playPrev() {
         mediaManager.playPrev();
+    }
+
+    @Override
+    public boolean isRepeat() {
+        return isRepeat ;
+    }
+
+    @Override
+    public boolean isShuffle() {
+        return mediaManager.isShuffle();
+    }
+
+    @Override
+    public void setRepeatState(boolean state) {
+       isRepeat = state;
+        updateRepeatState(isRepeat);
+    }
+
+    @Override
+    public void setShuffleState(boolean state) {
+        mediaManager.setShuffle(state);
     }
 }

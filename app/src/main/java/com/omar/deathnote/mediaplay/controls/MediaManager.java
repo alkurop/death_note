@@ -1,9 +1,13 @@
-package com.omar.deathnote.mediaplay.ports;
+package com.omar.deathnote.mediaplay.controls;
 
 import com.omar.deathnote.mediaplay.devices.AudioPlayer;
 import com.omar.deathnote.mediaplay.devices.IAudioPlayerCallback;
 import com.omar.deathnote.mediaplay.devices.IVoiceRecorderCallback;
 import com.omar.deathnote.mediaplay.devices.VoiceRecorder;
+import com.omar.deathnote.mediaplay.ports.AudioClient;
+import com.omar.deathnote.mediaplay.ports.IAudioClient;
+import com.omar.deathnote.mediaplay.ports.IMediaClient;
+import com.omar.deathnote.mediaplay.ports.MediaState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,8 @@ public class MediaManager implements IMediaManager {
     private static IVoiceRecorderCallback voiceRecorderCallback;
 
     private boolean isShuffle;
-    private boolean isRepeat;
+
+
     private static final String TAG = "Media COntroller";
 
     private MediaManager() {
@@ -32,7 +37,7 @@ public class MediaManager implements IMediaManager {
         mediaClientList = new ArrayList<>();
         mediaState = new MediaState();
         audioPlayer = new AudioPlayer(audioPlayerCallback);
-        voiceRecorder = new VoiceRecorder(voiceRecorderCallback );
+        voiceRecorder = new VoiceRecorder(voiceRecorderCallback);
     }
 
     private void initVoiseRecoderCallback() {
@@ -114,7 +119,7 @@ public class MediaManager implements IMediaManager {
     public void stopAudio() {
         if (mediaState.getState() == MediaState.STATES.STOPPED)
             return;
-        if(mediaState.getState() == MediaState.STATES.RECORDING_AUDIO)
+        if (mediaState.getState() == MediaState.STATES.RECORDING_AUDIO)
             voiceRecorder.recordStop();
         audioPlayer.playerStop();
         mediaState.setState(MediaState.STATES.STOPPED);
@@ -176,21 +181,57 @@ public class MediaManager implements IMediaManager {
     }
 
     @Override
-    public void onPlayEnded() {
-        mediaState.setState(MediaState.STATES.STOPPED);
-        ((IAudioClient) (mediaState.getClient())).stopCallback();
-        playNext();
+    public void playShuffle() {
+       /* stopAudio();
+        int index = -1;
+        try {
+            index = mediaClientList.indexOf(mediaState.getClient());
+        } catch (Exception e) {} finally {
+            if (index != -1)
+
+                playAudio(mediaClientList.get(index));
+
+        }*/
     }
 
     @Override
-    public void setRepeat(boolean repeat) {
-        isRepeat = repeat;
+    public void onPlayEnded() {
+        mediaState.setState(MediaState.STATES.STOPPED);
+        ((IAudioClient) (mediaState.getClient())).stopCallback();
+        if (((AudioClient) mediaState.getClient()).isRepeat())
+            repeat();
+        else if (isShuffle);
+        else
+            playNext();
     }
+
+    @Override
+    public void repeat() {
+        stopAudio();
+        int index = -1;
+        try {
+            index = mediaClientList.indexOf(mediaState.getClient());
+        } catch (Exception e) {} finally {
+            if (index != -1)
+
+                playAudio(mediaClientList.get(index));
+
+        }
+    }
+
 
     @Override
     public void setShuffle(boolean shuffle) {
         isShuffle = shuffle;
+        for (IMediaClient item : mediaClientList)
+            ((AudioClient) item).updateShuffleState(shuffle);
     }
+
+    @Override
+    public boolean isShuffle() {
+        return isShuffle;
+    }
+
 
     @Override
     public MediaState getMediaState() {
@@ -201,4 +242,6 @@ public class MediaManager implements IMediaManager {
     public void updateAudioProgress(int position) {
         audioPlayer.updateAudioProgress(position);
     }
+
+
 }

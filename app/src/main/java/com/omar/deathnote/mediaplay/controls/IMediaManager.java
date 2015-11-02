@@ -1,4 +1,7 @@
-package com.omar.deathnote.mediaplay.ports;
+package com.omar.deathnote.mediaplay.controls;
+
+import com.omar.deathnote.mediaplay.ports.IMediaClient;
+import com.omar.deathnote.mediaplay.ports.MediaState;
 
 /**
  * Created by omar on 9/8/15.
@@ -23,11 +26,18 @@ public interface IMediaManager {
 
     void playNext();
 
+    void playShuffle();
+
     void onPlayEnded();
 
-    void setRepeat(boolean repeat);
+    void repeat();
+
 
     void setShuffle(boolean shuffle);
+
+    boolean isShuffle();
+
+
 
     MediaState getMediaState();
 
