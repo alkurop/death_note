@@ -23,7 +23,8 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
 
     @Override
     public State getThisState() {
-        if (mediaManager.getMediaState().getClient() != this) return State.NOT_THIS;
+        if (mediaManager.getMediaState().getClient() != null && mediaManager.getMediaState().getClient() != this)
+            return State.NOT_THIS;
         switch (mediaManager.getMediaState().getState()) {
             case PAUSED_AUDIO:
                 return State.IS_PAUSED_THIS;
@@ -54,5 +55,11 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
     @Override
     public void pause() {
         mediaManager.stopAudio();
+    }
+
+
+    @Override
+    public String getFilePath() {
+        return filepath;
     }
 }

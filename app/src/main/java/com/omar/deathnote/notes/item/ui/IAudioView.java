@@ -25,4 +25,6 @@ public interface IAudioView {
 
     void setPausedMode();
 
+    void updateSeekbar(int max, int position);
+
 }

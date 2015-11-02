@@ -167,6 +167,12 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
         seekBar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void updateSeekbar(int max, int position) {
+        seekBar.setMax(max);
+        seekBar.setProgress(position);
+    }
+
     @OnClick(R.id.btnPlay)
     void playClicked() {
         audioEventHandler.playCLicked();

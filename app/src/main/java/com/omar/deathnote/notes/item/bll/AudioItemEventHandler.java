@@ -48,14 +48,10 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
             }
 
             @Override
-            public void setSeekbarMax(int max) {
-
+            public void updateSeekBar(int max, int progress) {
+                audioView.updateSeekbar(max, progress);
             }
 
-            @Override
-            public void setSeekbarProgress(int max) {
-
-            }
 
             @Override
             public void setShuffleState(boolean state) {

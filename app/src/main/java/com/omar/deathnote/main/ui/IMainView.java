@@ -18,5 +18,4 @@ public interface IMainView {
     void openNote(int id);
 
     void setUpSpinner(int pos, MySpinnerAdapter.SpinnerCallback spinnerCallback);
-
 }

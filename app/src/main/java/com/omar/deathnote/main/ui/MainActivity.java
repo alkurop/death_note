@@ -27,7 +27,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IMainView {
 
-
     @InjectView(R.id.rv_main)
     RecyclerView rv_MainList;
     @InjectView(R.id.fl_background)
@@ -44,17 +43,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
         presenter = App.getMainPresenter();
         presenter.init(this);
         presenter.loadData();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @OnClick(R.id.fab)
@@ -66,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     public RecyclerView getRecyclerView() {
         return rv_MainList;
     }
-
 
     @Override
     public void openEmptyNote() {
@@ -95,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spinnerCallback.onItemSelected(i);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 

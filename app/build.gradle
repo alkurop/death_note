@@ -29,8 +29,8 @@ android {
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "com.omar.deathnote"
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 11
+        targetSdkVersion 22
         versionCode 19
         versionName "2.0"
     }

@@ -7,6 +7,8 @@ public interface IAudioClient {
 
     void setFilePath(String filepath);
 
+    String getFilePath();
+
     void stop();
 
     void record();
@@ -23,9 +25,9 @@ public interface IAudioClient {
 
     void pauseCallback();
 
-    void setSeekbarMax(int max);
+    void updateSeekBar(int max, int progress);
 
-    void setSeekbarProgress(int max);
+
 
     void setShuffleState(boolean state);
 
