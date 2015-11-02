@@ -17,7 +17,9 @@ public interface IMediaManager {
 
     void playPrev();
 
-    void pause();
+    void pauseAudio();
+
+    void resumeAudio();
 
     void playNext();
 
@@ -28,4 +30,6 @@ public interface IMediaManager {
     void setShuffle(boolean shuffle);
 
     MediaState getMediaState();
+
+    void updateAudioProgress(int position);
 }

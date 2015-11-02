@@ -64,7 +64,7 @@ public class Constants {
 			R.drawable.bg_red, R.drawable.bg_yellow_1, };
 	public static final String NOTE_ID = "note_id";
 
-	public static final String PAUSE = "pause";
+	public static final String PAUSE = "pauseAudio";
 
 	public static final String PAUSED = "paused";
 	public static final String PLAY_PAUSE = "playpause";

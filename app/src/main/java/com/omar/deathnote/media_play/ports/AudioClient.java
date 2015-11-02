@@ -14,7 +14,7 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
         NOT_THIS
     }
 
-    public AudioClient(){ mediaManager = MediaManager.I();}
+    public AudioClient() { mediaManager = MediaManager.I();}
 
     @Override
     public void setFilePath(String filepath) {
@@ -23,7 +23,7 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
 
     @Override
     public State getThisState() {
-        if (mediaManager.getMediaState().getClient() != null && mediaManager.getMediaState().getClient() != this)
+        if (mediaManager.getMediaState().getClient() != this)
             return State.NOT_THIS;
         switch (mediaManager.getMediaState().getState()) {
             case PAUSED_AUDIO:
@@ -53,13 +53,34 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
     }
 
     @Override
+    public void resume() {
+        mediaManager.resumeAudio();
+    }
+
+    @Override
     public void pause() {
-        mediaManager.stopAudio();
+        mediaManager.pauseAudio();
     }
 
 
     @Override
     public String getFilePath() {
         return filepath;
+    }
+
+    @Override
+    public void updateProgress(int position) {
+        mediaManager.updateAudioProgress(position);
+    }
+
+
+    @Override
+    public void playNext() {
+        mediaManager.playNext();
+    }
+
+    @Override
+    public void playPrev() {
+        mediaManager.playPrev();
     }
 }

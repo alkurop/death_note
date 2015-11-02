@@ -25,20 +25,38 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
         stopMedia();
     }
 
+    public void playerPause() {
+        pauseMedia();
+    }
+
+    public void playerResume(){
+        mediaPlayer.start();
+    }
+
+
+
     public void playerStart(String audioSource) {
         setupMediaPlayer(audioSource);
     }
-
+    private void pauseMedia() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         stopMedia();
+        callback.onAudioEndedAndStoped();
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {playMedia();}
 
     private void setupMediaPlayer(String voiceURL) {
+        if(mediaPlayer != null && mediaPlayer.isPlaying())
+            mediaPlayer.stop();
+
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnPreparedListener(this);
@@ -56,7 +74,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
             mediaPlayer.release();
             mediaPlayer = null;
             callback.normalMessage("Audio Player Stopped");
-            callback.onAudioEndedAndStoped();
+
         } else {
             callback.onErrorOccured("Audio Player Error");
         }
@@ -73,14 +91,16 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
         }
     }
 
+
     private Runnable sendUpdatesToUi = new Runnable() {
         public void run() {
             LogMediaPosition();
             positionUpdateHandeler.postDelayed(this, 250);
         }
+
         private void LogMediaPosition() {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                callback.sendPositionUpdate(mediaPlayer.getDuration(),  mediaPlayer.getCurrentPosition());
+                callback.sendPositionUpdate(mediaPlayer.getDuration(), mediaPlayer.getCurrentPosition());
             }
 
         }
@@ -95,4 +115,10 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
     }
 
 
+    public void updateAudioProgress(int position) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.seekTo(position);
+        }
+
+    }
 }

@@ -33,6 +33,7 @@ public class NotePresenter implements INoteEventHandler {
         displayView();
         setUpSpinner(noteModel.getStyle() - 1);
 
+
     }
 
     @Override
@@ -41,6 +42,7 @@ public class NotePresenter implements INoteEventHandler {
         displayView();
         setUpSpinner(0);
         noteModel.setStyle(1);
+
     }
 
     @Override
@@ -49,7 +51,7 @@ public class NotePresenter implements INoteEventHandler {
         view.clearList(noteModel.getContentList());
         generateEventHandlersList();
         displayEventHandlerList();
-
+        MediaManager.I().stopAudio();
     }
 
     private void setUpSpinner(final int pos) {

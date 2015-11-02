@@ -27,11 +27,18 @@ public interface IAudioClient {
 
     void updateSeekBar(int max, int progress);
 
-
+    void updateProgress(int position);
 
     void setShuffleState(boolean state);
 
     void setRepeatState(boolean state);
 
     AudioClient.State getThisState();
+
+
+    void playNext();
+
+    void playPrev();
+
+    void resume();
 }

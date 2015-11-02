@@ -3,6 +3,7 @@ package com.omar.deathnote.notes.item.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,7 +22,7 @@ import com.omar.deathnote.notes.item.bll.IContentEventHandler;
 /**
  * Created by omar on 9/8/15.
  */
-public class AudioFragment extends BaseItemFragment implements IAudioView {
+public class AudioFragment extends BaseItemFragment implements IAudioView, SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.hidable)
     View hidable;
@@ -43,6 +44,10 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
     ImageView btnShuffle;
     @InjectView(R.id.btnRepeat)
     ImageView btnRepeat;
+
+
+    private int newProgress;
+    private boolean blockUpdating;
 
     private IAudioEventHandler audioEventHandler;
 
@@ -133,21 +138,21 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
 
     @Override
     public void setStopMode() {
-        btnPlay.setImageResource(R.drawable.media_play);
+        btnPlay.setBackgroundResource(R.drawable.media_play);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.GONE);
     }
 
     @Override
     public void setPlayingMode() {
-        btnPlay.setImageResource(R.drawable.media_pause);
+        btnPlay.setBackgroundResource(R.drawable.media_pause);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setRecordMode() {
-        btnPlay.setImageResource(R.drawable.ic_action_rec);
+        btnPlay.setBackgroundResource(R.drawable.ic_action_rec);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.GONE);
 
@@ -155,22 +160,32 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
 
     @Override
     public void setRecordingMode() {
-        btnPlay.setImageResource(R.drawable.ic_action_recording);
+        btnPlay.setBackgroundResource(R.drawable.ic_action_recording);
         tvTimer.setVisibility(View.VISIBLE);
         seekBar.setVisibility(View.GONE);
     }
 
     @Override
     public void setPausedMode() {
-        btnPlay.setImageResource(R.drawable.media_play);
+        btnPlay.setBackgroundResource(R.drawable.media_paused);
+        AnimationDrawable pausedAnimation = (AnimationDrawable) btnPlay.getBackground();
+        pausedAnimation.start();
+
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void updateSeekbar(int max, int position) {
-        seekBar.setMax(max);
-        seekBar.setProgress(position);
+        if (!blockUpdating) {
+            seekBar.setMax(max);
+            seekBar.setProgress(position);
+        }
+    }
+
+    @Override
+    public void setSeekbarActive(boolean b) {
+        seekBar.setOnSeekBarChangeListener(b ? this : null);
     }
 
     @OnClick(R.id.btnPlay)
@@ -224,5 +239,23 @@ public class AudioFragment extends BaseItemFragment implements IAudioView {
         }
 
 
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+        newProgress = i;
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        blockUpdating = true;
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+        audioEventHandler.progressUpdated(newProgress);
+        blockUpdating = false;
     }
 }

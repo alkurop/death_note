@@ -27,4 +27,7 @@ public interface IAudioView {
 
     void updateSeekbar(int max, int position);
 
+
+
+    void setSeekbarActive(boolean b);
 }

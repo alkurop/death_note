@@ -14,18 +14,18 @@ import com.omar.deathnote.notes.item.ui.IContentView;
 public class AudioItemEventHandler extends ContentItemPresenter implements IAudioEventHandler {
 
     private String filepath = "";
-    private IAudioClient audioClinet;
+    private IAudioClient audioClient;
     private IAudioView audioView;
 
     @Override
     public IMediaClient getMediaClient() {
-        return ((IMediaClient) audioClinet);
+        return ((IMediaClient) audioClient);
     }
 
     @Override
     public void init(Content content, INoteEventHandler noteEventHandler) {
         super.init(content, noteEventHandler);
-        audioClinet = new AudioClient() {
+        audioClient = new AudioClient() {
 
             @Override
             public void stopCallback() {
@@ -39,6 +39,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
             @Override
             public void playCallback() {
+                audioView.setSeekbarActive(true);
                 audioView.setPlayingMode();
             }
 
@@ -99,40 +100,40 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
     @Override
     public void playCLicked() {
-        switch (audioClinet.getThisState()) {
+        switch (audioClient.getThisState()) {
             case IS_PAUSED_THIS:
-                audioClinet.play();
+                audioClient.resume();
                 break;
             case IS_RECORDING_THIS:
-                audioClinet.stop();
+                audioClient.stop();
                 break;
             case IS_PLAYING_THIS:
-                audioClinet.pause();
+                audioClient.pause();
                 break;
             case NOT_THIS:
-                audioClinet.play();
+                audioClient.play();
                 break;
         }
     }
 
     @Override
     public void nextClicked() {
-
+        audioClient.playNext();
     }
 
     @Override
     public void prevClicked() {
-
+        audioClient.playPrev();
     }
 
     @Override
     public void stopClicked() {
-        audioClinet.stop();
+        audioClient.stop();
     }
 
     @Override
     public void progressUpdated(int position) {
-
+        audioClient.updateProgress(position);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
     public void setFilePath(String s) {
         filepath = s;
         audioView.setTitleLabel(filepath.substring(filepath.lastIndexOf("/") + 1));
-        audioClinet.setFilePath(filepath);
+        audioClient.setFilePath(filepath);
     }
 
     @Override

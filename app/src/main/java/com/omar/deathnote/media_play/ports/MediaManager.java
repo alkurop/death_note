@@ -11,7 +11,6 @@ import java.util.List;
  * Created by omar on 9/17/15.
  */
 public class MediaManager implements IMediaManager {
-
     private static MediaState mediaState;
     private List<IMediaClient> mediaClientList;
     private static MediaManager mediaManager;
@@ -21,9 +20,9 @@ public class MediaManager implements IMediaManager {
 
     private static IAudioPlayerCallback audioPlayerCallback;
 
-
     private boolean isShuffle;
     private boolean isRepeat;
+    private static final String TAG = "Media COntroller";
 
     private MediaManager() {
         audioPlayerCallbacks();
@@ -63,8 +62,7 @@ public class MediaManager implements IMediaManager {
 
             @Override
             public void sendPositionUpdate(int max, int position) {
-                if (mediaManager.getMediaState().getClient() != null)
-                    ((IAudioClient) (mediaState.getClient())).updateSeekBar(max, position);
+                ((IAudioClient) (mediaState.getClient())).updateSeekBar(max, position);
             }
         };
     }
@@ -81,13 +79,14 @@ public class MediaManager implements IMediaManager {
 
     @Override
     public void playAudio(IMediaClient mediaClient) {
+
         stopAudio();
         mediaState.setClinet(mediaClient);
         mediaState.setState(MediaState.STATES.PLAYING_AUDIO);
-        if (mediaManager.getMediaState().getClient() != null) {
-            audioPlayer.playerStart(((IAudioClient) (mediaState.getClient())).getFilePath());
-            ((IAudioClient) (mediaState.getClient())).playCallback();
-        }
+
+        audioPlayer.playerStart(((IAudioClient) (mediaState.getClient())).getFilePath());
+        ((IAudioClient) (mediaState.getClient())).playCallback();
+
     }
 
     @Override
@@ -96,38 +95,67 @@ public class MediaManager implements IMediaManager {
             return;
         audioPlayer.playerStop();
         mediaState.setState(MediaState.STATES.STOPPED);
-        if (mediaManager.getMediaState().getClient() != null)
-            ((IAudioClient) (mediaState.getClient())).stopCallback();
+        ((IAudioClient) (mediaState.getClient())).stopCallback();
     }
 
     @Override
     public void recordAudio(IMediaClient mediaClient) {
         mediaState.setClinet(mediaClient);
         mediaState.setState(MediaState.STATES.RECORDING_AUDIO);
-        if (mediaManager.getMediaState().getClient() != null)
-            ((IAudioClient) (mediaState.getClient())).recordCallback();
+        ((IAudioClient) (mediaState.getClient())).recordCallback();
     }
 
     @Override
     public void playPrev() {
+        stopAudio();
+        int index = -1;
+        try {
+            index = mediaClientList.indexOf(mediaState.getClient());
+        } catch (Exception e) {
+        } finally {
+            if (index != -1)
+                if (index > 0)
+                    playAudio(mediaClientList.get(index - 1));
+                else{
+                    playAudio(mediaClientList.get(0));}
+        }
     }
 
     @Override
-    public void pause() {
+    public void pauseAudio() {
         mediaState.setState(MediaState.STATES.PAUSED_AUDIO);
-        if (mediaManager.getMediaState().getClient() != null)
-            ((IAudioClient) (mediaState.getClient())).pauseCallback();
+        audioPlayer.playerPause();
+        ((IAudioClient) (mediaState.getClient())).pauseCallback();
+    }
+
+    @Override
+    public void resumeAudio() {
+        mediaState.setState(MediaState.STATES.PLAYING_AUDIO);
+        audioPlayer.playerResume();
+        ((IAudioClient) (mediaState.getClient())).playCallback();
     }
 
     @Override
     public void playNext() {
+        stopAudio();
+        int index = -1;
+        try {
+            index = mediaClientList.indexOf(mediaState.getClient());
+        } catch (Exception e) {} finally {
+            if (index != -1)
+                if (mediaClientList.size() > index + 1)
+                    playAudio(mediaClientList.get(index + 1));
+                else{
+                    playAudio(mediaClientList.get(0));}
+        }
+
     }
 
     @Override
     public void onPlayEnded() {
         mediaState.setState(MediaState.STATES.STOPPED);
-        if (mediaManager.getMediaState().getClient() != null)
-            ((IAudioClient) (mediaState.getClient())).stopCallback();
+        ((IAudioClient) (mediaState.getClient())).stopCallback();
+        playNext();
     }
 
     @Override
@@ -143,5 +171,10 @@ public class MediaManager implements IMediaManager {
     @Override
     public MediaState getMediaState() {
         return mediaState;
+    }
+
+    @Override
+    public void updateAudioProgress(int position) {
+        audioPlayer.updateAudioProgress(position);
     }
 }

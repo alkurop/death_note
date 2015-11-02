@@ -19,7 +19,8 @@ public class MediaState {
 
     public MediaState() {
         this.state = STATES.STOPPED;
-
+        this.audioClient = new WeakReference<IMediaClient>(new IMediaClient() {
+        });
     }
 
     public void setClinet(IMediaClient audioClinet) {
@@ -31,6 +32,9 @@ public class MediaState {
     }
 
     public IMediaClient getClient() {
+        if (this.audioClient.get() == null)
+            this.audioClient = new WeakReference<IMediaClient>(new IMediaClient() {
+            });
         return audioClient.get();
     }
 
