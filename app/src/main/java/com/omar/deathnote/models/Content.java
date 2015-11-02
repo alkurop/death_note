@@ -9,6 +9,7 @@ import java.io.Serializable;
  * Created by omar on 9/7/15.
  */
 public class Content implements Serializable{
+
     public enum ContentType{
         TITLE,
         NOTE,
@@ -68,5 +69,10 @@ public class Content implements Serializable{
         content.setContent2(cont2);
         return content;
     }
+    public void setType(ContentType type) {
+        this.type = type;
+
+    }
+
 
 }

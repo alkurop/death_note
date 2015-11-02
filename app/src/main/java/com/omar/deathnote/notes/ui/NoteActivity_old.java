@@ -123,7 +123,7 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-		sc = new FileManager(getApplicationContext());
+		sc = new FileManager();
 		fragList = new TreeMap<String, String>();
 		String[] keys = null;
 		String[] values = null;

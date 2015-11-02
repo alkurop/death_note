@@ -28,8 +28,5 @@ public interface IAudioEventHandler {
 
     String getFilePath();
 
-
-
-
-
+    void recordClicked();
 }

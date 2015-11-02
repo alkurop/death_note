@@ -11,7 +11,7 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
         IS_PLAYING_THIS,
         IS_RECORDING_THIS,
         IS_PAUSED_THIS,
-        NOT_THIS
+        NOT_THIS_OR_STOPPED
     }
 
     public AudioClient() { mediaManager = MediaManager.I();}
@@ -24,7 +24,7 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
     @Override
     public State getThisState() {
         if (mediaManager.getMediaState().getClient() != this)
-            return State.NOT_THIS;
+            return State.NOT_THIS_OR_STOPPED;
         switch (mediaManager.getMediaState().getState()) {
             case PAUSED_AUDIO:
                 return State.IS_PAUSED_THIS;
@@ -33,7 +33,7 @@ abstract public class AudioClient implements IAudioClient, IMediaClient {
             case PLAYING_AUDIO:
                 return State.IS_PLAYING_THIS;
             default:
-                return State.NOT_THIS;
+                return State.NOT_THIS_OR_STOPPED;
         }
     }
 

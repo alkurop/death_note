@@ -1021,7 +1021,7 @@ public class AudioFragment extends Fragment implements OnFocusChangeListener {
 					new IntentFilter(Constants.BROADCAST_ACTION));
 
 			SimpleDateFormat time = new SimpleDateFormat("_dd_MMMM_HH-MM-ss");
-			FileManager fileManager = new FileManager(thiscontext);
+			FileManager fileManager = new FileManager();
 			audioName = "VoiceRecording" + time.format(new Date());
 			time = null;
 

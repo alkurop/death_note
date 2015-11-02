@@ -28,6 +28,14 @@
                 android:layout_marginTop="3dp"
                 android:layout_weight="1" >
 
+                <ImageView android:id="@+id/btnRecord"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_gravity="center_vertical|center_horizontal" android:layout_margin="7dp"
+                           android:clickable="true"
+                           android:padding="7dp"
+                           android:background="@drawable/ic_action_rec"
+                           android:visibility="gone"/>
                 <ImageView
                     android:id="@+id/btnPlay"
                     android:layout_width="wrap_content"
@@ -35,7 +43,7 @@
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_margin="7dp"
                     android:clickable="true"
-                    android:padding="7dp" />
+                    android:padding="7dp" android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/songTitle"

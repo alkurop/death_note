@@ -114,6 +114,8 @@ public class MediaManager implements IMediaManager {
     public void stopAudio() {
         if (mediaState.getState() == MediaState.STATES.STOPPED)
             return;
+        if(mediaState.getState() == MediaState.STATES.RECORDING_AUDIO)
+            voiceRecorder.recordStop();
         audioPlayer.playerStop();
         mediaState.setState(MediaState.STATES.STOPPED);
         ((IAudioClient) (mediaState.getClient())).stopCallback();
@@ -122,7 +124,7 @@ public class MediaManager implements IMediaManager {
     @Override
     public void recordAudio(IMediaClient mediaClient) {
         mediaState.setClinet(mediaClient);
-
+        voiceRecorder.recordStart(((AudioClient) mediaClient).getFilePath());
         mediaState.setState(MediaState.STATES.RECORDING_AUDIO);
         ((IAudioClient) (mediaState.getClient())).recordCallback();
     }
@@ -138,8 +140,8 @@ public class MediaManager implements IMediaManager {
             if (index != -1)
                 if (index > 0)
                     playAudio(mediaClientList.get(index - 1));
-                else{
-                    playAudio(mediaClientList.get(0));}
+               /* else{
+                    playAudio(mediaClientList.get(0));}*/
         }
     }
 
@@ -167,8 +169,8 @@ public class MediaManager implements IMediaManager {
             if (index != -1)
                 if (mediaClientList.size() > index + 1)
                     playAudio(mediaClientList.get(index + 1));
-                else{
-                    playAudio(mediaClientList.get(0));}
+        /*        else{
+                    playAudio(mediaClientList.get(0));}*/
         }
 
     }

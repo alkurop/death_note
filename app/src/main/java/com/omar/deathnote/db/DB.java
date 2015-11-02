@@ -196,7 +196,7 @@ public class DB {
 		
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			FileManager sc = new FileManager(mCtx);
+			FileManager sc = new FileManager();
 			Log.d("db", "creating");
 			sc.startup();
 			db.execSQL(DB_CREATE);

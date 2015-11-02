@@ -1,22 +1,22 @@
 package com.omar.deathnote.utility;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 public class FileManager {
 
 	public final String LOG_TAG = "MYLOG";
 	public final String MainFolder = new String("DeathNote");
-	public final String MusicFolder = new String("Music/DeathNote");
+	public final String MusicFolder = new String("DeathNote/Audio");
 	public final String ImageFolder = new String("DeathNote/Images");
 	public final String Sep = new String(File.separator);
 	public File sdPath;
 
-	public FileManager(Context context) {
+	public FileManager( ) {
 
 		sdPath = Environment.getExternalStorageDirectory();
 	}
@@ -102,4 +102,15 @@ public class FileManager {
 
 	}
 
+	public String generateAudioFilePath() {
+
+		return sdPath + "/" + MusicFolder + "/" + "voice" + millisToDate(System.currentTimeMillis()) + ".mp3";
+	}
+
+	private String millisToDate(long millis) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		return dateFormat.format(millis);
+
+
+	}
 }

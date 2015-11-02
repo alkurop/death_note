@@ -28,6 +28,8 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
     View hidable;
     @InjectView(R.id.btnPlay)
     ImageView btnPlay;
+    @InjectView(R.id.btnRecord)
+    ImageView btnRecord;
     @InjectView(R.id.songTime)
     TextView tvTimer;
     @InjectView(R.id.songTitle)
@@ -138,6 +140,8 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
 
     @Override
     public void setStopMode() {
+        btnRecord.setVisibility(View.GONE);
+        btnPlay.setVisibility(View.VISIBLE);
         btnPlay.setBackgroundResource(R.drawable.media_play);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.GONE);
@@ -145,6 +149,8 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
 
     @Override
     public void setPlayingMode() {
+        btnRecord.setVisibility(View.GONE);
+        btnPlay.setVisibility(View.VISIBLE);
         btnPlay.setBackgroundResource(R.drawable.media_pause);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.VISIBLE);
@@ -152,7 +158,9 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
 
     @Override
     public void setRecordMode() {
-        btnPlay.setBackgroundResource(R.drawable.ic_action_rec);
+        btnRecord.setVisibility(View.VISIBLE);
+        btnRecord.setBackgroundResource(R.drawable.ic_action_rec);
+        btnPlay.setVisibility(View.GONE);
         tvTimer.setVisibility(View.GONE);
         seekBar.setVisibility(View.GONE);
 
@@ -160,13 +168,16 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
 
     @Override
     public void setRecordingMode() {
-        btnPlay.setBackgroundResource(R.drawable.ic_action_recording);
+        btnRecord.setVisibility(View.VISIBLE);
+        btnRecord.setBackgroundResource(R.drawable.ic_action_recording);
+        btnPlay.setVisibility(View.GONE);
         tvTimer.setVisibility(View.VISIBLE);
         seekBar.setVisibility(View.GONE);
     }
 
     @Override
     public void setPausedMode() {
+        btnRecord.setVisibility(View.GONE);
         btnPlay.setBackgroundResource(R.drawable.media_paused);
         AnimationDrawable pausedAnimation = (AnimationDrawable) btnPlay.getBackground();
         pausedAnimation.start();
@@ -191,6 +202,11 @@ public class AudioFragment extends BaseItemFragment implements IAudioView, SeekB
     @OnClick(R.id.btnPlay)
     void playClicked() {
         audioEventHandler.playCLicked();
+    }
+
+    @OnClick(R.id.btnRecord)
+    void recordClicked() {
+        audioEventHandler.recordClicked();
     }
 
     @OnClick(R.id.btnPrev)

@@ -1,6 +1,5 @@
 package com.omar.deathnote.notes.item.bll;
 
-import android.util.Log;
 import com.omar.deathnote.mediaplay.ports.AudioClient;
 import com.omar.deathnote.mediaplay.ports.IAudioClient;
 import com.omar.deathnote.mediaplay.ports.IMediaClient;
@@ -8,6 +7,9 @@ import com.omar.deathnote.models.Content;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.ui.IAudioView;
 import com.omar.deathnote.notes.item.ui.IContentView;
+import com.omar.deathnote.utility.FileManager;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by omar on 9/7/15.
@@ -56,7 +58,8 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
             @Override
             public void updateRecordingProgress(int progress) {
-                Log.d("AudioRecorder", "recording " + String.valueOf(progress));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                audioView.setTimerLabel(dateFormat.format(progress));
             }
 
 
@@ -83,6 +86,8 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
                 else setFilePath(getContent().getContent1());
                 break;
             case AUDIO_RECORD:
+                audioView.setRecordMode();
+
                 break;
         }
     }
@@ -106,6 +111,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
 
     @Override
     public void playCLicked() {
+
         switch (audioClient.getThisState()) {
             case IS_PAUSED_THIS:
                 audioClient.resume();
@@ -116,7 +122,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
             case IS_PLAYING_THIS:
                 audioClient.pause();
                 break;
-            case NOT_THIS:
+            case NOT_THIS_OR_STOPPED:
                 audioClient.play();
                 break;
         }
@@ -160,6 +166,21 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
     @Override
     public String getFilePath() {
         return filepath;
+    }
+
+    @Override
+    public void recordClicked() {
+        switch (audioClient.getThisState()) {
+            case IS_RECORDING_THIS:
+                audioClient.stop();
+                break;
+            case NOT_THIS_OR_STOPPED:
+                setFilePath(new FileManager().generateAudioFilePath());
+                audioClient.record();
+                getContent().setType(Content.ContentType.AUDIO_FILE);
+                break;
+
+        }
     }
 
 

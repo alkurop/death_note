@@ -96,8 +96,9 @@ public class NotePresenter implements INoteEventHandler {
         if (noteModel.getContentList().size() > 2) {
             int index = noteModel.getContentList().indexOf(item);
             noteModel.getContentList().remove(index);
-            if(eventHandlers.get(index) instanceof IAudioEventHandler) MediaManager.I().remmoveMediaClient(((IAudioEventHandler)
-                    eventHandlers.get(index) ).getMediaClient());
+            if (eventHandlers.get(index) instanceof IAudioEventHandler)
+                MediaManager.I().remmoveMediaClient(((IAudioEventHandler)
+                        eventHandlers.get(index)).getMediaClient());
             eventHandlers.remove(index);
             view.removeFragment(item);
         }
@@ -133,7 +134,7 @@ public class NotePresenter implements INoteEventHandler {
         eventHandler.init(content, this);
         eventHandlers.add(eventHandler);
 
-        if(eventHandler instanceof IAudioEventHandler) MediaManager.I().addMediaCLient(((IAudioEventHandler)
+        if (eventHandler instanceof IAudioEventHandler) MediaManager.I().addMediaCLient(((IAudioEventHandler)
                 eventHandler).getMediaClient());
         return eventHandler;
     }
@@ -146,7 +147,7 @@ public class NotePresenter implements INoteEventHandler {
         }
     }
 
-    private void displayEventHandler(IContentEventHandler eventHandler ) {
+    private void displayEventHandler(IContentEventHandler eventHandler) {
         Fragment fragment = null;
         switch (eventHandler.getContent().getType()) {
             case LINK:
@@ -157,7 +158,7 @@ public class NotePresenter implements INoteEventHandler {
                 break;
             case AUDIO_FILE:
             case AUDIO_RECORD:
-                fragment  = new AudioFragment();
+                fragment = new AudioFragment();
                 break;
             case PICTURE_FILE:
             case PICTURE_CAPTURE:
@@ -168,26 +169,29 @@ public class NotePresenter implements INoteEventHandler {
         }
         ((IContentView) fragment).setEventHandler(eventHandler);
         eventHandler.setView((IContentView) fragment);
-        view.displayFragment(eventHandler, fragment );
+        view.displayFragment(eventHandler, fragment);
     }
 
     @Override
     public void saveContent() {
         noteModel.setContentList(new ArrayList<Content>());
         for (IContentEventHandler item : eventHandlers) {
-            item.saveData();
-            noteModel.getContentList().add(item.getContent());
+            if (item.getContent().getType() != Content.ContentType.AUDIO_RECORD) {
+                item.saveData();
+                noteModel.getContentList().add(item.getContent());
+            }
         }
     }
 
     @Override
-    public void saveDB( ) {
+    public void saveDB() {
 
         SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
             @Override
             public void onSuccess(int id) {
                 noteModel.setId(id);
             }
+
             @Override
             public void onError(String error) {
             }
@@ -214,7 +218,7 @@ public class NotePresenter implements INoteEventHandler {
             @Override
             public void addContent(Content content) {
                 addContentItem(content);
-                IContentEventHandler eventHandler =  generateEventHandler(content);
+                IContentEventHandler eventHandler = generateEventHandler(content);
                 displayEventHandler(eventHandler);
                 eventHandler.requestFocus();
             }

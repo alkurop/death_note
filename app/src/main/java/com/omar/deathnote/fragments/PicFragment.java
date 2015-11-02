@@ -76,7 +76,7 @@ public class PicFragment extends Fragment {
 			Bundle savedInstanceState) {
 
 		v = inflater.inflate(R.layout.note_elem_pic, null);
-		sc = new FileManager(thiscontext);
+		sc = new FileManager();
 		thiscontext = container.getContext();
 		picLayout = (LinearLayout) v.findViewById(R.id.picLayout);
 		picLayout.setClickable(true);

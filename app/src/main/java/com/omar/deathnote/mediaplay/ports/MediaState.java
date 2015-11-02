@@ -1,7 +1,5 @@
 package com.omar.deathnote.mediaplay.ports;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Created by omar on 9/17/15.
  */
@@ -11,20 +9,20 @@ public class MediaState {
         PLAYING_AUDIO,
         RECORDING_AUDIO,
         PAUSED_AUDIO,
-        STOPPED
+         STOPPED
     }
 
     private STATES state;
-    private WeakReference<IMediaClient> audioClient;
+    private  IMediaClient audioClient;
 
     public MediaState() {
         this.state = STATES.STOPPED;
-        this.audioClient = new WeakReference<IMediaClient>(new IMediaClient() {
-        });
+        this.audioClient =  new IMediaClient() {
+        } ;
     }
 
     public void setClinet(IMediaClient audioClinet) {
-        audioClient = new WeakReference<IMediaClient>(audioClinet);
+        audioClient = audioClinet;
     }
 
     public void setState(STATES state) {
@@ -32,10 +30,8 @@ public class MediaState {
     }
 
     public IMediaClient getClient() {
-        if (this.audioClient.get() == null)
-            this.audioClient = new WeakReference<IMediaClient>(new IMediaClient() {
-            });
-        return audioClient.get();
+
+        return audioClient ;
     }
 
     public STATES getState() {

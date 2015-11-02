@@ -6,7 +6,6 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.os.SystemClock;
 import android.util.Log;
 import com.omar.deathnote.Constants;
 
@@ -20,9 +19,9 @@ import java.util.concurrent.TimeUnit;
  * Created by omar on 11/2/15.
  */
 public class VoiceRecorder {
-    private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
-    private static String TAG = "recorder";
-    private final int mSampleRate = 8000;
+
+
+    private final int mSampleRate = 44100;
 
     private short[] buffer;
     private byte[] mp3buffer;
@@ -83,10 +82,10 @@ public class VoiceRecorder {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                time = SystemClock.currentThreadTimeMillis();
+                time = System.currentTimeMillis();
                 while (recording) {
                     Message msg = new Message();
-                    msg.arg1 = (int) (time - (SystemClock.currentThreadTimeMillis()) / 100);
+                    msg.arg1 = (int) (System.currentTimeMillis() - time) ;
                     msg.what = 1;
                     handler.sendMessage(msg);
                     try {
@@ -106,62 +105,44 @@ public class VoiceRecorder {
         new Thread() {
             @Override
             public void run() {
-
-                android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-
-
-                File outFile = new File(filePath);
-                if (outFile.exists()) {
-                    outFile.delete();
-                }
                 try {
+                    Log.d("recorder", filePath);
+                    android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+                    File outFile = new File(filePath);
+                    if (outFile.exists()) {
+                        outFile.delete();
+                    }
                     outFile.createNewFile();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-
-                initRecorder();
-                initBuffer();
-                initOutput();
-
-                SimpleLame.init(mSampleRate, 1, mSampleRate, 32);
-                try {
-                    recorder.startRecording();
+                    initRecorder();
+                    initBuffer();
+                    initOutput();
+                    SimpleLame.init(mSampleRate, 1, mSampleRate, 32);
                     counterThread();
+                    recorder.startRecording();
+
                     int readSize = 0;
                     while (recording) {
 
                         readSize = recorder.read(buffer, 0, minBufferSize);
                         int encResult = SimpleLame.encode(buffer, buffer, readSize, mp3buffer);
-                        callback.normalMessage("recording");
 
-                        try {
-                            output.write(mp3buffer, 0, encResult);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        output.write(mp3buffer, 0, encResult);
                     }
                     int flushResult = SimpleLame.flush(mp3buffer);
                     if (flushResult != 0) {
-                        try {
-                            output.write(mp3buffer, 0, flushResult);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        output.write(mp3buffer, 0, flushResult);
                     }
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    output.close();
                     recorder.stop();
                     recorder.release();
                     SimpleLame.close();
-                } catch (Exception e) {
-                    handler.sendEmptyMessage(0);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NullPointerException e) {
+                    Log.e("no such file", filePath);
                 }
+
             }
         }.start();
     }
@@ -173,31 +154,30 @@ public class VoiceRecorder {
     }
 
     public void recordStop() {
-        recording = false;
-
+        try {
+            recording = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public AudioRecord findAudioRecord() {
-        for (int rate : mSampleRates) {
-            for (short audioFormat : new short[]{AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT}) {
-                for (short channelConfig : new short[]{AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO}) {
-                    try {
-                        Log.d(TAG, "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
-                                + channelConfig);
-                        minBufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
+        try {
+            minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat
+                    .ENCODING_PCM_16BIT);
 
-                        if (minBufferSize != AudioRecord.ERROR_BAD_VALUE) {
-                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, minBufferSize);
-                            SimpleLame.init(rate, channelConfig, rate, 32);
-                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
-                                return recorder;
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, rate + "Exception, keep trying.", e);
-                    }
-                }
+            if (minBufferSize != AudioRecord.ERROR_BAD_VALUE) {
+                AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat
+                        .ENCODING_PCM_16BIT, minBufferSize * 4);
+                SimpleLame.init(41000, AudioFormat.CHANNEL_IN_MONO, 44100, 32);
+                if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+                    return recorder;
             }
+        } catch (Exception e) {
+
         }
+
+
         return null;
     }
 
