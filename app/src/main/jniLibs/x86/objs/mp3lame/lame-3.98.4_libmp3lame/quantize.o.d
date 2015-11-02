@@ -1,5 +1,6 @@
-obj/local/x86/objs/mp3lame/lame-3.98.4_libmp3lame/quantize.o: \
- jni/lame-3.98.4_libmp3lame/quantize.c jni/lame-3.98.4_libmp3lame/lame.h \
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/obj/local/x86/objs/mp3lame/lame-3.98.4_libmp3lame/quantize.o: \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/quantize.c \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdio.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/sys/cdefs.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/sys/cdefs_elf.h \
@@ -18,8 +19,8 @@ obj/local/x86/objs/mp3lame/lame-3.98.4_libmp3lame/quantize.o: \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/linux/types.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/machine/kernel.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/sys/sysmacros.h \
- jni/lame-3.98.4_libmp3lame/machine.h \
- jni/lame-3.98.4_libmp3lame/version.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/machine.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/version.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/assert.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/math.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/limits.h \
@@ -38,16 +39,18 @@ obj/local/x86/objs/mp3lame/lame-3.98.4_libmp3lame/quantize.o: \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/endian.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/sys/endian.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/machine/endian.h \
- jni/lame-3.98.4_libmp3lame/encoder.h jni/lame-3.98.4_libmp3lame/util.h \
- jni/lame-3.98.4_libmp3lame/l3side.h jni/lame-3.98.4_libmp3lame/id3tag.h \
- jni/lame-3.98.4_libmp3lame/quantize_pvt.h \
- jni/lame-3.98.4_libmp3lame/lame_global_flags.h \
- jni/lame-3.98.4_libmp3lame/reservoir.h \
- jni/lame-3.98.4_libmp3lame/bitstream.h \
- jni/lame-3.98.4_libmp3lame/vbrquantize.h \
- jni/lame-3.98.4_libmp3lame/quantize.h
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/encoder.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/util.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/l3side.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/id3tag.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/quantize_pvt.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame_global_flags.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/reservoir.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/bitstream.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/vbrquantize.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/quantize.h
 
-jni/lame-3.98.4_libmp3lame/lame.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdio.h:
 
@@ -85,9 +88,9 @@ jni/lame-3.98.4_libmp3lame/lame.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/sys/sysmacros.h:
 
-jni/lame-3.98.4_libmp3lame/machine.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/machine.h:
 
-jni/lame-3.98.4_libmp3lame/version.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/version.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/assert.h:
 
@@ -125,22 +128,22 @@ jni/lame-3.98.4_libmp3lame/version.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/machine/endian.h:
 
-jni/lame-3.98.4_libmp3lame/encoder.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/encoder.h:
 
-jni/lame-3.98.4_libmp3lame/util.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/util.h:
 
-jni/lame-3.98.4_libmp3lame/l3side.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/l3side.h:
 
-jni/lame-3.98.4_libmp3lame/id3tag.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/id3tag.h:
 
-jni/lame-3.98.4_libmp3lame/quantize_pvt.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/quantize_pvt.h:
 
-jni/lame-3.98.4_libmp3lame/lame_global_flags.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame_global_flags.h:
 
-jni/lame-3.98.4_libmp3lame/reservoir.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/reservoir.h:
 
-jni/lame-3.98.4_libmp3lame/bitstream.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/bitstream.h:
 
-jni/lame-3.98.4_libmp3lame/vbrquantize.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/vbrquantize.h:
 
-jni/lame-3.98.4_libmp3lame/quantize.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/quantize.h:

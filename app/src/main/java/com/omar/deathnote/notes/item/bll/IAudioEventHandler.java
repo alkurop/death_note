@@ -1,6 +1,6 @@
 package com.omar.deathnote.notes.item.bll;
 
-import com.omar.deathnote.media_play.ports.IMediaClient;
+import com.omar.deathnote.mediaplay.ports.IMediaClient;
 
 /**
  * Created by omar on 9/17/15.

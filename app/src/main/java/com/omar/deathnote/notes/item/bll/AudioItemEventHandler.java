@@ -1,8 +1,9 @@
 package com.omar.deathnote.notes.item.bll;
 
-import com.omar.deathnote.media_play.ports.AudioClient;
-import com.omar.deathnote.media_play.ports.IAudioClient;
-import com.omar.deathnote.media_play.ports.IMediaClient;
+import android.util.Log;
+import com.omar.deathnote.mediaplay.ports.AudioClient;
+import com.omar.deathnote.mediaplay.ports.IAudioClient;
+import com.omar.deathnote.mediaplay.ports.IMediaClient;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.ui.IAudioView;
@@ -51,6 +52,11 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
             @Override
             public void updateSeekBar(int max, int progress) {
                 audioView.updateSeekbar(max, progress);
+            }
+
+            @Override
+            public void updateRecordingProgress(int progress) {
+                Log.d("AudioRecorder", "recording " + String.valueOf(progress));
             }
 
 

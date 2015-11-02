@@ -7,7 +7,7 @@ import com.omar.deathnote.db.providers.OpenNoteProvider;
 import com.omar.deathnote.db.providers.SaveNoteProvider;
 import com.omar.deathnote.dialogs.add_dialog.bll.AddDialogPresenter;
 import com.omar.deathnote.dialogs.add_dialog.ui.AddDialog;
-import com.omar.deathnote.media_play.ports.MediaManager;
+import com.omar.deathnote.mediaplay.ports.MediaManager;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.item.bll.*;

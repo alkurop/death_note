@@ -1,4 +1,4 @@
-package com.omar.deathnote.media_play.devices;
+package com.omar.deathnote.mediaplay.devices;
 
 /**
  * Created by omar on 11/2/15.

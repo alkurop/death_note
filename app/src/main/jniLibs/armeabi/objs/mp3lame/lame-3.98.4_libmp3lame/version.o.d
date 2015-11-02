@@ -1,5 +1,6 @@
-obj/local/armeabi/objs/mp3lame/lame-3.98.4_libmp3lame/version.o: \
- jni/lame-3.98.4_libmp3lame/version.c jni/lame-3.98.4_libmp3lame/lame.h \
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/obj/local/armeabi/objs/mp3lame/lame-3.98.4_libmp3lame/version.o: \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/version.c \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdio.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \
@@ -17,8 +18,8 @@ obj/local/armeabi/objs/mp3lame/lame-3.98.4_libmp3lame/version.o: \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/linux/types.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/machine/kernel.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h \
- jni/lame-3.98.4_libmp3lame/machine.h \
- jni/lame-3.98.4_libmp3lame/version.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/machine.h \
+ /media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/version.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/assert.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/math.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/limits.h \
@@ -37,7 +38,7 @@ obj/local/armeabi/objs/mp3lame/lame-3.98.4_libmp3lame/version.o: \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/sys/endian.h \
  /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/machine/endian.h
 
-jni/lame-3.98.4_libmp3lame/lame.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/lame.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdio.h:
 
@@ -73,9 +74,9 @@ jni/lame-3.98.4_libmp3lame/lame.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h:
 
-jni/lame-3.98.4_libmp3lame/machine.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/machine.h:
 
-jni/lame-3.98.4_libmp3lame/version.h:
+/media/omar/d/AndroidStudioProjects/death_note/app/src/main/jni/lame-3.98.4_libmp3lame/version.h:
 
 /home/omar/Android/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/assert.h:
 

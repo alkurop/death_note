@@ -1,4 +1,4 @@
-package com.omar.deathnote.media_play.controls;
+package com.omar.deathnote.mediaplay.controls;
 
 /**
  * Created by omar on 9/23/15.

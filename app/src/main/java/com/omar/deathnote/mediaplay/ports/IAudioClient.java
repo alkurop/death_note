@@ -1,4 +1,4 @@
-package com.omar.deathnote.media_play.ports;
+package com.omar.deathnote.mediaplay.ports;
 
 /**
  * Created by omar on 9/17/15.
@@ -26,6 +26,8 @@ public interface IAudioClient {
     void pauseCallback();
 
     void updateSeekBar(int max, int progress);
+
+    void updateRecordingProgress(  int progress);
 
     void updateProgress(int position);
 

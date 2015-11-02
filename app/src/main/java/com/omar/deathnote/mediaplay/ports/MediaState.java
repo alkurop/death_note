@@ -1,4 +1,4 @@
-package com.omar.deathnote.media_play.ports;
+package com.omar.deathnote.mediaplay.ports;
 
 import java.lang.ref.WeakReference;
 

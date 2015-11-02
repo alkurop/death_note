@@ -1,9 +1,7 @@
-package com.omar.deathnote.media_play.devices;
+package com.omar.deathnote.mediaplay.devices;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
-import com.omar.deathnote.App;
 
 import java.io.IOException;
 
@@ -11,13 +9,12 @@ import java.io.IOException;
  * Created by omar on 11/2/15.
  */
 public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
-    private Context context;
+
     private IAudioPlayerCallback callback;
     private MediaPlayer mediaPlayer;
     private static Handler positionUpdateHandeler = new Handler();
 
     public AudioPlayer(IAudioPlayerCallback _callback) {
-        context = App.getContext();
         callback = _callback;
     }
 
@@ -29,15 +26,15 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
         pauseMedia();
     }
 
-    public void playerResume(){
+    public void playerResume() {
         mediaPlayer.start();
     }
-
 
 
     public void playerStart(String audioSource) {
         setupMediaPlayer(audioSource);
     }
+
     private void pauseMedia() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -54,7 +51,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
     public void onPrepared(MediaPlayer mediaPlayer) {playMedia();}
 
     private void setupMediaPlayer(String voiceURL) {
-        if(mediaPlayer != null && mediaPlayer.isPlaying())
+        if (mediaPlayer != null && mediaPlayer.isPlaying())
             mediaPlayer.stop();
 
         mediaPlayer = new MediaPlayer();
@@ -110,8 +107,6 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, MediaPlaye
     private void setupHandler() {
         positionUpdateHandeler.removeCallbacks(sendUpdatesToUi);
         positionUpdateHandeler.postDelayed(sendUpdatesToUi, 0);
-
-
     }
 
 

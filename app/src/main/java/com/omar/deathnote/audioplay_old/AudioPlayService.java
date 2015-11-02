@@ -37,9 +37,6 @@ import java.util.ArrayList;
 public class AudioPlayService extends Service implements OnCompletionListener,
 		OnPreparedListener, OnSeekCompleteListener {
 
-	static {
-		System.loadLibrary(Constants.MP3_LAME);
-	}
 
 	
 	public static final int NOTIFICATION_ID = 1;

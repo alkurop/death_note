@@ -1,4 +1,4 @@
-package com.omar.deathnote.media_play.ports;
+package com.omar.deathnote.mediaplay.ports;
 
 /**
  * Created by omar on 9/17/15.
