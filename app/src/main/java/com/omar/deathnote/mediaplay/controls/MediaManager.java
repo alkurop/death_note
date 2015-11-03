@@ -11,6 +11,7 @@ import com.omar.deathnote.mediaplay.ports.MediaState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by omar on 9/17/15.
@@ -25,11 +26,11 @@ public class MediaManager implements IMediaManager {
 
     private static IAudioPlayerCallback audioPlayerCallback;
     private static IVoiceRecorderCallback voiceRecorderCallback;
-
+    private Random rand;
     private boolean isShuffle;
 
 
-    private static final String TAG = "Media COntroller";
+    private static final String TAG = "Media C0ntroller";
 
     private MediaManager() {
         initAudioPlayerCallbacks();
@@ -38,6 +39,7 @@ public class MediaManager implements IMediaManager {
         mediaState = new MediaState();
         audioPlayer = new AudioPlayer(audioPlayerCallback);
         voiceRecorder = new VoiceRecorder(voiceRecorderCallback);
+        rand = new Random();
     }
 
     private void initVoiseRecoderCallback() {
@@ -182,16 +184,10 @@ public class MediaManager implements IMediaManager {
 
     @Override
     public void playShuffle() {
-       /* stopAudio();
-        int index = -1;
-        try {
-            index = mediaClientList.indexOf(mediaState.getClient());
-        } catch (Exception e) {} finally {
-            if (index != -1)
+        stopAudio();
 
-                playAudio(mediaClientList.get(index));
+        playAudio(mediaClientList.get(randInt(0, mediaClientList.size() - 1)));
 
-        }*/
     }
 
     @Override
@@ -200,7 +196,7 @@ public class MediaManager implements IMediaManager {
         ((IAudioClient) (mediaState.getClient())).stopCallback();
         if (((AudioClient) mediaState.getClient()).isRepeat())
             repeat();
-        else if (isShuffle);
+        else if (isShuffle) ;
         else
             playNext();
     }
@@ -243,5 +239,10 @@ public class MediaManager implements IMediaManager {
         audioPlayer.updateAudioProgress(position);
     }
 
+    public int randInt(int min, int max) {
 
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
+    }
 }
