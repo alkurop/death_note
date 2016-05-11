@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_dismiss">DISMISS</string>
     <string name="appName">Death Note</string>
     <string name="checkbox2_title">CheckBox 2</string>
     <string name="checkbox2_summary">Summary of CheckBox 2</string>
