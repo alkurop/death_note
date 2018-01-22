@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
@@ -31,15 +31,15 @@ public class NoteActivity
         extends AppCompatActivity
         implements INoteView, IScrollCallback {
 
-    @InjectView(R.id.noteList)
+    @BindView(R.id.noteList)
     LinearLayout ll_main;
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.spinner)
+    @BindView(R.id.spinner)
     Spinner spinner;
-    @InjectView(R.id.iv_BackGround)
+    @BindView(R.id.iv_BackGround)
     ImageView iv_Background;
-    @InjectView(R.id.scrollView1)
+    @BindView(R.id.scrollView1)
     ScrollView scrollView1;
 
     private INoteEventHandler presenter;
@@ -63,7 +63,7 @@ public class NoteActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         presenter = App.getNotePresenter();
         presenter.setView(this);
         scrollView1.setSmoothScrollingEnabled(true);

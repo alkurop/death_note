@@ -10,7 +10,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import butterknife.InjectView;
+
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 
@@ -18,7 +19,7 @@ import com.omar.deathnote.R;
  * Created by omar on 9/8/15.
  */
 public class LinkFragment extends BaseItemFragment {
-    @InjectView(R.id.etText)
+    @BindView(R.id.etText)
     EditText etText;
 
     @Override

@@ -1,0 +1,9 @@
+ext.versions = [
+        'butterknife' : '8.8.1',
+        'dbflow'  : '2.2.1',
+        'facebook': '4.11.0',
+        'kotlin'  : '1.2.20',
+        'retrifit' : '2.0.0',
+        'rxAndroid' : '1.2.0',
+        'support' : '26.1.0'
+]

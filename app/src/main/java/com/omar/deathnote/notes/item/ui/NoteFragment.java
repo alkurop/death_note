@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 
@@ -12,7 +12,7 @@ import com.omar.deathnote.R;
  * Created by omar on 9/8/15.
  */
 public class NoteFragment extends BaseItemFragment {
-    @InjectView(R.id.etTxt)
+    @BindView(R.id.etTxt)
     EditText etText;
 
     @Override

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 import com.omar.deathnote.models.ItemMainList;
@@ -15,14 +15,12 @@ import com.omar.deathnote.models.ItemMainList;
  */
 public class ItemViewMainList extends RecyclerView.ViewHolder {
 
-    @InjectView(R.id.itemTitle)
+    @BindView(R.id.itemTitle)
     TextView itemTitle;
-    @InjectView(R.id.itemDate)
+    @BindView(R.id.itemDate)
     TextView itemDate;
-    @InjectView(R.id.itemImg)
+    @BindView(R.id.itemImg)
     ImageView itemImg;
-
-
 
     private ItemMainList dataHolder;
 
@@ -31,7 +29,7 @@ public class ItemViewMainList extends RecyclerView.ViewHolder {
 
     public ItemViewMainList(View view) {
         super(view);
-        ButterKnife.inject(this,view);
+        ButterKnife.bind(this,view);
     }
 
     public void bindData(ItemMainList dataHolder, IMainAdapterCallback callback) {

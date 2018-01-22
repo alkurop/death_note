@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import com.omar.deathnote.R;
 import com.omar.deathnote.dialogs.add_dialog.bll.IAddDialogPresenter;
 
@@ -22,10 +22,10 @@ import com.omar.deathnote.dialogs.add_dialog.bll.IAddDialogPresenter;
  */
 public class AddDialog extends DialogFragment implements IAddDialogView{
 
-    @InjectView(R.id.tv_addDialog_title)
+    @BindView(R.id.tv_addDialog_title)
     TextView tvTitle;
 
-    @InjectView(R.id.lv_addDialog_list)
+    @BindView(R.id.lv_addDialog_list)
     RecyclerView lvList;
 
     private IAddDialogPresenter presenter;
@@ -41,7 +41,7 @@ public class AddDialog extends DialogFragment implements IAddDialogView{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_add, container,false);
-        ButterKnife.inject(this,v);
+        ButterKnife.bind(this,v);
         lvList.setLayoutManager(new LinearLayoutManager(getContext()));
         getDialog().setCanceledOnTouchOutside(true);
         tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 
@@ -13,7 +13,7 @@ import com.omar.deathnote.R;
  * Created by omar on 9/15/15.
  */
 public class AddDialogItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.itemTitle)
+    @BindView(R.id.itemTitle)
     TextView itemTitle;
 
     private IAddDialogItemDataHolder dataHolder;
@@ -21,7 +21,7 @@ public class AddDialogItemViewHolder extends RecyclerView.ViewHolder {
 
     public AddDialogItemViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
     }
 
 

@@ -26,7 +26,7 @@ abstract public class BaseItemFragment extends Fragment implements IContentView 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(getLayout(), container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         eventHandler.displayView();
         return v;
     }

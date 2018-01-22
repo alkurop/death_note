@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.R;
 import com.omar.deathnote.notes.item.bll.IAudioEventHandler;
@@ -24,27 +24,27 @@ import com.omar.deathnote.notes.item.bll.IContentEventHandler;
  */
 public class AudioFragment extends BaseItemFragment implements IAudioView, SeekBar.OnSeekBarChangeListener {
 
-    @InjectView(R.id.hidable)
+    @BindView(R.id.hidable)
     View hidable;
-    @InjectView(R.id.btnPlay)
+    @BindView(R.id.btnPlay)
     ImageView btnPlay;
-    @InjectView(R.id.btnRecord)
+    @BindView(R.id.btnRecord)
     ImageView btnRecord;
-    @InjectView(R.id.songTime)
+    @BindView(R.id.songTime)
     TextView tvTimer;
-    @InjectView(R.id.songTitle)
+    @BindView(R.id.songTitle)
     TextView tvSongTitle;
-    @InjectView(R.id.seekBar1)
+    @BindView(R.id.seekBar1)
     SeekBar seekBar;
-    @InjectView(R.id.btnPrev)
+    @BindView(R.id.btnPrev)
     ImageView btnPrev;
-    @InjectView(R.id.btnStop)
+    @BindView(R.id.btnStop)
     ImageView btnStop;
-    @InjectView(R.id.btnNext)
+    @BindView(R.id.btnNext)
     ImageView btnNext;
-    @InjectView(R.id.btnShuffle)
+    @BindView(R.id.btnShuffle)
     ImageView btnShuffle;
-    @InjectView(R.id.btnRepeat)
+    @BindView(R.id.btnRepeat)
     ImageView btnRepeat;
 
 

@@ -1,14 +1,14 @@
 package com.omar.deathnote.notes.item.ui;
 
 import android.widget.EditText;
-import butterknife.InjectView;
+import butterknife.BindView;
 import com.omar.deathnote.R;
 
 /**
  * Created by omar on 9/8/15.
  */
 public class TitleFragment extends BaseItemFragment {
-    @InjectView(R.id.tvTitle)
+    @BindView(R.id.tvTitle)
     EditText etTitle;
 
     @Override

@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
@@ -27,13 +27,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IMainView {
 
-    @InjectView(R.id.rv_main)
+    @BindView(R.id.rv_main)
     RecyclerView rv_MainList;
-    @InjectView(R.id.fl_background)
+    @BindView(R.id.fl_background)
     FrameLayout fl_Background;
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.spinner)
+    @BindView(R.id.spinner)
     Spinner spinner;
 
     private IMainEventHandler presenter;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         presenter = App.getMainPresenter();
         presenter.init(this);
         presenter.loadData();
