@@ -1,61 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.omar.deathnote">
+    package="com.omar.deathnote">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:name=".App">
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
         <activity
-                android:name=".main.ui.MainActivity"
-                android:label="@string/app_name"
-                android:screenOrientation="sensorPortrait">
+            android:name=".main.ui.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-                android:name=".notes.ui.NoteActivity"
-                android:label=" "
-                android:launchMode="singleTop"
-                android:screenOrientation="sensorPortrait"
-                android:windowSoftInputMode="stateHidden|adjustResize">
-        </activity>
+            android:name=".notes.ui.NoteActivity"
+            android:label=" "
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-                android:name="com.omar.deathnote.pref.PrefActivity"
-                android:label="Settings" >
-        </activity>
+            android:name="com.omar.deathnote.pref.PrefActivity"
+            android:label="Settings" />
         <activity
-                android:name="com.omar.deathnote.pref.Contact"
-                android:label="Contact" >
-        </activity>
+            android:name="com.omar.deathnote.pref.Contact"
+            android:label="Contact" />
         <activity
-                android:name="com.omar.deathnote.picview.SingleViewActivity"
-                android:label=" " >
-        </activity>
+            android:name="com.omar.deathnote.picview.SingleViewActivity"
+            android:label=" " />
 
         <service
-                android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
-                android:enabled="true" >
-        </service>
-
-
+            android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
+            android:enabled="true" />
 
         <provider
-                android:name="com.omar.deathnote.db.MyContentProvider"
-                android:authorities="com.omar.deathnote.contentprovider"
-                android:exported="false"
-                android:syncable="true" />
+            android:name="com.omar.deathnote.db.MyContentProvider"
+            android:authorities="com.omar.deathnote.contentprovider"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

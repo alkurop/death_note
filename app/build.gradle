@@ -36,16 +36,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-    }
 }
 
 dependencies {
@@ -62,9 +52,8 @@ dependencies {
 
     implementation "com.jakewharton:butterknife:$versions.butterknife"
     kapt "com.jakewharton:butterknife-compiler:$versions.butterknife"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 
-    //pisc
-    implementation 'io.reactivex:rxandroid:1.2.0'
-    implementation 'com.squareup.picasso:picasso:2.4.0'
-    implementation 'com.google.code.gson:gson:2.3'
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
+    implementation "com.google.code.gson:gson:$versions.gson"
 }
