@@ -1,6 +1,5 @@
 package com.omar.deathnote
 
-import com.omar.deathnote.dagger.DaggerAppComponent
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Provider
@@ -33,6 +32,7 @@ class ComponentContainer private constructor() {
         return get(typeToken) { it.build() }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : BaseComponent> get(typeToken: Class<T>, componentBuilder: (ComponentBuilder<T>) -> T): T {
         getItem(AppComponent::class.java)
                 ?: throw IllegalStateException("No AppComponent - call ComponentContainer.initialize()")

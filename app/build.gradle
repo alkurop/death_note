@@ -48,12 +48,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
 
-    kapt "com.raizlabs.android:DBFlow-Compiler:$versions.dbflow"
-    implementation "com.raizlabs.android:DBFlow-Core:$versions.dbflow"
-    implementation "com.raizlabs.android:DBFlow:$versions.dbflow"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-
     implementation "com.jakewharton:butterknife:$versions.butterknife"
+
     kapt "com.jakewharton:butterknife-compiler:$versions.butterknife"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 

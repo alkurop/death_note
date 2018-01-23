@@ -9,13 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import com.jakewharton.rxbinding2.view.RxView
+import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.models.SpinnerItem
 import com.omar.deathnote.notes.ui.NoteActivity
-import com.omar.deathnote.utility.plusAssign
 import com.omar.deathnote.pref.PrefActivity
+import com.omar.deathnote.utility.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -32,13 +32,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-        if (resources.configuration.orientation % 2 == 0) {
-            mainLayout.setBackgroundDrawable(applicationContext
-                    .resources.getDrawable(Constants.bg_images_main_2[0]))
+
+        val background = if (resources.configuration.orientation % 2 == 0) {
+            Constants.bg_images_main_2[0]
         } else {
-            mainLayout.setBackgroundDrawable(applicationContext
-                    .resources.getDrawable(Constants.bg_images_main[0]))
+            Constants.bg_images_main[0]
         }
+        mainLayout.setBackgroundResource(background)
 
         ComponentContainer.instance.get(MainScreenComponent::class.java).inject(this)
         setSupportActionBar(toolbar)
@@ -121,7 +121,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     fun navigate(navigation: MainViewNavigation) {
         when (navigation) {
