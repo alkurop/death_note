@@ -1,0 +1,35 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+apply from: '../libs.gradle'
+
+android {
+    compileSdkVersion 26
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    api "android.arch.persistence.room:runtime:$versions.room"
+    api "android.arch.persistence.room:rxjava2:$versions.room"
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
+
+    kapt "android.arch.persistence.room:compiler:$versions.room"
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+}

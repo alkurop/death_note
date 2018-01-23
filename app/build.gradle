@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 apply from:'../libs.gradle'
 
@@ -39,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation project(':database')
+
     implementation "com.android.support:recyclerview-v7:$versions.support"
     implementation "com.android.support:appcompat-v7:$versions.support"
     implementation "com.android.support:design:$versions.support"
@@ -56,4 +59,10 @@ dependencies {
 
     implementation "com.squareup.picasso:picasso:$versions.picasso"
     implementation "com.google.code.gson:gson:$versions.gson"
+
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    implementation "com.jakewharton.timber:timber:$versions.timber"
 }
