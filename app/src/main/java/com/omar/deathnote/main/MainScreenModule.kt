@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.v2
+package com.omar.deathnote.main
 
 import com.alkurop.database.NoteDao
 import dagger.Module

@@ -21,7 +21,7 @@ import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.SpinnerItem;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
-import com.omar.deathnote.spinner.MySpinnerAdapter;
+import com.omar.deathnote.main.MySpinnerAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
-import com.omar.deathnote.spinner.MySpinnerAdapter;
+import com.omar.deathnote.main.MySpinnerAdapter;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.v2
+package com.omar.deathnote.main
 
 import javax.inject.Scope
 

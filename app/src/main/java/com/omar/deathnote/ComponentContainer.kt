@@ -1,6 +1,6 @@
-package com.omar.deathnote.dagger
+package com.omar.deathnote
 
-import com.omar.deathnote.App
+import com.omar.deathnote.dagger.DaggerAppComponent
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Provider

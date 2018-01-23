@@ -1,4 +1,4 @@
-package com.omar.deathnote.dagger;
+package com.omar.deathnote;
 
 public interface ComponentBuilder<T extends BaseComponent> {
     T build();

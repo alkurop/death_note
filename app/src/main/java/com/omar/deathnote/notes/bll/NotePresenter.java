@@ -13,7 +13,7 @@ import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.item.bll.*;
 import com.omar.deathnote.notes.item.ui.*;
 import com.omar.deathnote.notes.ui.INoteView;
-import com.omar.deathnote.spinner.MySpinnerAdapter;
+import com.omar.deathnote.main.MySpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

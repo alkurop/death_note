@@ -1,6 +1,5 @@
-package com.omar.deathnote.dagger
+package com.omar.deathnote
 
-import com.omar.deathnote.App
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

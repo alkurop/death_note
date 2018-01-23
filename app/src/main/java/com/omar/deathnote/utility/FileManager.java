@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 
 public class FileManager {
 
-	public final String LOG_TAG = "MYLOG";
 	public final String MainFolder = new String("DeathNote");
 	public final String MusicFolder = new String("DeathNote/Audio");
 	public final String ImageFolder = new String("DeathNote/Images");

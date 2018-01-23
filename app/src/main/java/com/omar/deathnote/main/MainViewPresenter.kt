@@ -1,8 +1,8 @@
-package com.omar.deathnote.main.v2
+package com.omar.deathnote.main
 
 import com.alkurop.database.Note
 import com.alkurop.database.NoteDao
-import com.omar.deathnote.plusAssign
+import com.omar.deathnote.utility.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject

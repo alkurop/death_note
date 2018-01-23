@@ -1,4 +1,4 @@
-package com.omar.deathnote.spinner;
+package com.omar.deathnote.main;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;

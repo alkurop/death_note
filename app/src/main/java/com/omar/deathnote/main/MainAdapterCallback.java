@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.v2;
+package com.omar.deathnote.main;
 
 /**
  * Created by omar on 8/29/15.

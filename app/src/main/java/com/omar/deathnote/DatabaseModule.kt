@@ -1,9 +1,8 @@
-package com.omar.deathnote.dagger
+package com.omar.deathnote
 
 import android.arch.persistence.room.Room
 import com.alkurop.database.AppDatabase
 import com.alkurop.database.NoteDao
-import com.omar.deathnote.App
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

@@ -1,7 +1,7 @@
-package com.omar.deathnote.main.v2
+package com.omar.deathnote.main
 
-import com.omar.deathnote.dagger.BaseComponent
-import com.omar.deathnote.dagger.ComponentBuilder
+import com.omar.deathnote.BaseComponent
+import com.omar.deathnote.ComponentBuilder
 import dagger.Subcomponent
 
 @Subcomponent(modules = arrayOf(MainScreenModule::class))
@@ -13,5 +13,5 @@ interface MainScreenComponent : BaseComponent {
         override fun build(): MainScreenComponent
     }
 
-    fun inject(activity: MainActivity1)
+    fun inject(activity: MainActivity)
 }

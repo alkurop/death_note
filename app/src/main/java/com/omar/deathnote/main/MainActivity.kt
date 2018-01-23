@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.v2
+package com.omar.deathnote.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,18 +11,17 @@ import android.widget.AdapterView
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.dagger.ComponentContainer
+import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.models.SpinnerItem
 import com.omar.deathnote.notes.ui.NoteActivity
-import com.omar.deathnote.plusAssign
+import com.omar.deathnote.utility.plusAssign
 import com.omar.deathnote.pref.PrefActivity
-import com.omar.deathnote.spinner.MySpinnerAdapter
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class MainActivity1 : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var presenter: MainViewPresenter

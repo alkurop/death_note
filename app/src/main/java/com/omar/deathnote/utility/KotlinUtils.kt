@@ -1,4 +1,4 @@
-package com.omar.deathnote
+package com.omar.deathnote.utility
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

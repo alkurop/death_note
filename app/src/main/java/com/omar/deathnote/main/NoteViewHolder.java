@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.v2;
+package com.omar.deathnote.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +12,6 @@ import butterknife.OnClick;
 import com.alkurop.database.Note;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.main.v2.MainAdapterCallback;
 
 /**
  * Created by omar on 8/29/15.
