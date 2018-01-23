@@ -1,4 +1,4 @@
-package com.omar.deathnote.fragments;
+package com.omar.deathnote.notes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

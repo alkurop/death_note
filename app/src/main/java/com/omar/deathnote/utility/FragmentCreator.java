@@ -9,11 +9,11 @@ import android.util.Log;
 
 import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.fragments.AudioFragment;
-import com.omar.deathnote.fragments.DefaultFragment;
-import com.omar.deathnote.fragments.LinkFragment;
-import com.omar.deathnote.fragments.NoteFragment;
-import com.omar.deathnote.fragments.PicFragment;
+import com.omar.deathnote.notes.AudioFragment;
+import com.omar.deathnote.notes.DefaultFragment;
+import com.omar.deathnote.notes.LinkFragment;
+import com.omar.deathnote.notes.NoteFragment;
+import com.omar.deathnote.notes.PicFragment;
 
 public class FragmentCreator {
 	private	FragmentManager fm;
@@ -27,18 +27,7 @@ public class FragmentCreator {
 	public FragmentCreator(FragmentManager fm){
 		this.fm = fm;
 	}
-	
-	
-	/**
-	 * 
-	 * @param cont1
-	 * @param cont2
-	 * @param type  - fragment type
-	 * @param fragCount - fragment number in the list
-	 * @param noteId  - id of the current note
-	 * @param fragList
-	 * @return fragList   - back to the activity
-	 */
+
 	public TreeMap<String, String> createFragment(String cont1, String cont2, Constants.Frags type, int fragCount, long
 			noteId, TreeMap<String, String> list ) {
 		if(fragList != null)

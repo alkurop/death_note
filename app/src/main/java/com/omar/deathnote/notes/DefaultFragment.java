@@ -1,4 +1,4 @@
-package com.omar.deathnote.fragments;
+package com.omar.deathnote.notes;
 
 import java.util.TreeMap;
 

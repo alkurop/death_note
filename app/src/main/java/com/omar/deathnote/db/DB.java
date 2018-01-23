@@ -23,11 +23,9 @@ public class DB {
 	public static final String COLUMN_STYLE = "style";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_TIMEDATE = "timedate";
-	public static final String COLUMN_XML = "xml";
 	public static final String COLUMN_TYPE = "type";
 	public static final String COLUMN_CONT1 = "cont1";
 	public static final String COLUMN_CONT2 = "cont2";
-	public static final String COLUMN_LICENSE = "license";
 	private static final String DB_CREATE = "create table " + DB_TABLE + "("
 			+ COLUMN_ID + " integer primary key autoincrement, " + COLUMN_STYLE
 			+ " integer, " + COLUMN_TITLE + " text, " + COLUMN_TIMEDATE
