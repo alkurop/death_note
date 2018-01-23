@@ -9,9 +9,6 @@ import com.omar.deathnote.notes.bll.NotePresenter;
 
 import timber.log.Timber;
 
-/**
- * Created by omar on 8/27/15.
- */
 public class App extends Application {
     private static INoteEventHandler notePresenter;
     private static Context context;
@@ -24,15 +21,15 @@ public class App extends Application {
         ComponentContainer.getInstance().initialize(this);
         Stetho.initializeWithDefaults(this);
 
-
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
     }
 
     public static INoteEventHandler getNotePresenter() {
-        if (notePresenter == null)
+        if (notePresenter == null) {
             notePresenter = new NotePresenter();
+        }
         return notePresenter;
     }
 
