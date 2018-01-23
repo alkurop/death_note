@@ -5,12 +5,12 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Provider
 
-class DaggerComponentContainer private constructor() {
+class ComponentContainer private constructor() {
 
     companion object {
 
         @JvmStatic
-        val instance = DaggerComponentContainer()
+        val instance = ComponentContainer()
     }
 
     private val components = HashMap<Class<*>, Any>()
@@ -36,7 +36,7 @@ class DaggerComponentContainer private constructor() {
 
     fun <T : BaseComponent> get(typeToken: Class<T>, componentBuilder: (ComponentBuilder<T>) -> T): T {
         getItem(AppComponent::class.java)
-                ?: throw IllegalStateException("No AppComponent - call DaggerComponentContainer.initialize()")
+                ?: throw IllegalStateException("No AppComponent - call ComponentContainer.initialize()")
 
         if (getItem(typeToken) == null) {
             val provider = screenBuilders[typeToken]

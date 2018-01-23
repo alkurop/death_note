@@ -20,6 +20,6 @@ interface AppComponent : BaseComponent {
 
     }
 
-    fun inject(daggerComponentContainer: DaggerComponentContainer)
+    fun inject(daggerComponentContainer: ComponentContainer)
 
 }

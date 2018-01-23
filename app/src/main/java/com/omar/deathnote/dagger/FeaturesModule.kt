@@ -1,6 +1,6 @@
 package com.omar.deathnote.dagger
 
-import com.omar.deathnote.main.di.MainScreenComponent
+import com.omar.deathnote.main.v2.MainScreenComponent
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

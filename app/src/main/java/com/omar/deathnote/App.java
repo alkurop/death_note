@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 
-import com.omar.deathnote.dagger.DaggerComponentContainer;
+import com.omar.deathnote.dagger.ComponentContainer;
 import com.omar.deathnote.main.bll.IMainEventHandler;
 import com.omar.deathnote.main.bll.MainPresenter;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
@@ -28,7 +28,7 @@ public class App extends Application {
         context = this;
 
 
-        DaggerComponentContainer.getInstance().initialize(this);
+        ComponentContainer.getInstance().initialize(this);
 
 
 
