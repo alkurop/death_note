@@ -1,4 +1,4 @@
-package com.omar.deathnote.main.ui;
+package com.omar.deathnote.main.legacy;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -22,8 +22,8 @@ import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.db.loaders_old.LoaderCallback;
-import com.omar.deathnote.dialogs.DialogOnDelete;
-import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
+import com.omar.deathnote.main.v2.DialogOnDelete;
+import com.omar.deathnote.main.v2.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
 import com.omar.deathnote.pref.PrefActivity;
 import com.omar.deathnote.rate.RateMeMaybe;

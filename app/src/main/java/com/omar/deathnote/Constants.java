@@ -1,6 +1,8 @@
 package com.omar.deathnote;
 
 
+import android.support.annotation.DrawableRes;
+
 public class Constants {
 
     public enum AudioCommangs {
@@ -81,7 +83,8 @@ public class Constants {
             R.drawable.ic_action_metallic, R.drawable.ic_action_red,
             R.drawable.ic_action_yellow,};
 
-    public final static int[] select_names = new int[]{R.string.all,
+    public final static @DrawableRes
+    int[] select_names = new int[]{R.string.all,
             R.string.d_blue, R.string.green, R.string.magenta,
             R.string.metallic, R.string.red, R.string.yellow};
 
@@ -105,6 +108,11 @@ public class Constants {
     public static final String FRAGMENT_ARRAY_LIST = "frag_array_list";
 
     public enum LOADERS {SAVE_NOTE, LOAD_NOTE, EDIT_REC_TITLE, LOAD_STYLE, ADD_NEW_NOTE, LOAD_LIST, DELETE_SOME_NOTE}
+
+    @DrawableRes
+    public static int getStyleImage(int position) {
+        return select_images[position];
+    }
 
 
 }

@@ -19,11 +19,11 @@ import com.omar.deathnote.R;
 import com.omar.deathnote.db.loaders_old.LoaderCallback;
 import com.omar.deathnote.dialogs.AddAudioDialog;
 import com.omar.deathnote.dialogs.AddPicDialog;
-import com.omar.deathnote.dialogs.DialogOnDelete;
-import com.omar.deathnote.dialogs.DialogOnDelete.DeleteDialog;
+import com.omar.deathnote.main.v2.DialogOnDelete;
+import com.omar.deathnote.main.v2.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.fragments.AudioFragment;
 import com.omar.deathnote.fragments.AudioFragment.NextAudio;
-import com.omar.deathnote.main.ui.MainActivity_old;
+import com.omar.deathnote.main.legacy.MainActivity_old;
 import com.omar.deathnote.utility.*;
 
 import java.util.ArrayList;

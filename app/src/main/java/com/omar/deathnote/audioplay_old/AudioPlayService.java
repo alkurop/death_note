@@ -25,7 +25,7 @@ import android.util.Log;
 import android.widget.Toast;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.main.ui.MainActivity_old;
+import com.omar.deathnote.main.legacy.MainActivity_old;
 import com.omar.deathnote.notes.ui.NoteActivity_old;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 	private static int songEnded;
 
-	private String audioPath;;
+	private String audioPath;
 	private int mediaPos;
 	private int mediaMax;
 	private int audioNumber;
@@ -373,7 +373,6 @@ public class AudioPlayService extends Service implements OnCompletionListener,
 
 			recordStop();
 		}
-		;
 
 		if (phoneStateListener != null) {
 			telephoneManager.listen(phoneStateListener,

@@ -31,13 +31,36 @@ class MainActivity1 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+        if (resources.configuration.orientation % 2 == 0) {
+            mainLayout.setBackgroundDrawable(applicationContext
+                    .resources.getDrawable(Constants.bg_images_main_2[0]))
+        } else {
+            mainLayout.setBackgroundDrawable(applicationContext
+                    .resources.getDrawable(Constants.bg_images_main[0]))
+        }
+
         ComponentContainer.instance.get(MainScreenComponent::class.java).inject(this)
         setSupportActionBar(toolbar)
         initRecyclerView()
         initSpinner()
         subscribeToPresenter()
         subscribeToUiChanges()
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val adapter = MainListAdapter(object : MainAdapterCallback {
+            override fun openNote(id: Int) {
+                presenter.onAction(MainViewActions.ListItemClicked(id))
+            }
+
+            override fun deleteItem(id: Int) {
+                presenter.onAction(MainViewActions.DeleteListItemClicked(id))
+            }
+        })
+        recyclerView.adapter = adapter
     }
 
     override fun onDestroy() {
@@ -55,7 +78,6 @@ class MainActivity1 : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.action_about -> presenter.onAction(MainViewActions.AboutClicled)
             R.id.add -> presenter.onAction(MainViewActions.FabClicked)
@@ -92,11 +114,15 @@ class MainActivity1 : AppCompatActivity() {
         dis += presenter.viewState.subscribe { renderView(it) }
     }
 
-    fun initRecyclerView() {
-        rv_main.layoutManager = LinearLayoutManager(this)
+    fun renderView(state: MainViewState) {
+        when (state) {
+            is MainViewState.UpdateList -> {
+                val mainListAdapter = recyclerView.adapter as MainListAdapter
+                mainListAdapter.setDataList(state.items)
+            }
+        }
     }
 
-    fun renderView(state: MainViewState) {}
 
     fun navigate(navigation: MainViewNavigation) {
         when (navigation) {
@@ -113,5 +139,4 @@ class MainActivity1 : AppCompatActivity() {
             }
         }
     }
-
 }
