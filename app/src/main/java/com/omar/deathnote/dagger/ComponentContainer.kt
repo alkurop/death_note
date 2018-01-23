@@ -8,7 +8,6 @@ import javax.inject.Provider
 class ComponentContainer private constructor() {
 
     companion object {
-
         @JvmStatic
         val instance = ComponentContainer()
     }
@@ -27,7 +26,7 @@ class ComponentContainer private constructor() {
                 .application(application)
                 .build()
         putItem(AppComponent::class.java, appComponent)
-
+        appComponent.inject(this)
     }
 
     operator fun <T : BaseComponent> get(typeToken: Class<T>): T {

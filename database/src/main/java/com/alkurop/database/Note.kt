@@ -3,6 +3,7 @@ package com.alkurop.database
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 
+
 @Entity(tableName = "maintab2")
 open class Note {
 
@@ -22,9 +23,12 @@ open class Note {
 interface NoteDao {
 
     @Query("SELECT * FROM maintab2 WHERE style = :arg0")
-    fun getNotesByStyle(style: Int?): Flowable<List<Note>>
+    fun getNotesByStyle(style: Int): Flowable<List<Note>>
 
     @Query("SELECT * FROM maintab2")
     fun getAllNotes(): Flowable<List<Note>>
+
+    @Query("DELETE FROM maintab2 WHERE _id = :arg0")
+    fun delete(id: Int)
 
 }

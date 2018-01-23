@@ -29,6 +29,7 @@ dependencies {
     api "android.arch.persistence.room:runtime:$versions.room"
     api "android.arch.persistence.room:rxjava2:$versions.room"
     implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
 
     kapt "android.arch.persistence.room:compiler:$versions.room"
     implementation "com.jakewharton.timber:timber:$versions.timber"
