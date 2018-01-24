@@ -74,7 +74,7 @@ public class FragmentSaver {
 
 				switch (eType) {
 
-				case DefaultFragment:
+				case TitleFragment:
 
 					tempFragment = (DefaultFragment) fm
 							.findFragmentByTag(fragId);

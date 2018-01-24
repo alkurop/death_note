@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
-    private List<Note> dataList;
+    private List<NoteViewModel> dataList;
     private final MainAdapterCallback callback;
 
     MainListAdapter(MainAdapterCallback callback) {
@@ -20,7 +20,7 @@ public class MainListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         this.callback = callback;
     }
 
-    void setDataList(List<Note> dataList) {
+    void setDataList(List<NoteViewModel> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }

@@ -49,7 +49,7 @@ public class FragmentCreator {
 
 		switch (type) {
 
-		case DefaultFragment:
+		case TitleFragment:
 			tempFragment = new DefaultFragment();
 		
 
@@ -59,7 +59,7 @@ public class FragmentCreator {
 
 			
 			fTrans.add(R.id.noteList, ((DefaultFragment) tempFragment), fragId);
-			fragList.put(fragId, Constants.Frags.DefaultFragment.name());
+			fragList.put(fragId, Constants.Frags.TitleFragment.name());
 			
 			break;
 

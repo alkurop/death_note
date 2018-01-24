@@ -1,5 +1,6 @@
 package com.omar.deathnote.main
 
+import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
 import dagger.Module
 import dagger.Provides
@@ -8,7 +9,7 @@ import dagger.Provides
 open class MainScreenModule {
     @MainViewScope
     @Provides
-    fun provideMainScreenPresenter(nodeDao: NoteDao): MainViewPresenter {
-        return MainViewPresenter(nodeDao)
+    fun provideMainScreenPresenter(noteDao: NoteDao, contentDao: ContentDao): MainViewPresenter {
+        return MainViewPresenter(noteDao, contentDao)
     }
 }

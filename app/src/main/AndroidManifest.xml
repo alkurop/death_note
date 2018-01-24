@@ -31,6 +31,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+
+        <activity
+            android:name=".notes.v2.ContentActivity"
+            android:label=" "
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name="com.omar.deathnote.pref.PrefActivity"
             android:label="Settings" />

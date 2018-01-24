@@ -23,7 +23,7 @@ class NoteViewHolder extends RecyclerView.ViewHolder {
     ImageView itemImg;
 
     private MainAdapterCallback callback;
-    private Note note;
+    private NoteViewModel note;
 
 
     NoteViewHolder(View view) {
@@ -31,7 +31,7 @@ class NoteViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    void bindData(Note note, MainAdapterCallback callback) {
+    void bindData(NoteViewModel note, MainAdapterCallback callback) {
         this.callback = callback;
         this.note = note;
         itemTitle.setText(note.getTitle());

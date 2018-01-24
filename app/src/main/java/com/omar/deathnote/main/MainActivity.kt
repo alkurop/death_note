@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_about -> presenter.onAction(MainViewActions.AboutClicled)
+            R.id.action_about -> presenter.onAction(MainViewActions.AboutClicked)
             R.id.add -> presenter.onAction(MainViewActions.FabClicked)
         }
 

@@ -109,7 +109,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
                     }
                 } else {
                 /* Log.d ("loading saved note  ", "cursor == null"); */
-                    NoteActivity_old.createFragment("", null, Constants.Frags.DefaultFragment);
+                    NoteActivity_old.createFragment("", null, Constants.Frags.TitleFragment);
                     NoteActivity_old.createFragment(" ", null, Constants.Frags.NoteFragment);
                 }
 

@@ -13,8 +13,6 @@ open class Note {
 
     var style: Int = 0
 
-    var title: String = ""
-
     var timedate: String = ""
 }
 

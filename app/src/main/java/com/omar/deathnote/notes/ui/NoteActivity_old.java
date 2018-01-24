@@ -178,7 +178,7 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 						(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);
 
 				createFragment(extras.getString(Constants.TITLE), Constants.SPACE,
-						Constants.Frags.DefaultFragment);
+						Constants.Frags.TitleFragment);
 
 				createFragment(Constants.SPACE, Constants.SPACE, Constants.Frags.NoteFragment);
 

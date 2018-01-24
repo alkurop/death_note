@@ -14,7 +14,7 @@ public class Constants {
     }
 
     public enum Frags {
-        AudioFragment, DefaultFragment, LinkFragment, NoteFragment, NoticeDialogFragment, PicFragment
+        AudioFragment, TitleFragment, LinkFragment, NoteFragment, NoticeDialogFragment, PicFragment
     }
 
     public final static String DATA = "data";
