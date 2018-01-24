@@ -18,7 +18,7 @@ public class DialogOnDelete extends DialogFragment implements OnClickListener {
 
 
     public interface DeleteDialog {
-        public void del();
+        void del();
     }
 
     DeleteDialog deleteDialog;

@@ -3,13 +3,13 @@ package com.alkurop.database
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 
-
-@Entity(tableName = "maintab2")
+@Entity(tableName = "maintab2",
+        indices = [Index(value = ["id"], unique = true)]
+)
 open class Note {
 
     @PrimaryKey
-    @ColumnInfo(name = "_id")
-    var id: Int = 0
+    var id: Long = 0
 
     var style: Int = 0
 
@@ -17,7 +17,6 @@ open class Note {
 
     var timedate: String = ""
 }
-
 
 @Dao
 interface NoteDao {
@@ -28,7 +27,6 @@ interface NoteDao {
     @Query("SELECT * FROM maintab2")
     fun getAllNotes(): Flowable<List<Note>>
 
-    @Query("DELETE FROM maintab2 WHERE _id = :arg0")
-    fun delete(id: Int)
-
+    @Query("DELETE FROM maintab2 WHERE id = :arg0")
+    fun delete(id: Long)
 }

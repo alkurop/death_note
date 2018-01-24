@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = MainListAdapter(object : MainAdapterCallback {
-            override fun openNote(id: Int) {
+            override fun openNote(id: Long) {
                 presenter.onAction(MainViewActions.ListItemClicked(id))
             }
 
-            override fun deleteItem(id: Int) {
+            override fun deleteItem(id: Long) {
                 presenter.onAction(MainViewActions.DeleteListItemClicked(id))
             }
         })

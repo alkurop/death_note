@@ -5,7 +5,7 @@ package com.omar.deathnote.main;
  */
 public interface MainAdapterCallback {
 
-    void deleteItem(int id);
+    void deleteItem(long id);
 
-    void openNote(int id);
+    void openNote(long id);
 }

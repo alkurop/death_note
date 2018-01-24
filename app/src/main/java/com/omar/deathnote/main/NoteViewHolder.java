@@ -13,10 +13,7 @@ import com.alkurop.database.Note;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 
-/**
- * Created by omar on 8/29/15.
- */
-public class NoteViewHolder extends RecyclerView.ViewHolder {
+class NoteViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.itemTitle)
     TextView itemTitle;
@@ -29,12 +26,12 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private Note note;
 
 
-    public NoteViewHolder(View view) {
+    NoteViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
     }
 
-    public void bindData(Note note, MainAdapterCallback callback) {
+    void bindData(Note note, MainAdapterCallback callback) {
         this.callback = callback;
         this.note = note;
         itemTitle.setText(note.getTitle());
@@ -43,15 +40,12 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.del)
-    public void delClicked() {
+    void delClicked() {
         callback.deleteItem(note.getId());
     }
 
     @OnClick(R.id.container)
-    public void itemClicked() {
+    void itemClicked() {
         callback.openNote(note.getId());
     }
-
-
-
 }

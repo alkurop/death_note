@@ -10,13 +10,13 @@ import io.reactivex.subjects.PublishSubject
 sealed class MainViewActions {
     object FabClicked : MainViewActions()
     object AboutClicled : MainViewActions()
-    class ListItemClicked(val id: Int) : MainViewActions()
-    class DeleteListItemClicked(val id: Int) : MainViewActions()
+    class ListItemClicked(val id: Long) : MainViewActions()
+    class DeleteListItemClicked(val id: Long) : MainViewActions()
     class SpinnerItemClicked(val style: Int) : MainViewActions()
 }
 
 sealed class MainViewNavigation {
-    class NavigateNoteDetails(val id: Int) : MainViewNavigation()
+    class NavigateNoteDetails(val id: Long) : MainViewNavigation()
     object NavigateNewNote : MainViewNavigation()
     object NavigateAbout : MainViewNavigation()
 }
