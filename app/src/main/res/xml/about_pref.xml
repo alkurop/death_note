@@ -1,46 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/appName" >
-       <PreferenceScreen
+    <PreferenceCategory android:title="@string/appName">
+        <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext4_summary"
-            android:title="@string/edittext4_title" >
-        </PreferenceScreen>
-       
+            android:title="@string/edittext4_title"/>
+
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext2_summary"
-            android:title="@string/edittext2_title" >
-        </PreferenceScreen>
-         <PreferenceScreen
+            android:title="@string/edittext2_title"/>
+        <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext3_summary"
-            android:title="@string/edittext3_title" >
-        </PreferenceScreen>
-        
-        
-        
-        
-        
-        
+            android:title="@string/edittext3_title"/>
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext1_summary"
-            android:title="@string/edittext1_title" >
-        </PreferenceScreen>
-        
-     
-        
-    
+            android:title="@string/edittext1_title"/>
+
         <PreferenceScreen
             android:summary="@string/contact_developer_uri"
-            android:title="Contacts:" >
+            android:title="Contacts:">
             <intent
                 android:targetClass="com.omar.deathnote.pref.Contact"
-                android:targetPackage="com.omar.deathnote" >
-            </intent>
+                android:targetPackage="com.omar.deathnote"/>
         </PreferenceScreen>
-        
- </PreferenceCategory>
+
+    </PreferenceCategory>
 </PreferenceScreen>

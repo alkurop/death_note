@@ -22,13 +22,4 @@
             android:title="@string/list2_title" >
         </ListPreference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/category2" >
-        <PreferenceScreen
-            android:fragment="ru.startandroid.develop.p1111preferencefragment.Fragment1"
-            android:summary="@string/screen1_summary"
-            android:title="@string/screen1_title" >
-        </PreferenceScreen>
-      
-    </PreferenceCategory>
-
 </PreferenceScreen>
