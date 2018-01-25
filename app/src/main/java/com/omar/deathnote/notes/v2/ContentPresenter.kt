@@ -13,17 +13,19 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
+val DEFAULT_STYLE = 1
+
 data class NoteViewModel(val content: List<Content1>? = null,
-                         val style: Int = 0,
+                         val style: Int = DEFAULT_STYLE,
                          val noteId: Long = 0)
 
 sealed class ContentAction {
-    object CreateNewNote : ContentAction()
-    data class OpenNoteById(val id: Long) : ContentAction()
-    object Save : ContentAction()
-    object Add : ContentAction()
-    data class DeleteContent(val id: Long) : ContentAction()
-    data class UpdateStyle(val style: Int) : ContentAction()
+    object          CreateNewNote : ContentAction()
+    data class      OpenNoteById(val id: Long) : ContentAction()
+    object          Save : ContentAction()
+    object          Add : ContentAction()
+    data class      DeleteContent(val id: Long) : ContentAction()
+    data class      UpdateStyle(val style: Int) : ContentAction()
 }
 
 sealed class ContentNavigation {

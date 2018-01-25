@@ -10,22 +10,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import butterknife.OnClick;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+
 import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
+import com.omar.deathnote.main.MySpinnerAdapter;
 import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.SpinnerItem;
 import com.omar.deathnote.notes.bll.INoteEventHandler;
 import com.omar.deathnote.notes.item.bll.IContentEventHandler;
-import com.omar.deathnote.main.MySpinnerAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NoteActivity
         extends AppCompatActivity

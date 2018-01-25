@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
@@ -11,6 +15,7 @@ import com.omar.deathnote.R
 import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.models.SpinnerItem
 import com.omar.deathnote.utility.plusAssign
+import com.squareup.picasso.Picasso
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_content.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -48,6 +53,9 @@ class ContentActivity : AppCompatActivity() {
         ComponentContainer.instance.get(ContentViewComponent::class.java)
                 .inject(this)
 
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         initSpinner()
         initList()
         subscribeToListeners()
@@ -73,6 +81,20 @@ class ContentActivity : AppCompatActivity() {
         dis.clear()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.note, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+        // R.id.action_share -> presenter.shareClicked()
+        //R.id.save -> presenter.saveClicked()
+            android.R.id.home -> onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun initSpinner() {
         val spinnerItemList = Constants
                 .select_images
@@ -84,13 +106,21 @@ class ContentActivity : AppCompatActivity() {
         spinner.adapter = spinnerAdatper
     }
 
-
     fun initList() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     fun subscribeToListeners() {
         RxView.clicks(fab).subscribe { presenter.onAction(ContentAction.Add) }
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
+                presenter.onAction(ContentAction.UpdateStyle(i + 1))
+            }
+
+            override fun onNothingSelected(adapterView: AdapterView<*>?) {
+                //noop
+            }
+        }
     }
 
     fun subscribeToPresenter() {
@@ -105,6 +135,8 @@ class ContentActivity : AppCompatActivity() {
             }
             (recyclerView.adapter as ContentAdapter).updateList(state.content)
         }
+        spinner.setSelection(state.style - 1)
+        Picasso.with(this).load(Constants.note_bg_images[state.style - 1]).into(background)
     }
 
     fun navigate(navigation: ContentNavigation) {
