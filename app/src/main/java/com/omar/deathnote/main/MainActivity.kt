@@ -14,6 +14,7 @@ import com.omar.deathnote.Constants
 import com.omar.deathnote.R
 import com.omar.deathnote.models.SpinnerItem
 import com.omar.deathnote.notes.ui.NoteActivity
+import com.omar.deathnote.notes.v2.ContentActivity
 import com.omar.deathnote.pref.PrefActivity
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.disposables.CompositeDisposable
@@ -114,12 +115,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun renderView(state: MainViewState) {
-        when (state) {
-            is MainViewState.UpdateList -> {
-                val mainListAdapter = recyclerView.adapter as MainListAdapter
-                mainListAdapter.setDataList(state.items)
-            }
+        state.items?.let {
+            val mainListAdapter = recyclerView.adapter as MainListAdapter
+            mainListAdapter.setDataList(state.items)
         }
+        state.style?.let {
+            spinner.setSelection(it)
+        }
+
     }
 
     fun navigate(navigation: MainViewNavigation) {
@@ -128,9 +131,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, NoteActivity::class.java)
                 intent.putExtra(Constants.ID, navigation.id)
                 startActivity(intent)
+                ContentActivity.openNote(this, navigation.id)
             }
-            MainViewNavigation.NavigateNewNote -> {
-                startActivity(Intent(this, NoteActivity::class.java))
+            is MainViewNavigation.NavigateNewNote -> {
+                ContentActivity.newNote(this, navigation.style)
             }
             MainViewNavigation.NavigateAbout -> {
                 startActivity(Intent(this, PrefActivity::class.java))

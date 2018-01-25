@@ -1,12 +1,9 @@
 package com.omar.deathnote.main
 
 import com.alkurop.database.ContentDao
-import com.alkurop.database.Note
 import com.alkurop.database.NoteDao
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -21,13 +18,12 @@ sealed class MainViewActions {
 
 sealed class MainViewNavigation {
     data class NavigateNoteDetails(val id: Long) : MainViewNavigation()
-    object NavigateNewNote : MainViewNavigation()
+    data class NavigateNewNote(val style: Int) : MainViewNavigation()
     object NavigateAbout : MainViewNavigation()
 }
 
-sealed class MainViewState {
-    data class UpdateList(val items: List<NoteViewModel>) : MainViewState()
-}
+data class MainViewState(val items: List<NoteViewModel>? = null,
+                         val style: Int? = null)
 
 data class NoteViewModel(val id: Long,
                          val style: Int,
@@ -36,7 +32,16 @@ data class NoteViewModel(val id: Long,
 
 class MainViewPresenter(val noteDao: NoteDao,
                         val contentDao: ContentDao) {
-    val viewState = BehaviorSubject.create<MainViewState>()
+    companion object {
+        private const val DEFAULT_NEW_NOTE_STYLE = 1
+    }
+
+    val viewStatePublisher = BehaviorSubject.create<MainViewState>()
+    val viewState = viewStatePublisher
+            .scan(MainViewState(), { old, new ->
+                MainViewState(new.items ?: old.items, new.style ?: old.style)
+            })
+
     val navigation = PublishSubject.create<MainViewNavigation>()
     private val dis = CompositeDisposable()
 
@@ -46,7 +51,10 @@ class MainViewPresenter(val noteDao: NoteDao,
 
     fun onAction(action: MainViewActions) {
         when (action) {
-            MainViewActions.FabClicked -> navigation.onNext(MainViewNavigation.NavigateNewNote)
+            MainViewActions.FabClicked -> {
+                val style = viewStatePublisher.value?.style ?: DEFAULT_NEW_NOTE_STYLE
+                navigation.onNext(MainViewNavigation.NavigateNewNote(style))
+            }
             is MainViewActions.ListItemClicked -> navigation.onNext(MainViewNavigation.NavigateNoteDetails(action.id))
 
             is MainViewActions.DeleteListItemClicked -> {
@@ -86,6 +94,6 @@ class MainViewPresenter(val noteDao: NoteDao,
     }
 
     fun updateNotesList(notes: List<NoteViewModel>) {
-        viewState.onNext(MainViewState.UpdateList(notes))
+        viewStatePublisher.onNext(MainViewState(notes))
     }
 }
