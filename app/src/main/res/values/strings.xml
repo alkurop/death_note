@@ -137,5 +137,11 @@
     <string name="add_content">Add new content</string>
     <string name="add_audio">Add audio</string>
     <string name="add_picture">Add picture</string>
+    <string name="camera_permission_message">Death Note requests Camera Permission to make photos</string>
+    <string name="mic_permission_message">Death Note requests Mic Permission to record audio</string>
+    <string name="storage_permission_message">Death Note requests Storage Permission to open and save pictures and audio</string>
+    <string name="camera_permission_title">Camera Permission</string>
+    <string name="mic_permission_title">Mic Permission</string>
+    <string name="storage_permission_title">Storage Permission</string>
 
 </resources>

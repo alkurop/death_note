@@ -1,5 +1,6 @@
 package com.omar.deathnote.notes
 
+import android.Manifest.permission.*
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import com.github.alkurop.jpermissionmanager.PermissionOptionalDetails
+import com.github.alkurop.jpermissionmanager.PermissionsManager
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
@@ -49,6 +52,8 @@ class ContentActivity : AppCompatActivity() {
     @Inject
     lateinit var presenter: ContentPresenter
 
+    lateinit var permissionMananager: PermissionsManager
+
     val dis = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +78,8 @@ class ContentActivity : AppCompatActivity() {
         }
 
         initSpinner()
+
+        permissionMananager = PermissionsManager(this)
     }
 
     override fun onDestroy() {
@@ -95,6 +102,16 @@ class ContentActivity : AppCompatActivity() {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        permissionMananager.onActivityResult(requestCode)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        permissionMananager.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     fun initSpinner() {
@@ -146,7 +163,14 @@ class ContentActivity : AppCompatActivity() {
             ContentNavigation.ContentSelector -> {
                 val dialogPresenter = AddDialogPresenter()
                 dialogPresenter.init { content ->
-                    presenter.onAction(ContentAction.AddContent(content))
+                    when (content!!) {
+                        ContentType.PICTURE_FILE -> askGaleryPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                        ContentType.PICTURE_CAPTURE -> askCameraPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                        ContentType.LINK,
+                        ContentType.NOTE -> presenter.onAction(ContentAction.AddContent(content))
+                        ContentType.AUDIO_RECORD -> askRecordPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                        ContentType.AUDIO_FILE -> askGaleryPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                    }
                 }
                 val addDialog = AddDialog()
                 addDialog.setEventHandler(dialogPresenter)
@@ -154,5 +178,89 @@ class ContentActivity : AppCompatActivity() {
                 addDialog.show(supportFragmentManager, "")
             }
         }
+    }
+
+    fun askCameraPermissions(onSuccessOperator: (() -> Unit)) {
+        permissionMananager.clearPermissionsListeners()
+        permissionMananager.clearPermissions()
+
+        val permissionCameraDetails = PermissionOptionalDetails(
+                getString(R.string.camera_permission_title),
+                getString(R.string.camera_permission_message)
+        )
+
+        val permissionStorageDetails = PermissionOptionalDetails(
+                getString(R.string.storage_permission_title),
+                getString(R.string.storage_permission_message)
+        )
+
+        permissionMananager.addPermissions(mapOf(
+                Pair(CAMERA, permissionCameraDetails),
+                Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
+        ))
+
+        permissionMananager.addPermissionsListener {
+            for (mutableEntry in it) {
+                if (mutableEntry.value.not()) {
+                    return@addPermissionsListener
+                }
+            }
+            onSuccessOperator.invoke()
+        }
+        permissionMananager.makePermissionRequest()
+    }
+
+    fun askGaleryPermissions(onSuccessOperator: (() -> Unit)) {
+        permissionMananager.clearPermissionsListeners()
+        permissionMananager.clearPermissions()
+
+        val permissionStorageDetails = PermissionOptionalDetails(
+                getString(R.string.storage_permission_title),
+                getString(R.string.storage_permission_message)
+        )
+
+        permissionMananager.addPermissions(mapOf(
+                Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
+        ))
+
+        permissionMananager.addPermissionsListener {
+            for (mutableEntry in it) {
+                if (mutableEntry.value.not()) {
+                    return@addPermissionsListener
+                }
+            }
+            onSuccessOperator.invoke()
+        }
+        permissionMananager.makePermissionRequest()
+    }
+
+    fun askRecordPermissions(onSuccessOperator: (() -> Unit)) {
+        permissionMananager.clearPermissionsListeners()
+        permissionMananager.clearPermissions()
+
+        val permissionMicDetails = PermissionOptionalDetails(
+                getString(R.string.mic_permission_title),
+                getString(R.string.mic_permission_message)
+        )
+
+        val permissionStorageDetails = PermissionOptionalDetails(
+                getString(R.string.storage_permission_title),
+                getString(R.string.storage_permission_message)
+        )
+
+        permissionMananager.addPermissions(mapOf(
+                Pair(RECORD_AUDIO, permissionMicDetails),
+                Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
+        ))
+
+        permissionMananager.addPermissionsListener {
+            for (mutableEntry in it) {
+                if (mutableEntry.value.not()) {
+                    return@addPermissionsListener
+                }
+            }
+            onSuccessOperator.invoke()
+        }
+        permissionMananager.makePermissionRequest()
     }
 }

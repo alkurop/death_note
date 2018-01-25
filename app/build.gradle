@@ -64,4 +64,6 @@ dependencies {
 
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
 
+    implementation 'com.github.alkurop:Android-Runtime-Permission-Manager:0.0.12'
+
 }
