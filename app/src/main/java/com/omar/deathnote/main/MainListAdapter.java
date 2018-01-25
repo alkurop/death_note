@@ -1,5 +1,6 @@
 package com.omar.deathnote.main;
 
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,13 @@ public class MainListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         this.callback = callback;
     }
 
-    void setDataList(List<NoteViewModel> dataList) {
-        this.dataList = dataList;
+    void setDataList(List<NoteViewModel> newList) {
+        if (newList.equals(dataList)) {
+            return;
+        }
+        //todo fix diff util
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MainAdapterDiffUtilCallback(dataList, newList), false);
+        this.dataList = newList;
         notifyDataSetChanged();
     }
 

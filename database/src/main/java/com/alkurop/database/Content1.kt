@@ -3,15 +3,13 @@ package com.alkurop.database
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
-/*
 @Entity(foreignKeys = [(ForeignKey(
         entity = Note::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("parentNoteId") ))],
         tableName = "content",
         indices = [Index(value = ["parentNoteId"], unique = false)]
-)*/
-@Entity(tableName = "content")
+)
 open class Content1 {
 
     var parentNoteId: Long = 0
@@ -30,10 +28,7 @@ open class Content1 {
 interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdate(content: Content1)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdate(content: Array<Content1>)
+    fun addOrUpdate(content: Content1):Long
 
     @Query("Delete from content where id = :arg0")
     fun delete(id: Long)

@@ -17,6 +17,7 @@ import com.omar.deathnote.notes.ui.NoteActivity
 import com.omar.deathnote.notes.v2.ContentActivity
 import com.omar.deathnote.pref.PrefActivity
 import com.omar.deathnote.utility.plusAssign
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -110,8 +111,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun subscribeToPresenter() {
-        dis += presenter.navigation.subscribe { navigate(it) }
-        dis += presenter.viewState.subscribe { renderView(it) }
+        dis += presenter.navigation.observeOn(mainThread()).subscribe { navigate(it) }
+        dis += presenter.viewState.observeOn(mainThread()).subscribe { renderView(it) }
     }
 
     fun renderView(state: MainViewState) {
@@ -127,18 +128,9 @@ class MainActivity : AppCompatActivity() {
 
     fun navigate(navigation: MainViewNavigation) {
         when (navigation) {
-            is MainViewNavigation.NavigateNoteDetails -> {
-                val intent = Intent(this, NoteActivity::class.java)
-                intent.putExtra(Constants.ID, navigation.id)
-                startActivity(intent)
-                ContentActivity.openNote(this, navigation.id)
-            }
-            is MainViewNavigation.NavigateNewNote -> {
-                ContentActivity.newNote(this, navigation.style)
-            }
-            MainViewNavigation.NavigateAbout -> {
-                startActivity(Intent(this, PrefActivity::class.java))
-            }
+            is MainViewNavigation.NavigateNoteDetails -> ContentActivity.openNote(this, navigation.id)
+            is MainViewNavigation.NavigateNewNote -> ContentActivity.newNote(this, navigation.style)
+            MainViewNavigation.NavigateAbout -> startActivity(Intent(this, PrefActivity::class.java))
         }
     }
 }

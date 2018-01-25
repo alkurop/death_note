@@ -1,10 +1,12 @@
 package com.omar.deathnote.main
 
+import com.alkurop.database.Content1
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
 import com.omar.deathnote.utility.plusAssign
-import io.reactivex.Flowable
+import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
@@ -58,7 +60,12 @@ class MainViewPresenter(val noteDao: NoteDao,
             is MainViewActions.ListItemClicked -> navigation.onNext(MainViewNavigation.NavigateNoteDetails(action.id))
 
             is MainViewActions.DeleteListItemClicked -> {
-                noteDao.delete(action.id)
+                dis += Completable
+                        .fromAction {
+                            noteDao.delete(action.id)
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
             }
             is MainViewActions.SpinnerItemClicked -> {
                 dispose()
@@ -71,7 +78,10 @@ class MainViewPresenter(val noteDao: NoteDao,
                 dis += notesFlowable
                         .switchMap { notes ->
                             val map = notes.map { note ->
-                                contentDao.getTitleContent(note.id)
+
+                                //todo add title
+                                //contentDao.getTitleContent(note.id)
+                                Single.just(Content1())
                                         .map {
                                             NoteViewModel(
                                                     id = note.id,
@@ -81,7 +91,13 @@ class MainViewPresenter(val noteDao: NoteDao,
                                             )
                                         }.toFlowable()
                             }
-                            Flowable.combineLatest<NoteViewModel, List<NoteViewModel>>(map, { it.map { it as NoteViewModel } })
+
+                            if (map.isEmpty()) {
+                                Flowable.just(listOf())
+                            } else {
+                                Flowable.combineLatest<NoteViewModel,
+                                        List<NoteViewModel>>(map, { it.map { it as NoteViewModel } })
+                            }
                         }
                         .subscribe {
                             updateNotesList(it)

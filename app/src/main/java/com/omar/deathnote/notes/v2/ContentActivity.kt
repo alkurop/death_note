@@ -16,6 +16,7 @@ import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.models.SpinnerItem
 import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_content.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -56,20 +57,20 @@ class ContentActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        initSpinner()
         initList()
         subscribeToListeners()
         subscribeToPresenter()
         val noteById = intent.getLongExtra(KEY_ID, NO_ID)
-        val action = if (noteById == NO_ID) {
-            ContentAction.CreateNewNote
+        if (noteById == NO_ID) {
+            presenter.onAction(ContentAction.CreateNewNote)
+            val style = intent.getIntExtra(KEY_STYLE, DEFAULT_STYLE)
+            presenter.onAction(ContentAction.UpdateStyle(style))
         } else {
-            ContentAction.OpenNoteById(noteById)
+            presenter.onAction(ContentAction.OpenNoteById(noteById))
         }
-        presenter.onAction(action)
 
-        val style = intent.getIntExtra(KEY_STYLE, DEFAULT_STYLE)
-        presenter.onAction(ContentAction.UpdateStyle(style))
+        initSpinner()
+
     }
 
     override fun onDestroy() {
@@ -89,7 +90,6 @@ class ContentActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
         // R.id.action_share -> presenter.shareClicked()
-        //R.id.save -> presenter.saveClicked()
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -124,8 +124,8 @@ class ContentActivity : AppCompatActivity() {
     }
 
     fun subscribeToPresenter() {
-        dis += presenter.navigation.subscribe { navigate(it) }
-        dis += presenter.viewState.subscribe { renderView(it) }
+        dis += presenter.navigation.observeOn(AndroidSchedulers.mainThread()).subscribe { navigate(it) }
+        dis += presenter.viewState.observeOn(AndroidSchedulers.mainThread()).subscribe { renderView(it) }
     }
 
     fun renderView(state: NoteViewModel) {
