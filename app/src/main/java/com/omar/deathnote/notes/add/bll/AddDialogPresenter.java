@@ -2,13 +2,13 @@ package com.omar.deathnote.notes.add.bll;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+
 import com.omar.deathnote.App;
 import com.omar.deathnote.R;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.add.item.AddDialogItemDataHolder;
 import com.omar.deathnote.notes.add.item.IAddDialogItemDataHolder;
 import com.omar.deathnote.notes.add.ui.IAddDialogView;
-import com.omar.deathnote.models.Content;
-import com.omar.deathnote.models.ContentFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,20 +58,14 @@ public class AddDialogPresenter implements IAddDialogPresenter {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.NOTE));
+                callback.addContent(ContentType.NOTE);
             }
         });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.new_link)) {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.LINK));
-            }
-        });
-        items.add(new AddDialogItemDataHolder(context.getString(R.string.back)) {
-            @Override
-            public void doAction() {
-                view.dismiss();
+                callback.addContent(ContentType.LINK);
             }
         });
         adaper.notifyDataSetChanged();
@@ -85,14 +79,14 @@ public class AddDialogPresenter implements IAddDialogPresenter {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.AUDIO_FILE));
+                callback.addContent( ContentType.AUDIO_FILE);
             }
         });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.audio_from_recorder)) {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.AUDIO_RECORD));
+                callback.addContent(ContentType.AUDIO_RECORD);
             }
         });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.back)) {
@@ -112,14 +106,14 @@ public class AddDialogPresenter implements IAddDialogPresenter {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.PICTURE_FILE));
+                callback.addContent(ContentType.PICTURE_FILE);
             }
         });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.pic_from_camera)) {
             @Override
             public void doAction() {
                 view.dismiss();
-                callback.addContent(ContentFactory.getContent(Content.ContentType.PICTURE_CAPTURE));
+                callback.addContent(ContentType.PICTURE_CAPTURE);
             }
         });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.back)) {
@@ -132,6 +126,6 @@ public class AddDialogPresenter implements IAddDialogPresenter {
     }
 
     public interface IAddDialogCallback {
-        void addContent(Content content);
+        void addContent(ContentType content);
     }
 }

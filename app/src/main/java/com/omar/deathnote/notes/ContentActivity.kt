@@ -14,6 +14,8 @@ import com.omar.deathnote.Constants
 import com.omar.deathnote.R
 import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.models.SpinnerItem
+import com.omar.deathnote.notes.add.bll.AddDialogPresenter
+import com.omar.deathnote.notes.add.ui.AddDialog
 import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -111,7 +113,7 @@ class ContentActivity : AppCompatActivity() {
     }
 
     fun subscribeToListeners() {
-        RxView.clicks(fab).subscribe { presenter.onAction(ContentAction.Add) }
+        RxView.clicks(fab).subscribe { presenter.onAction(ContentAction.FabClicked) }
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 presenter.onAction(ContentAction.UpdateStyle(i + 1))
@@ -141,7 +143,16 @@ class ContentActivity : AppCompatActivity() {
 
     fun navigate(navigation: ContentNavigation) {
         when (navigation) {
-        //noop
+            ContentNavigation.ContentSelector -> {
+                val dialogPresenter = AddDialogPresenter()
+                dialogPresenter.init { content ->
+
+                }
+                val addDialog = AddDialog()
+                addDialog.setEventHandler(dialogPresenter)
+                dialogPresenter.setView(addDialog)
+                addDialog.show(supportFragmentManager, "")
+            }
         }
     }
 }

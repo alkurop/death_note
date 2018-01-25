@@ -5,10 +5,6 @@ import android.support.annotation.DrawableRes;
 
 public class Constants {
 
-    public enum AudioCommangs {
-        Pause, Play, Rec, Repeat, Shuffle, Stop
-    }
-
     public enum Flags {
         Cont1, Cont2, Dialog
     }
@@ -18,8 +14,6 @@ public class Constants {
     }
 
     public final static String DATA = "data";
-    public final static String ORDER_STATUS = "order_status";
-    public final static String RECORD_TO_DELETE = "rec_to_del";
     public final static String ID = "noteId";
     public final static String PLAY = "play";
     public final static String ATTRIBUTE_NAME_STYLE = "style";
@@ -35,7 +29,6 @@ public class Constants {
     public static final String BROADCAST_ACTION = "com.omar.deathnote.audioplay.progressbar";
     public static final String BROADCAST_AUTONOME = "com.omar.deathnote.fragments.audiofragment.autonome";
     public static final String BROADCAST_ENDOFSONG = "com.omar.deathnote.audioplay.endofsong";
-    public static final String BROADCAST_NOTIF = "com.omar.deathnote.audioplay.notif";
     public static final String BROADCAST_NOTIFIC = "com.omar.deathnote.audioplay.notif";
     public static final String BROADCAST_PAUSESONG = "com.omar.deathnote.fragments.audiofragment.pausesong";
     public static final String BROADCAST_REFRESHUI = "com.omar.deathnote.audioplay.refreshui";
@@ -95,7 +88,6 @@ public class Constants {
     public static final String TODO = "todo";
     public static final String STYLE = "style";
     public static final String SOME = "some";
-    public static final String DIALOG = "dialog";
     public static final String TITLE = "title";
     public static final String SPACE = " ";
     public static final String FRAGMENT_COUNTER = "frag_counter";

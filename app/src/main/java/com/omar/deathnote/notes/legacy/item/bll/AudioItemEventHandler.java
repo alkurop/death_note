@@ -3,7 +3,7 @@ package com.omar.deathnote.notes.legacy.item.bll;
 import com.omar.deathnote.mediaplay.ports.AudioClient;
 import com.omar.deathnote.mediaplay.ports.IAudioClient;
 import com.omar.deathnote.mediaplay.ports.IMediaClient;
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
 import com.omar.deathnote.notes.legacy.item.ui.IAudioView;
 import com.omar.deathnote.notes.legacy.item.ui.IContentView;
@@ -26,7 +26,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
     }
 
     @Override
-    public void init(Content content, INoteEventHandler noteEventHandler) {
+    public void init(ContentType content, INoteEventHandler noteEventHandler) {
         super.init(content, noteEventHandler);
         audioClient = new AudioClient() {
 
@@ -78,7 +78,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
     @Override
     public void displayView() {
 
-
+/*
         switch (getContent().getType()) {
             case AUDIO_FILE:
                 audioView.setStopMode();
@@ -89,7 +89,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
                 audioView.setRecordMode();
 
                 break;
-        }
+        }*/
 
         audioView.setRepeat(audioClient.isRepeat());
         audioView.setShuffle(audioClient.isShuffle());
@@ -102,14 +102,14 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
     }
 
     @Override
-    public Content getContent() {
+    public ContentType getContent() {
         return content;
     }
 
     @Override
     public void saveData() {
-        content.setContent1(filepath);
-        content.setContent2(filepath.substring(filepath.lastIndexOf("/") + 1));
+       /* content.setContent1(filepath);
+        content.setContent2(filepath.substring(filepath.lastIndexOf("/") + 1));*/
     }
 
     @Override
@@ -182,7 +182,7 @@ public class AudioItemEventHandler extends ContentItemPresenter implements IAudi
             case NOT_THIS_OR_STOPPED:
                 setFilePath(new FileManager().generateAudioFilePath());
                 audioClient.record();
-                getContent().setType(Content.ContentType.AUDIO_FILE);
+               // getContent().setType(ContentType.ContentType.AUDIO_FILE);
                 break;
 
         }

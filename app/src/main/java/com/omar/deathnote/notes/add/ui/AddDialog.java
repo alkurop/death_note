@@ -1,7 +1,6 @@
 package com.omar.deathnote.notes.add.ui;
 
 import android.app.Activity;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -12,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
-
 import com.omar.deathnote.R;
 import com.omar.deathnote.notes.add.bll.IAddDialogPresenter;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AddDialog extends DialogFragment implements IAddDialogView {
 
@@ -42,7 +41,7 @@ public class AddDialog extends DialogFragment implements IAddDialogView {
         ButterKnife.bind(this, v);
         lvList.setLayoutManager(new LinearLayoutManager(getContext()));
         getDialog().setCanceledOnTouchOutside(true);
-        tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvTitle.setPaintFlags(tvTitle.getPaintFlags());
         return v;
     }
 

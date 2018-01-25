@@ -21,7 +21,7 @@ import com.omar.deathnote.App;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.main.MySpinnerAdapter;
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.models.SpinnerItem;
 import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
 import com.omar.deathnote.notes.legacy.item.bll.IContentEventHandler;
@@ -89,24 +89,24 @@ public class NoteActivity
     @Override
     public void displayFragment(IContentEventHandler eventHandler, Fragment fragment ) {
         FrameLayout container = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.content_container, null, false);
-        container.setId(eventHandler.getContent().getUID());
+        //container.setId(eventHandler.getContent().getUID());
         ll_main.addView(container);
-        getSupportFragmentManager().beginTransaction().add(eventHandler.getContent().getUID(), fragment).commit();
+       // getSupportFragmentManager().beginTransaction().add(eventHandler.getContent().getUID(), fragment).commit();
     }
 
 
     @Override
-    public void removeFragment(Content item) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(item.getUID());
-        View view = ll_main.findViewById(item.getUID());
+    public void removeFragment(ContentType item) {
+       // Fragment fragment = getSupportFragmentManager().findFragmentById(item.getUID());
+       // View view = ll_main.findViewById(item.getUID());
 
-        if (fragment != null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        if (view != null) ll_main.removeView(view);
+       // if (fragment != null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+       // if (view != null) ll_main.removeView(view);
     }
 
     @Override
-    public void clearList(List<Content> contentList) {
-        for (Content item : contentList) {
+    public void clearList(List<ContentType> contentList) {
+        for (ContentType item : contentList) {
             removeFragment(item);
         }
     }

@@ -1,6 +1,6 @@
 package com.omar.deathnote.notes.legacy.item.bll;
 
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
 import com.omar.deathnote.notes.legacy.item.ui.IContentView;
 
@@ -10,11 +10,11 @@ import com.omar.deathnote.notes.legacy.item.ui.IContentView;
 public class ContentItemPresenter implements IContentEventHandler {
 
 
-    protected Content content;
+    protected ContentType content;
     protected INoteEventHandler noteEventHandler;
     protected IContentView contentView;
 
-    public void init(Content content, INoteEventHandler noteEventHandler) {
+    public void init(ContentType content, INoteEventHandler noteEventHandler) {
         this.content = content;
         this.noteEventHandler = noteEventHandler;
 
@@ -22,8 +22,8 @@ public class ContentItemPresenter implements IContentEventHandler {
 
     @Override
     public void displayView() {
-        contentView.setContent1(content.getContent1());
-        contentView.setContent2(content.getContent2());
+      //  contentView.setContent1(content.getContent1());
+       // contentView.setContent2(content.getContent2());
     }
 
     @Override
@@ -37,14 +37,14 @@ public class ContentItemPresenter implements IContentEventHandler {
     }
 
     @Override
-    public Content getContent() {
+    public ContentType getContent() {
         return content;
     }
 
     @Override
     public void saveData() {
-        content.setContent1(contentView.getContent1());
-        content.setContent2(contentView.getContent2());
+      //  content.setContent1(contentView.getContent1());
+      //  content.setContent2(contentView.getContent2());
     }
 
     @Override

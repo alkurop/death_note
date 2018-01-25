@@ -6,9 +6,10 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.models.Content;
 import com.omar.deathnote.models.NoteModel;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.utility.JsonHelper;
 
 /**
@@ -101,7 +102,7 @@ public class MyContentProvider extends ContentProvider {
 
     private int addNote(NoteModel noteModel) {
         Cursor cursor;
-        db.addRec(noteModel.getStyle(), noteModel.getContentList().get(0).getContent1());
+       // db.addRec(noteModel.getStyle(), noteModel.getContentList().get(0).getContent1());
         cursor = db.fetchLast();
         int id = cursor.getInt(cursor.getColumnIndex(DB.COLUMN_ID));
         cursor.close();
@@ -110,15 +111,15 @@ public class MyContentProvider extends ContentProvider {
 
 
     private void editNoteRecord(NoteModel noteModel) {
-        db.editRec(noteModel.getId(), noteModel.getStyle(), noteModel.getContentList().get(0).getContent1());
+       // db.editRec(noteModel.getId(), noteModel.getStyle(), noteModel.getContentList().get(0).getContent1());
     }
 
     private void saveNote(int id, NoteModel noteModel) {
 
         db.createNoteTable(id);
-        for (Content item : noteModel.getContentList()) {
-            db.addContentItem(id, item.getType().ordinal(),noteModel.getStyle(), item.getContent1(), item.getContent2
-                    ());
+        for (ContentType item : noteModel.getContentList()) {
+          //  db.addContentItem(id, item.getType().ordinal(),noteModel.getStyle(), item.getContent1(), item.getContent2
+           //         ());
         }
     }
 

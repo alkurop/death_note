@@ -1,6 +1,6 @@
 package com.omar.deathnote.notes.legacy.item.bll;
 
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
 import com.omar.deathnote.notes.legacy.item.ui.IContentView;
 
@@ -9,7 +9,7 @@ import com.omar.deathnote.notes.legacy.item.ui.IContentView;
  */
 public interface IContentEventHandler {
 
-    void init(Content content, INoteEventHandler noteEventHandler);
+    void init(ContentType content, INoteEventHandler noteEventHandler);
 
     void setView(IContentView contentView);
 
@@ -17,7 +17,7 @@ public interface IContentEventHandler {
 
     void delete();
 
-    Content getContent();
+    ContentType getContent();
 
     void saveData();
 

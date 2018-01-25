@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-val DEFAULT_STYLE = 1
+const val DEFAULT_STYLE = 1
 
 data class NoteViewModel(val content: List<Content1>? = null,
                          val style: Int = DEFAULT_STYLE,
@@ -25,13 +25,15 @@ data class NoteViewModel(val content: List<Content1>? = null,
 sealed class ContentAction {
     object CreateNewNote : ContentAction()
     data class OpenNoteById(val id: Long) : ContentAction()
-    object Save : ContentAction()
-    object Add : ContentAction()
+    object FabClicked : ContentAction()
     data class DeleteContent(val id: Long) : ContentAction()
     data class UpdateStyle(val style: Int) : ContentAction()
+    data class AddContent(val type: Int) : ContentAction()
 }
 
-sealed class ContentNavigation
+sealed class ContentNavigation {
+    object ContentSelector : ContentNavigation()
+}
 
 class ContentPresenter(private val noteDao: NoteDao,
                        private val contentDao: ContentDao) {
@@ -82,6 +84,7 @@ class ContentPresenter(private val noteDao: NoteDao,
             is ContentAction.OpenNoteById -> openNote(action.id)
             is ContentAction.DeleteContent -> deleteContent(action.id)
             is ContentAction.UpdateStyle -> updateNoteStyle(action.style)
+            is ContentAction.FabClicked -> navigation.onNext(ContentNavigation.ContentSelector)
         }
     }
 
@@ -99,12 +102,14 @@ class ContentPresenter(private val noteDao: NoteDao,
                             noteId = note.id
                     )
                 })
+                .subscribeOn(Schedulers.io())
                 .take(1)
                 .subscribe { viewStatePublisher.onNext(it) }
     }
 
     private fun createNote() {
         dis += viewState
+                .subscribeOn(Schedulers.io())
                 .firstOrError()
                 .flatMapObservable { noteViewModel ->
                     val note = Note()

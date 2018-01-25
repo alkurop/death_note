@@ -2,18 +2,20 @@ package com.omar.deathnote.notes.legacy.bll;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.providers.OpenNoteProvider;
 import com.omar.deathnote.db.providers.SaveNoteProvider;
+import com.omar.deathnote.main.MySpinnerAdapter;
+import com.omar.deathnote.mediaplay.controls.MediaManager;
+import com.omar.deathnote.models.NoteModel;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.add.bll.AddDialogPresenter;
 import com.omar.deathnote.notes.add.ui.AddDialog;
-import com.omar.deathnote.mediaplay.controls.MediaManager;
-import com.omar.deathnote.models.Content;
-import com.omar.deathnote.models.NoteModel;
-import com.omar.deathnote.notes.legacy.item.bll.*;
-import com.omar.deathnote.notes.legacy.item.ui.*;
+import com.omar.deathnote.notes.legacy.item.bll.IAudioEventHandler;
+import com.omar.deathnote.notes.legacy.item.bll.IContentEventHandler;
+import com.omar.deathnote.notes.legacy.item.ui.IContentView;
 import com.omar.deathnote.notes.legacy.ui.INoteView;
-import com.omar.deathnote.main.MySpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +94,7 @@ public class NotePresenter implements INoteEventHandler {
     }
 
     @Override
-    public void deleteContentItem(Content item) {
+    public void deleteContentItem(ContentType item) {
         if (noteModel.getContentList().size() > 2) {
             int index = noteModel.getContentList().indexOf(item);
             noteModel.getContentList().remove(index);
@@ -105,20 +107,20 @@ public class NotePresenter implements INoteEventHandler {
     }
 
     @Override
-    public void addContentItem(Content content) {
+    public void addContentItem(ContentType content) {
         noteModel.getContentList().add(content);
     }
 
     private void generateEventHandlersList() {
         eventHandlers = new ArrayList<>();
-        for (Content item : noteModel.getContentList()) {
+        for (ContentType item : noteModel.getContentList()) {
             generateEventHandler(item);
         }
     }
 
-    private IContentEventHandler generateEventHandler(Content content) {
-        IContentEventHandler eventHandler;
-        switch (content.getType()) {
+    private IContentEventHandler generateEventHandler(ContentType content) {
+        IContentEventHandler eventHandler = null;
+   /*     switch (content.getType()) {
             case AUDIO_FILE:
             case AUDIO_RECORD:
                 eventHandler = new AudioItemEventHandler();
@@ -135,7 +137,7 @@ public class NotePresenter implements INoteEventHandler {
         eventHandlers.add(eventHandler);
 
         if (eventHandler instanceof IAudioEventHandler) MediaManager.I().addMediaCLient(((IAudioEventHandler)
-                eventHandler).getMediaClient());
+                eventHandler).getMediaClient());*/
         return eventHandler;
     }
 
@@ -149,7 +151,7 @@ public class NotePresenter implements INoteEventHandler {
 
     private void displayEventHandler(IContentEventHandler eventHandler) {
         Fragment fragment = null;
-        switch (eventHandler.getContent().getType()) {
+       /* switch (eventHandler.getContent().getType()) {
             case LINK:
                 fragment = new LinkFragment();
                 break;
@@ -166,7 +168,7 @@ public class NotePresenter implements INoteEventHandler {
             case NOTE:
                 fragment = new NoteFragment();
                 break;
-        }
+        }*/
         ((IContentView) fragment).setEventHandler(eventHandler);
         eventHandler.setView((IContentView) fragment);
         view.displayFragment(eventHandler, fragment);
@@ -174,12 +176,12 @@ public class NotePresenter implements INoteEventHandler {
 
     @Override
     public void saveContent() {
-        noteModel.setContentList(new ArrayList<Content>());
+        noteModel.setContentList(new ArrayList<ContentType>());
         for (IContentEventHandler item : eventHandlers) {
-            if (item.getContent().getType() != Content.ContentType.AUDIO_RECORD) {
+            /*if (item.getContent().getType() != ContentType.ContentType.AUDIO_RECORD) {
                 item.saveData();
                 noteModel.getContentList().add(item.getContent());
-            }
+            }*/
         }
     }
 
@@ -216,7 +218,7 @@ public class NotePresenter implements INoteEventHandler {
         AddDialogPresenter dialogPresenter = new AddDialogPresenter();
         dialogPresenter.init(new AddDialogPresenter.IAddDialogCallback() {
             @Override
-            public void addContent(Content content) {
+            public void addContent(ContentType content) {
                 addContentItem(content);
                 IContentEventHandler eventHandler = generateEventHandler(content);
                 displayEventHandler(eventHandler);

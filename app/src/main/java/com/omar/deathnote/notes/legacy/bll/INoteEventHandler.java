@@ -1,7 +1,7 @@
 package com.omar.deathnote.notes.legacy.bll;
 
 import android.content.Intent;
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.models.NoteModel;
 import com.omar.deathnote.notes.legacy.ui.INoteView;
 
@@ -22,9 +22,9 @@ public interface INoteEventHandler {
 
       void loadContent(int id);
 
-      void deleteContentItem(Content content);
+      void deleteContentItem(ContentType content);
 
-      void addContentItem(Content content);
+      void addContentItem(ContentType content);
 
       void displayEventHandlerList();
 

@@ -3,7 +3,7 @@ package com.omar.deathnote.notes.legacy.ui;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
-import com.omar.deathnote.models.Content;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.item.bll.IContentEventHandler;
 import com.omar.deathnote.main.MySpinnerAdapter;
 
@@ -16,9 +16,9 @@ public interface INoteView {
 
     void displayFragment(IContentEventHandler eventHandler, Fragment fragment);
 
-    void removeFragment(Content content);
+    void removeFragment(ContentType content);
 
-    void clearList(List<Content> contentList);
+    void clearList(List<ContentType> contentList);
 
     void initToolbar();
 
