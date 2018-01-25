@@ -6,6 +6,7 @@ import com.alkurop.database.Note
 import com.alkurop.database.NoteDao
 import com.omar.deathnote.Constants
 import com.omar.deathnote.utility.plusAssign
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -28,7 +29,7 @@ sealed class ContentAction {
     object FabClicked : ContentAction()
     data class DeleteContent(val id: Long) : ContentAction()
     data class UpdateStyle(val style: Int) : ContentAction()
-    data class AddContent(val type: Int) : ContentAction()
+    data class AddContent(val type: ContentType) : ContentAction()
 }
 
 sealed class ContentNavigation {
@@ -85,6 +86,36 @@ class ContentPresenter(private val noteDao: NoteDao,
             is ContentAction.DeleteContent -> deleteContent(action.id)
             is ContentAction.UpdateStyle -> updateNoteStyle(action.style)
             is ContentAction.FabClicked -> navigation.onNext(ContentNavigation.ContentSelector)
+            is ContentAction.AddContent -> addContent(action)
+        }
+    }
+
+    private fun addContent(action: ContentAction.AddContent) {
+        when (action.type) {
+            ContentType.AUDIO_FILE -> {
+            }
+            ContentType.AUDIO_RECORD -> {
+            }
+            ContentType.LINK -> {
+                val content = Content1()
+                content.type = Constants.Frags.LinkFragment.ordinal
+                content.parentNoteId = viewState.value.noteId
+                dis += Completable.fromAction { contentDao.addOrUpdate(content) }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
+            }
+            ContentType.NOTE -> {
+                val content = Content1()
+                content.type = Constants.Frags.NoteFragment.ordinal
+                content.parentNoteId = viewState.value.noteId
+                dis += Completable.fromAction { contentDao.addOrUpdate(content) }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
+            }
+            ContentType.PICTURE_CAPTURE -> {
+            }
+            ContentType.PICTURE_FILE -> {
+            }
         }
     }
 
@@ -103,7 +134,6 @@ class ContentPresenter(private val noteDao: NoteDao,
                     )
                 })
                 .subscribeOn(Schedulers.io())
-                .take(1)
                 .subscribe { viewStatePublisher.onNext(it) }
     }
 

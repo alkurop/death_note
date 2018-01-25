@@ -65,7 +65,7 @@ public class NoteModel implements Serializable {
 
     public static NoteModel createEmpty() {
         NoteModel noteModel = new NoteModel();
-        noteModel.getContentList().add(ContentType.TITLE);
+        //noteModel.getContentList().add(ContentType.TITLE);
         noteModel.getContentList().add(ContentType.NOTE);
         return noteModel;
     }

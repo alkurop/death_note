@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.add;
+package com.omar.deathnote.notes.legacy;
 
 import android.app.Activity;
 import android.app.AlertDialog;

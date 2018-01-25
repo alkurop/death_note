@@ -146,7 +146,7 @@ class ContentActivity : AppCompatActivity() {
             ContentNavigation.ContentSelector -> {
                 val dialogPresenter = AddDialogPresenter()
                 dialogPresenter.init { content ->
-
+                    presenter.onAction(ContentAction.AddContent(content))
                 }
                 val addDialog = AddDialog()
                 addDialog.setEventHandler(dialogPresenter)
