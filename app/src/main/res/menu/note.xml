@@ -5,7 +5,7 @@
 
     <!--
          <main_list_item
-        android:id="@+id/action_settings"
+        andrnoteIdd:idnoteId@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
@@ -18,26 +18,26 @@
         android:title="@string/action_share"/>
      
     <!--<item
-        android:id="@+id/btnAdd"
+        andrnoteIdd:idnoteId@+id/btnAdd"
         android:icon="@drawable/ic_action_new_attachment"
         app:showAsAction="always"
         android:title="@string/add_element">
         <menu>
             <item
-                android:id="@+id/addText"
+                andrnoteIdd:idnoteId@+id/addText"
                 android:icon="@drawable/ic_action_edit"
                 android:title="@string/new_text"/>
              <item
-                android:id="@+id/addLink"
+                andrnoteIdd:idnoteId@+id/addLink"
                 android:icon="@drawable/ic_action_directions"
                 android:title="@string/new_link"/>
             <item
-                android:id="@+id/addPic"
+                andrnoteIdd:idnoteId@+id/addPic"
                 android:icon="@drawable/ic_action_camera"
                 android:title="@string/new_pic"/>
  
             <item
-                android:id="@+id/addAudio"
+                andrnoteIdd:idnoteId@+id/addAudio"
                 android:icon="@drawable/ic_action_play"
                 android:title="@string/new_audio"/>
         </menu>

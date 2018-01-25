@@ -20,7 +20,7 @@ public class Constants {
     public final static String DATA = "data";
     public final static String ORDER_STATUS = "order_status";
     public final static String RECORD_TO_DELETE = "rec_to_del";
-    public final static String ID = "id";
+    public final static String ID = "noteId";
     public final static String PLAY = "play";
     public final static String ATTRIBUTE_NAME_STYLE = "style";
     public final static String ATTRIBUTE_NAME_TEXT = "text";

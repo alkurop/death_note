@@ -26,7 +26,7 @@ public class DefaultFragment extends Fragment {
 			fragId = savedInstanceState.getString(Constants.FRAGMENT_ID);
 		
 		
-		View v = inflater.inflate(R.layout.note_elem_default, null);
+		View v = inflater.inflate(R.layout.note_elem_title, null);
 
 		etTitle = (EditText) v.findViewById(R.id.tvTitle);
 		etTitle.setText(title);

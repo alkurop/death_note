@@ -265,29 +265,29 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 
 		switch (item.getItemId()) {
 
-		/*case R.id.action_share:
+		/*case R.noteId.action_share:
 			SharingModule sM = new SharingModule(fm, this, fragList);
 			sM.share();
 
 			break;
 
-		case R.id.save:
+		case R.noteId.save:
 
 			finish();
 
 			break;
 
-		case android.R.id.home:
+		case android.R.noteId.home:
 
 			finish();
 
 			break;
 
-		case R.id.btnRepeat:
+		case R.noteId.btnRepeat:
 
 			break;
 
-		case R.id.addPic:
+		case R.noteId.addPic:
 			xSave();
 			AddPicDialog pic = new AddPicDialog();
 
@@ -295,18 +295,18 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 
 			break;
 
-		case R.id.addLink:
+		case R.noteId.addLink:
 			xSave();
 			createFragment(null, null, Constants.Frags.LinkFragment);
 
 			break;
 
-		case R.id.addText:
+		case R.noteId.addText:
 			xSave();
 			createFragment(null, null, Constants.Frags.NoteFragment);
 
 			break;
-		case R.id.addAudio:
+		case R.noteId.addAudio:
 			xSave();
 
 			AddAudioDialog aud = new AddAudioDialog();

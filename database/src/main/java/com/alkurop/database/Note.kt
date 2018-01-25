@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 )
 open class Note {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     var style: Int = 0
@@ -27,4 +27,10 @@ interface NoteDao {
 
     @Query("DELETE FROM maintab2 WHERE id = :arg0")
     fun delete(id: Long)
+
+    @Query("SELECT * FROM maintab2 WHERE id = :arg0")
+    fun getById(id: Long) : Flowable<Note>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addOrUpdate(note: Note)
 }

@@ -3,17 +3,20 @@ package com.alkurop.database
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
-
+/*
 @Entity(foreignKeys = [(ForeignKey(
         entity = Note::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("parentNoteId")
-))], tableName = "content")
-open class Content {
+        childColumns = arrayOf("parentNoteId") ))],
+        tableName = "content",
+        indices = [Index(value = ["parentNoteId"], unique = false)]
+)*/
+@Entity(tableName = "content")
+open class Content1 {
 
     var parentNoteId: Long = 0
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     var type: Int = 0
@@ -27,7 +30,10 @@ open class Content {
 interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdate(content: Content)
+    fun addOrUpdate(content: Content1)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addOrUpdate(content: Array<Content1>)
 
     @Query("Delete from content where id = :arg0")
     fun delete(id: Long)
@@ -36,8 +42,8 @@ interface ContentDao {
     fun deleteRelatedToNote(noteId: Long)
 
     @Query("Select * from content where id = :arg0")
-    fun getRelatedToNote(noteId: Long): Flowable<List<Content>>
+    fun getRelatedToNote(noteId: Long): Flowable<List<Content1>>
 
     @Query("Select * from content where parentNoteId = :arg0 and type = 1")
-    fun getTitleContent(noteId: Long): Single<Content>
+    fun getTitleContent(noteId: Long): Single<Content1>
 }

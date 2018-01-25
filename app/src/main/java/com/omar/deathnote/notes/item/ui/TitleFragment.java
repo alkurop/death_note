@@ -32,7 +32,7 @@ public class TitleFragment extends BaseItemFragment {
 
     @Override
     public int getLayout() {
-        return  R.layout.note_elem_default;
+        return  R.layout.note_elem_title;
     }
 
     @Override

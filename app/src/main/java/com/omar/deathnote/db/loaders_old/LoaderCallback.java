@@ -233,7 +233,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
             db.createNoteTable(NoteActivity_old.getId());
             for (FragContent listItem : fragsArrayList) {
 
-                //	db.addContentItem(NoteActivity_old.getId(), 0, listItem.getCont1(), listItem.getCont2());
+                //	db.addContentItem(NoteActivity_old.getNoteId(), 0, listItem.getCont1(), listItem.getCont2());
 
             }
 

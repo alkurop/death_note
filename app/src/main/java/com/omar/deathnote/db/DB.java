@@ -147,7 +147,7 @@ public class DB {
 	
 	public void createNoteTable(int id) {
 		String TABLE_CREATE =
-				"create table " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
+				"viewStatePublisher table " + "NOTE" + String.valueOf(id) + "(" + COLUMN_ID
 				+ " integer primary key autoincrement, "
 						+ COLUMN_STYLE
 						+ " integer, "

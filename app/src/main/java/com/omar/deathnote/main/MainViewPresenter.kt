@@ -59,6 +59,7 @@ class MainViewPresenter(val noteDao: NoteDao,
                 } else {
                     noteDao.getNotesByStyle(action.style)
                 }
+                //todo move this to a use case
                 dis += notesFlowable
                         .switchMap { notes ->
                             val map = notes.map { note ->
