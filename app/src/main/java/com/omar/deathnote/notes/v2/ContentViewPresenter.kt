@@ -44,10 +44,16 @@ class ContentPresenter(private val noteDao: NoteDao,
     init {
         viewStatePublisher
                 .scan(NoteViewModel(), { old, new ->
+                    val noteId = if (new.noteId != 0L) new.noteId else old.noteId
+                    val content = (new.content ?: old.content)?.map {
+                        it.parentNoteId = noteId
+                        it
+                    }
+
                     val noteViewModel = NoteViewModel(
-                            content = new.content ?: old.content,
+                            content = content,
                             style = if (new.style != 0) new.style else old.style,
-                            noteId = if (new.noteId != 0L) new.noteId else old.noteId)
+                            noteId = noteId)
                     noteViewModel
                 })
                 .distinct()

@@ -31,7 +31,7 @@ class ContentActivity : AppCompatActivity() {
         private const val KEY_ID = "key_id"
         private const val KEY_STYLE = "key_style"
 
-        fun openNote(activity: AppCompatActivity, id: Long? = NO_ID, style: Int? = DEFAULT_STYLE) {
+        fun openNote(activity: AppCompatActivity, id: Long? = NO_ID) {
             val intent = Intent(activity, ContentActivity::class.java)
             intent.putExtra(KEY_ID, id)
             activity.startActivity(intent)
@@ -39,6 +39,7 @@ class ContentActivity : AppCompatActivity() {
 
         fun newNote(activity: AppCompatActivity, style: Int) {
             val intent = Intent(activity, ContentActivity::class.java)
+            intent.putExtra(KEY_STYLE, style)
             activity.startActivity(intent)
         }
     }
@@ -70,7 +71,6 @@ class ContentActivity : AppCompatActivity() {
         }
 
         initSpinner()
-
     }
 
     override fun onDestroy() {

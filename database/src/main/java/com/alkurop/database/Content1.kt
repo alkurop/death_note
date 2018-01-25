@@ -2,6 +2,7 @@ package com.alkurop.database
 
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 @Entity(foreignKeys = [(ForeignKey(
         entity = Note::class,
@@ -40,5 +41,5 @@ interface ContentDao {
     fun getRelatedToNote(noteId: Long): Flowable<List<Content1>>
 
     @Query("Select * from content where parentNoteId = :arg0 and type = 1")
-    fun getTitleContent(noteId: Long): Single<Content1>
+    fun getTitleContent(noteId: Long): Flowable<Content1>
 }
