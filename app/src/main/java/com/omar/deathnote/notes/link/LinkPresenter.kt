@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.v2.link
+package com.omar.deathnote.notes.link
 
 import com.alkurop.database.ContentDao
 import com.omar.deathnote.notes.BaseContentPresenter

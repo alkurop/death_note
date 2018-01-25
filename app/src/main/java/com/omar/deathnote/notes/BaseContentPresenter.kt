@@ -20,7 +20,9 @@ abstract class BaseContentPresenter(val contentDao: ContentDao) {
     fun delete() {
         Completable
                 .fromAction {
-                    contentDao.addOrUpdate(content)
-                }.subscribeOn(Schedulers.io()).subscribe()
+                    contentDao.delete(content.id)
+                }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 }

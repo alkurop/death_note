@@ -8,17 +8,18 @@ import android.view.ViewGroup
 import com.alkurop.database.Content1
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.notes.v2.audio.AudioViewHolder
-import com.omar.deathnote.notes.v2.link.LinkViewHolder
-import com.omar.deathnote.notes.v2.note.NoteViewHolder
-import com.omar.deathnote.notes.v2.picture.PictureViewHolder
-import com.omar.deathnote.notes.v2.title.TitleViewHolder
+import com.omar.deathnote.notes.audio.AudioViewHolder
+import com.omar.deathnote.notes.link.LinkViewHolder
+import com.omar.deathnote.notes.note.NoteViewHolder
+import com.omar.deathnote.notes.picture.PictureViewHolder
+import com.omar.deathnote.notes.title.TitleViewHolder
 
 class ContentAdapter : RecyclerView.Adapter<ContentViewHolder>() {
     private var items = listOf<Content1>()
     lateinit var layouInflater: LayoutInflater
 
     fun updateList(newItems: List<Content1>) {
+        if(newItems == items) return
         val calculateDiff = DiffUtil.calculateDiff(ContentAdapterDiffUtilCallback(items, newItems))
         items = newItems
         calculateDiff.dispatchUpdatesTo(this)

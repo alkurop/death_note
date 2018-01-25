@@ -124,7 +124,8 @@ class ContentPresenter(private val noteDao: NoteDao,
     }
 
     private fun openNote(id: Long) {
-        dis += Flowable.combineLatest(contentDao.getRelatedToNote(id),
+        dis += Flowable.combineLatest(
+                contentDao.getRelatedToNote(id),
                 noteDao.getById(id),
                 BiFunction<List<Content1>, Note, NoteViewModel> { contentList, note ->
                     NoteViewModel(

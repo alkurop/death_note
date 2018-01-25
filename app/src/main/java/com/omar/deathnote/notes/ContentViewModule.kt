@@ -2,11 +2,11 @@ package com.omar.deathnote.notes
 
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
-import com.omar.deathnote.notes.v2.audio.AudioPresenter
-import com.omar.deathnote.notes.v2.link.LinkPresenter
-import com.omar.deathnote.notes.v2.note.NotePresenter
-import com.omar.deathnote.notes.v2.picture.PicturePresenter
-import com.omar.deathnote.notes.v2.title.TitlePresenter
+import com.omar.deathnote.notes.audio.AudioPresenter
+import com.omar.deathnote.notes.link.LinkPresenter
+import com.omar.deathnote.notes.note.NotePresenter
+import com.omar.deathnote.notes.picture.PicturePresenter
+import com.omar.deathnote.notes.title.TitlePresenter
 import dagger.Module
 import dagger.Provides
 

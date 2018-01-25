@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.v2.audio
+package com.omar.deathnote.notes.audio
 
 import android.view.View
 import com.alkurop.database.Content1

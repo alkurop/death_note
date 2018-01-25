@@ -1,7 +1,8 @@
-package com.omar.deathnote.notes.v2.note
+package com.omar.deathnote.notes.note
 
 import android.view.View
 import com.alkurop.database.Content1
+import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.notes.ContentViewComponent
@@ -26,5 +27,7 @@ class NoteViewHolder(itemView: View?)
                     content.content = it.editable()?.toString()
                     presenter.save()
                 }
+        RxView.clicks(itemView.del).subscribe { presenter.delete() }
+
     }
 }

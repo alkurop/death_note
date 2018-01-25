@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.v2.title
+package com.omar.deathnote.notes.title
 
 import android.view.View
 import com.alkurop.database.Content1
