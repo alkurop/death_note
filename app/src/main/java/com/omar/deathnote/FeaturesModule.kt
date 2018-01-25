@@ -1,7 +1,7 @@
 package com.omar.deathnote
 
 import com.omar.deathnote.main.MainScreenComponent
-import com.omar.deathnote.notes.v2.ContentViewComponent
+import com.omar.deathnote.notes.ContentViewComponent
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

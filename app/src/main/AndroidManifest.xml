@@ -26,7 +26,7 @@
         </activity>
 
         <activity
-            android:name=".notes.ui.NoteActivity"
+            android:name=".notes.legacy.ui.NoteActivity"
             android:label=" "
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
@@ -34,7 +34,7 @@
 
 
         <activity
-            android:name=".notes.v2.ContentActivity"
+            android:name=".notes.ContentActivity"
             android:label=" "
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"

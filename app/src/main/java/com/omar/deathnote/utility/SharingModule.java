@@ -19,11 +19,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.notes.AudioFragment;
-import com.omar.deathnote.notes.DefaultFragment;
-import com.omar.deathnote.notes.LinkFragment;
-import com.omar.deathnote.notes.NoteFragment;
-import com.omar.deathnote.notes.PicFragment;
+import com.omar.deathnote.notes.legacy.AudioFragment;
+import com.omar.deathnote.notes.legacy.DefaultFragment;
+import com.omar.deathnote.notes.legacy.LinkFragment;
+import com.omar.deathnote.notes.legacy.NoteFragment;
+import com.omar.deathnote.notes.legacy.PicFragment;
 
 public class SharingModule {
 

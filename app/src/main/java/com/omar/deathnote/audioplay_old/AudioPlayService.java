@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.notes.ui.NoteActivity_old;
+import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 
 import java.io.File;
 import java.io.FileNotFoundException;

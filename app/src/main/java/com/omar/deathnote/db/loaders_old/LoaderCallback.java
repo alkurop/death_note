@@ -10,7 +10,7 @@ import android.support.v4.content.Loader;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.db.DB;
 import com.omar.deathnote.db.loaders.MainListLoader;
-import com.omar.deathnote.notes.ui.NoteActivity_old;
+import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 import com.omar.deathnote.utility.FragContent;
 
 import java.util.ArrayList;

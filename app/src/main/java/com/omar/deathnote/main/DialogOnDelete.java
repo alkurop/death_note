@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.omar.deathnote.R;
-import com.omar.deathnote.notes.ui.NoteActivity_old;
+import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 
 @SuppressLint("InflateParams")
 public class DialogOnDelete extends DialogFragment implements OnClickListener {

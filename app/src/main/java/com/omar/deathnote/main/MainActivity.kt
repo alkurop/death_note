@@ -13,8 +13,8 @@ import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
 import com.omar.deathnote.models.SpinnerItem
-import com.omar.deathnote.notes.ui.NoteActivity
-import com.omar.deathnote.notes.v2.ContentActivity
+import com.omar.deathnote.notes.legacy.ui.NoteActivity
+import com.omar.deathnote.notes.ContentActivity
 import com.omar.deathnote.pref.PrefActivity
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread

@@ -4,8 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
-import com.omar.deathnote.notes.bll.INoteEventHandler;
-import com.omar.deathnote.notes.bll.NotePresenter;
+import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
+import com.omar.deathnote.notes.legacy.bll.NotePresenter;
 
 import timber.log.Timber;
 
