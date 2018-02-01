@@ -9,7 +9,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,13 +22,12 @@ import android.widget.SimpleAdapter;
 
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.db.loaders_old.LoaderCallback;
+import com.omar.deathnote.main.DialogOnDelete;
+import com.omar.deathnote.main.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.notes.legacy.AddAudioDialog;
 import com.omar.deathnote.notes.legacy.AddPicDialog;
 import com.omar.deathnote.notes.legacy.AudioFragment;
 import com.omar.deathnote.notes.legacy.AudioFragment.NextAudio;
-import com.omar.deathnote.main.DialogOnDelete;
-import com.omar.deathnote.main.DialogOnDelete.DeleteDialog;
 import com.omar.deathnote.utility.FileManager;
 import com.omar.deathnote.utility.FragmentCreator;
 import com.omar.deathnote.utility.FragmentSaver;
@@ -71,7 +69,6 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 	private static LoaderManager loaderManager;
 	private static FragmentManager fm;
 	private static ActionBar actionBar;
-	private static LoaderCallback callbacks;
 	private SimpleAdapter selectAdapter;
 	private ArrayList<Map<String, Object>> dataSelect;
 	private Map<String, Object> m;
@@ -151,7 +148,7 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 
 		loaderManager = getLoaderManager();
 		fm = getFragmentManager();
-		callbacks = LoaderCallback.getInstance(this);
+		//callbacks = LoaderCallback.getInstance(this);
 
 		if (savedInstanceState == null) {
 
@@ -163,20 +160,20 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 			if (extras.getLong(Constants.ID) != 0) {
 
 				id = extras.getInt(Constants.ID);
-
+/*
 				loaderManager.restartLoader(LoaderCallback.LOAD_NOTE, null,
 						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
 				loaderManager.restartLoader(LoaderCallback.LOAD_STYLE, null,
-						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);
+						(LoaderManager.LoaderCallbacks<Cursor>)callbacks);*/
 
 			} else {
 				 
 				style = extras.getInt(Constants.STYLE);
 				actionBar.setSelectedNavigationItem(style - 1);
 
-				loaderManager.restartLoader(LoaderCallback.ADD_NEW_NOTE, null,
+				/*loaderManager.restartLoader(LoaderCallback.ADD_NEW_NOTE, null,
 						(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);
-
+*/
 				createFragment(extras.getString(Constants.TITLE), Constants.SPACE,
 						Constants.Frags.TitleFragment);
 
@@ -507,12 +504,12 @@ public class NoteActivity_old extends Activity implements   OnNavigationListener
 		FragmentSaver fs = new FragmentSaver(fm, fragList);
 
 		Bundle titleBundle = fs.getTitleBundle();
-		loaderManager.restartLoader(LoaderCallback.EDIT_REC_TITLE,
+		/*loaderManager.restartLoader(LoaderCallback.EDIT_REC_TITLE,
 				titleBundle,(LoaderManager.LoaderCallbacks<Cursor>) callbacks);
 
 		Bundle saveBundle = fs.saveFragment();
 		loaderManager.restartLoader(LoaderCallback.SAVE_NOTE, saveBundle,
-				(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);
+				(LoaderManager.LoaderCallbacks<Cursor>)	callbacks);*/
 
 	}
 

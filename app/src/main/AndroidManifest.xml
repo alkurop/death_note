@@ -54,11 +54,6 @@
             android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
             android:enabled="true" />
 
-        <provider
-            android:name="com.omar.deathnote.db.MyContentProvider"
-            android:authorities="com.omar.deathnote.contentprovider"
-            android:exported="false"
-            android:syncable="true" />
     </application>
 
 </manifest>

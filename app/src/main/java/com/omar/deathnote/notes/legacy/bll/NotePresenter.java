@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.db.providers.OpenNoteProvider;
-import com.omar.deathnote.db.providers.SaveNoteProvider;
 import com.omar.deathnote.main.MySpinnerAdapter;
 import com.omar.deathnote.mediaplay.controls.MediaManager;
 import com.omar.deathnote.models.NoteModel;
@@ -81,7 +79,7 @@ public class NotePresenter implements INoteEventHandler {
 
     @Override
     public void loadContent(int id) {
-        OpenNoteProvider.I(view.getSupportLoaderManager()).LoadNote(id, new OpenNoteProvider.IOpenNoteCallback() {
+      /*  OpenNoteProvider.I(view.getSupportLoaderManager()).LoadNote(id, new OpenNoteProvider.IOpenNoteCallback() {
             @Override
             public void onSuccess(NoteModel noteModel) {
                 init(noteModel);
@@ -90,7 +88,7 @@ public class NotePresenter implements INoteEventHandler {
             @Override
             public void onError(String error) {
             }
-        });
+        });*/
     }
 
     @Override
@@ -188,7 +186,7 @@ public class NotePresenter implements INoteEventHandler {
     @Override
     public void saveDB() {
 
-        SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
+       /* SaveNoteProvider.I(view.getSupportLoaderManager()).SaveNote(noteModel, new SaveNoteProvider.ISaveNoteCallback() {
             @Override
             public void onSuccess(int id) {
                 noteModel.setId(id);
@@ -197,7 +195,7 @@ public class NotePresenter implements INoteEventHandler {
             @Override
             public void onError(String error) {
             }
-        });
+        });*/
     }
 
     @Override
