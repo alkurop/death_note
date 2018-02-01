@@ -3,9 +3,10 @@ package com.omar.deathnote.notes.legacy.ui;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+
+import com.omar.deathnote.main.MySpinnerAdapter;
 import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.item.bll.IContentEventHandler;
-import com.omar.deathnote.main.MySpinnerAdapter;
 
 import java.util.List;
 

@@ -1,8 +1,9 @@
 package com.omar.deathnote.notes.legacy.bll;
 
 import android.content.Intent;
-import com.omar.deathnote.notes.ContentType;
+
 import com.omar.deathnote.models.NoteModel;
+import com.omar.deathnote.notes.ContentType;
 import com.omar.deathnote.notes.legacy.ui.INoteView;
 
 /**

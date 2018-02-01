@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import com.alkurop.github.mediapicker.MediaPicker
+import com.alkurop.github.mediapicker.MediaType
 import com.github.alkurop.jpermissionmanager.PermissionOptionalDetails
 import com.github.alkurop.jpermissionmanager.PermissionsManager
 import com.jakewharton.rxbinding2.view.RxView
@@ -60,7 +62,7 @@ class ContentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_content)
         ComponentContainer.instance.get(ContentViewComponent::class.java)
-                .inject(this)
+            .inject(this)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -80,6 +82,15 @@ class ContentActivity : AppCompatActivity() {
         initSpinner()
 
         permissionMananager = PermissionsManager(this)
+        MediaPicker.getResult(this)
+            .subscribe {
+                when (it.first) {
+                    MediaType.AUDIO -> presenter.onAction(ContentAction.AddContent(ContentType.AUDIO_FILE, it.second.toString()))
+                    MediaType.PHOTO -> presenter.onAction(ContentAction.AddContent(ContentType.PICTURE_FILE, it.second.toString()))
+                    MediaType.VIDEO -> {
+                    }
+                }
+            }
     }
 
     override fun onDestroy() {
@@ -116,10 +127,10 @@ class ContentActivity : AppCompatActivity() {
 
     fun initSpinner() {
         val spinnerItemList = Constants
-                .select_images
-                .indices
-                .filter { it != 0 }
-                .map { SpinnerItem(Constants.select_images[it], getString(Constants.select_names[it])) }
+            .select_images
+            .indices
+            .filter { it != 0 }
+            .map { SpinnerItem(Constants.select_images[it], getString(Constants.select_names[it])) }
 
         val spinnerAdatper = MySpinnerAdapter(spinnerItemList)
         spinner.adapter = spinnerAdatper
@@ -164,12 +175,12 @@ class ContentActivity : AppCompatActivity() {
                 val dialogPresenter = AddDialogPresenter()
                 dialogPresenter.init { content ->
                     when (content!!) {
-                        ContentType.PICTURE_FILE -> askGaleryPermissions { presenter.onAction(ContentAction.AddContent(content)) }
-                        ContentType.PICTURE_CAPTURE -> askCameraPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                        ContentType.PICTURE_FILE -> askGaleryPermissions { openImageGal() }
+                        ContentType.PICTURE_CAPTURE -> askCameraPermissions { captureImageCamera() }
                         ContentType.LINK,
                         ContentType.NOTE -> presenter.onAction(ContentAction.AddContent(content))
-                        ContentType.AUDIO_RECORD -> askRecordPermissions { presenter.onAction(ContentAction.AddContent(content)) }
-                        ContentType.AUDIO_FILE -> askGaleryPermissions { presenter.onAction(ContentAction.AddContent(content)) }
+                        ContentType.AUDIO_RECORD -> askRecordPermissions { }
+                        ContentType.AUDIO_FILE -> askGaleryPermissions { openAudioGal() }
                     }
                 }
                 val addDialog = AddDialog()
@@ -180,24 +191,38 @@ class ContentActivity : AppCompatActivity() {
         }
     }
 
+    fun captureImageCamera() {
+        MediaPicker.fromCamera(this, MediaType.PHOTO)
+    }
+
+    fun openImageGal() {
+        MediaPicker.fromGallery(this, MediaType.PHOTO)
+    }
+
+    fun openAudioGal() {
+        MediaPicker.fromGallery(this, MediaType.AUDIO)
+    }
+
     fun askCameraPermissions(onSuccessOperator: (() -> Unit)) {
         permissionMananager.clearPermissionsListeners()
         permissionMananager.clearPermissions()
 
         val permissionCameraDetails = PermissionOptionalDetails(
-                getString(R.string.camera_permission_title),
-                getString(R.string.camera_permission_message)
+            getString(R.string.camera_permission_title),
+            getString(R.string.camera_permission_message)
         )
 
         val permissionStorageDetails = PermissionOptionalDetails(
-                getString(R.string.storage_permission_title),
-                getString(R.string.storage_permission_message)
+            getString(R.string.storage_permission_title),
+            getString(R.string.storage_permission_message)
         )
 
-        permissionMananager.addPermissions(mapOf(
+        permissionMananager.addPermissions(
+            mapOf(
                 Pair(CAMERA, permissionCameraDetails),
                 Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
-        ))
+            )
+        )
 
         permissionMananager.addPermissionsListener {
             for (mutableEntry in it) {
@@ -215,13 +240,15 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager.clearPermissions()
 
         val permissionStorageDetails = PermissionOptionalDetails(
-                getString(R.string.storage_permission_title),
-                getString(R.string.storage_permission_message)
+            getString(R.string.storage_permission_title),
+            getString(R.string.storage_permission_message)
         )
 
-        permissionMananager.addPermissions(mapOf(
+        permissionMananager.addPermissions(
+            mapOf(
                 Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
-        ))
+            )
+        )
 
         permissionMananager.addPermissionsListener {
             for (mutableEntry in it) {
@@ -239,19 +266,21 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager.clearPermissions()
 
         val permissionMicDetails = PermissionOptionalDetails(
-                getString(R.string.mic_permission_title),
-                getString(R.string.mic_permission_message)
+            getString(R.string.mic_permission_title),
+            getString(R.string.mic_permission_message)
         )
 
         val permissionStorageDetails = PermissionOptionalDetails(
-                getString(R.string.storage_permission_title),
-                getString(R.string.storage_permission_message)
+            getString(R.string.storage_permission_title),
+            getString(R.string.storage_permission_message)
         )
 
-        permissionMananager.addPermissions(mapOf(
+        permissionMananager.addPermissions(
+            mapOf(
                 Pair(RECORD_AUDIO, permissionMicDetails),
                 Pair(WRITE_EXTERNAL_STORAGE, permissionStorageDetails)
-        ))
+            )
+        )
 
         permissionMananager.addPermissionsListener {
             for (mutableEntry in it) {
