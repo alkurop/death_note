@@ -20,6 +20,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.Constants.Frags;
 import com.omar.deathnote.R;

@@ -6,18 +6,14 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.util.Log;
-import com.omar.deathnote.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by omar on 11/2/15.
- */
+import timber.log.Timber;
+
 public class VoiceRecorder {
 
 
@@ -28,35 +24,21 @@ public class VoiceRecorder {
     private int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
     private AudioRecord recorder;
     private String filePath;
-    boolean recording;
+    private boolean isRecording;
     private FileOutputStream output;
     private static Handler handler;
-    private static IVoiceRecorderCallback callback;
+    private IVoiceRecorderCallback mCallback;
 
     private long time;
 
     static {
-        System.loadLibrary(Constants.MP3_LAME);
+        System.loadLibrary("mp3lame");
     }
 
 
     public VoiceRecorder(final IVoiceRecorderCallback callback) {
-        this.callback = callback;
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 0:
-                        callback.onErrorOccured("error recording");
-                        break;
-                    case 1:
-                        callback.sendPositionUpdate(msg.arg1);
-                        break;
-                }
-            }
-        }
-
-        ;
+        this.mCallback = callback;
+        handler = new MyHandler(callback);
     }
 
     private void initBuffer() {
@@ -73,19 +55,19 @@ public class VoiceRecorder {
         try {
             output = new FileOutputStream(new File(filePath));
         } catch (FileNotFoundException e) {
-            callback.onErrorOccured("file not found");
+            mCallback.onErrorOccured("file not found");
         }
 
     }
 
-    public void counterThread() {
+    private void counterThread() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 time = System.currentTimeMillis();
-                while (recording) {
+                while (isRecording) {
                     Message msg = new Message();
-                    msg.arg1 = (int) (System.currentTimeMillis() - time) ;
+                    msg.arg1 = (int) (System.currentTimeMillis() - time);
                     msg.what = 1;
                     handler.sendMessage(msg);
                     try {
@@ -98,16 +80,15 @@ public class VoiceRecorder {
         }).start();
     }
 
-
-    public void recThread() {
+    private void recThread() {
 
 
         new Thread() {
             @Override
             public void run() {
                 try {
-                    Log.d("recorder", filePath);
-                    android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+                    Timber.d(filePath);
+                    Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
                     File outFile = new File(filePath);
                     if (outFile.exists()) {
                         outFile.delete();
@@ -121,7 +102,7 @@ public class VoiceRecorder {
                     recorder.startRecording();
 
                     int readSize = 0;
-                    while (recording) {
+                    while (isRecording) {
 
                         readSize = recorder.read(buffer, 0, minBufferSize);
                         int encResult = SimpleLame.encode(buffer, buffer, readSize, mp3buffer);
@@ -137,48 +118,54 @@ public class VoiceRecorder {
                     recorder.release();
                     SimpleLame.close();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (NullPointerException e) {
-                    Log.e("no such file", filePath);
+                } catch (Exception e) {
+                    Timber.e(filePath);
                 }
-
             }
         }.start();
     }
 
     public void recordStart(String path) {
         this.filePath = path;
-        recording = true;
+        isRecording = true;
         recThread();
     }
 
     public void recordStop() {
         try {
-            recording = false;
+            isRecording = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public AudioRecord findAudioRecord() {
-        try {
-            minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat
-                    .ENCODING_PCM_16BIT);
+    private AudioRecord findAudioRecord() {
+        minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat
+                .ENCODING_PCM_16BIT);
 
-            if (minBufferSize != AudioRecord.ERROR_BAD_VALUE) {
-                AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat
-                        .ENCODING_PCM_16BIT, minBufferSize * 4);
-                SimpleLame.init(41000, AudioFormat.CHANNEL_IN_MONO, 44100, 32);
-                if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
-                    return recorder;
-            }
-        } catch (Exception e) {
-
-        }
-
-
-        return null;
+        AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat
+                .ENCODING_PCM_16BIT, minBufferSize * 4);
+        SimpleLame.init(41000, AudioFormat.CHANNEL_IN_MONO, 44100, 32);
+        return recorder;
     }
 
+    static class MyHandler extends Handler {
+        private final IVoiceRecorderCallback mCallback;
+
+        MyHandler(IVoiceRecorderCallback callback) {
+            mCallback = callback;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mCallback.onErrorOccured("error recording");
+                    break;
+                case 1:
+                    mCallback.sendPositionUpdate(msg.arg1);
+                    break;
+            }
+        }
+    }
 }

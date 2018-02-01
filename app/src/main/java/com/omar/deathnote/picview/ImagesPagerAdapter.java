@@ -2,12 +2,12 @@ package com.omar.deathnote.picview;
 
 import java.util.ArrayList;
 
-import com.omar.deathnote.Constants;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.omar.deathnote.Constants;
 
 public class ImagesPagerAdapter extends FragmentPagerAdapter {
 	public ImagesPagerAdapter(FragmentManager fm, ArrayList<String> list) {

@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 import com.omar.deathnote.db.DB;

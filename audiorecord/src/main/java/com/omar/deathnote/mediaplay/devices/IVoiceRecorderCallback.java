@@ -12,5 +12,5 @@ public interface IVoiceRecorderCallback {
 
 
 
-        void sendPositionUpdate(  int position);
+        void sendPositionUpdate(int position);
 }

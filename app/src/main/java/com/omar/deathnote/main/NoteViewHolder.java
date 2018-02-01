@@ -9,7 +9,6 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import com.alkurop.database.Note;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 

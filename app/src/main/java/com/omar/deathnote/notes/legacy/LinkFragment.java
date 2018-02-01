@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.omar.deathnote.Constants;
 import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 import com.omar.deathnote.R;
-import com.omar.deathnote.Constants;
 import com.omar.deathnote.utility.OnDeleteFragment;
 
 @SuppressLint("InflateParams")

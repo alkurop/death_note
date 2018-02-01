@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
+import com.omar.deathnote.R;
 
 @SuppressLint("InflateParams")
 public class DefaultFragment extends Fragment {

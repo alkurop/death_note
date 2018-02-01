@@ -7,8 +7,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.util.Log;
 
-import com.omar.deathnote.R;
 import com.omar.deathnote.Constants;
+import com.omar.deathnote.R;
 import com.omar.deathnote.notes.legacy.AudioFragment;
 import com.omar.deathnote.notes.legacy.DefaultFragment;
 import com.omar.deathnote.notes.legacy.LinkFragment;
