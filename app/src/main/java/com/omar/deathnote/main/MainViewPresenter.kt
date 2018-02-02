@@ -1,9 +1,7 @@
 package com.omar.deathnote.main
 
-import com.alkurop.database.Content1
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
-import com.omar.deathnote.Constants
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
@@ -82,12 +80,10 @@ class MainViewPresenter(
                 } else {
                     noteDao.getNotesByStyle(action.style)
                 }
-                //todo move this to a use case
                 dis += notesFlowable
                     .switchMap { notes ->
                         val map = notes.map { note ->
                             contentDao.getTitleContent(note.id)
-                                .take(1)
                                 .map {
                                     NoteViewModel(
                                         id = note.id,
@@ -105,6 +101,7 @@ class MainViewPresenter(
                                     List<NoteViewModel>>(map, { it.map { it as NoteViewModel } })
                         }
                     }
+                    .distinctUntilChanged()
                     .subscribe {
                         updateNotesList(it)
                     }

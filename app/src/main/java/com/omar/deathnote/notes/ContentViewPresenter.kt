@@ -1,10 +1,13 @@
 package com.omar.deathnote.notes
 
-import com.alkurop.database.Content1
+import com.alkurop.database.Content
 import com.alkurop.database.ContentDao
 import com.alkurop.database.Note
 import com.alkurop.database.NoteDao
 import com.omar.deathnote.Constants
+import com.omar.deathnote.notes.content.ContentType
+import com.omar.deathnote.notes.content.toFragType
+import com.omar.deathnote.utility.SharingUtil
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -22,7 +25,7 @@ import java.util.Date
 const val DEFAULT_STYLE = 1
 
 data class NoteViewModel(
-        val content: List<Content1>? = null,
+        val content: List<Content>? = null,
         val style: Int = DEFAULT_STYLE,
         val noteId: Long = 0,
         val noteDate: String = ""
@@ -35,6 +38,7 @@ sealed class ContentAction {
     data class DeleteContent(val id: Long) : ContentAction()
     data class UpdateStyle(val style: Int) : ContentAction()
     data class AddContent(val type: ContentType, val content: String? = null) : ContentAction()
+    object ShareClicked : ContentAction()
 }
 
 sealed class ContentNavigation {
@@ -43,7 +47,8 @@ sealed class ContentNavigation {
 
 class ContentPresenter(
         private val noteDao: NoteDao,
-        private val contentDao: ContentDao
+        private val contentDao: ContentDao,
+        private val sharingUtil: SharingUtil
 ) {
     private val dis = CompositeDisposable()
     private val viewStatePublisher = BehaviorSubject.create<NoteViewModel>()
@@ -69,7 +74,6 @@ class ContentPresenter(
                 )
                 noteViewModel
             })
-            .distinct()
             .subscribeWith(object : DisposableObserver<NoteViewModel>() {
                 override fun onComplete() {
                     viewState.onComplete()
@@ -97,12 +101,19 @@ class ContentPresenter(
             is ContentAction.UpdateStyle -> updateNoteStyle(action.style)
             is ContentAction.FabClicked -> navigation.onNext(ContentNavigation.ContentSelector)
             is ContentAction.AddContent -> addContent(action)
+            is ContentAction.ShareClicked -> share()
         }
+    }
+
+    private fun share() {
+//        dis += sharingUtil
+//            .share(viewState.value.noteId)
+//            .subscribe()
     }
 
     private fun addContent(action: ContentAction.AddContent) {
         val type = action.type.toFragType()
-        val content = Content1()
+        val content = Content()
         content.type = type.ordinal
         content.parentNoteId = viewState.value.noteId
         content.content = action.content
@@ -119,7 +130,7 @@ class ContentPresenter(
         dis += Flowable.combineLatest(
             contentDao.getRelatedToNote(id),
             noteDao.getById(id),
-            BiFunction<List<Content1>, Note, NoteViewModel> { contentList, note ->
+            BiFunction<List<Content>, Note, NoteViewModel> { contentList, note ->
                 NoteViewModel(
                     content = contentList,
                     style = note.style,
@@ -140,23 +151,29 @@ class ContentPresenter(
                 note.id = noteViewModel.noteId
                 note.timedate = SimpleDateFormat("dd  MMMM  HH:mm:ss  ").format(Date())
                 note.style = noteViewModel.style
-                val content = listOf(
-                    Content1().apply { type = Constants.Frags.TitleFragment.ordinal },
-                    Content1().apply { type = Constants.Frags.NoteFragment.ordinal }
-                )
 
                 Single
                     .fromCallable { noteDao.addOrUpdate(note) }
+                    .doOnSuccess {
+                        listOf(
+                            Content().apply {
+                                type = Constants.Frags.TitleFragment.ordinal
+                                parentNoteId = it
+                            },
+                            Content().apply {
+                                type = Constants.Frags.NoteFragment.ordinal
+                                parentNoteId = it
+                            }
+                        ).forEach {
+                            contentDao.addOrUpdate(it)
+                        }
+                    }
                     .subscribeOn(Schedulers.io())
-                    .flatMap {
-                        noteDao.getById(it)
-                            .firstOrError()
-                    }.toObservable()
-                    .map { NoteViewModel(noteId = it.id, style = it.style, content = content, noteDate = it.timedate) }
+                    .toObservable()
 
             }
             .subscribe {
-                viewStatePublisher.onNext(it)
+                openNote(it)
             }
     }
 
@@ -164,7 +181,7 @@ class ContentPresenter(
         dis += viewState
             .subscribeOn(Schedulers.io())
             .firstOrError()
-            .flatMapObservable {
+            .flatMapCompletable {
                 val note = Note()
                 note.id = it.noteId
                 note.timedate = it.noteDate
@@ -174,16 +191,11 @@ class ContentPresenter(
                     Single
                         .fromCallable { noteDao.addOrUpdate(note) }
                         .subscribeOn(Schedulers.io())
-                        .flatMap {
-                            noteDao.getById(it)
-                                .firstOrError()
-                        }.toObservable()
+                        .toCompletable()
                 else {
-                    Observable.just(note)
+                    Completable.complete()
                 }
             }
-            .subscribe {
-                viewStatePublisher.onNext(NoteViewModel(noteId = it.id, style = it.style, noteDate = it.timedate))
-            }
+            .subscribe()
     }
 }

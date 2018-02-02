@@ -1,5 +1,6 @@
 package com.omar.deathnote.utility;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ComponentName;
@@ -22,10 +23,7 @@ import java.util.TreeMap;
 
 public class SharingModule {
 
-	private FragmentManager fm;
-	private Fragment tempFragment;
 	private TreeMap<String, String> fragList;
-	Context context;
 
 	private static final String PHOTO_URIS = "photouris";
 	private static final String AUDIO_URIS = "audiouris";
@@ -34,16 +32,9 @@ public class SharingModule {
 	private static final String SUBJECT = "subject";
 	private static final String TEXT = "text";
 
-	public SharingModule(FragmentManager fm, Context context,
-			TreeMap<String, String> fragList) {
-		this.fm = fm;
-		this.context = context;
-		this.fragList = fragList;
-	}
 
-	public void share() {
-		initShareIntent(collectForShare());
-
+	public void share(Activity activity) {
+		initShareIntent(collectForShare(), activity);
 	}
 
 	private Bundle collectForShare() {
@@ -126,7 +117,7 @@ public class SharingModule {
 				if (!temp.get(Constants.Flags.Cont1.name()).equalsIgnoreCase("")) {
 					cont1 = temp.get(Constants.Flags.Cont1.name());
 				} else {
-					cont1 = "No Content1";
+					cont1 = "No Content";
 				}
 
 				stringBuilder.append("\n" + "\n" + cont1);
@@ -146,22 +137,6 @@ public class SharingModule {
 
 				stringBuilder.append("http://" + cont1 + "\n" + "\n");
 
-				break;
-			case AudioFragment:
-
-				tempFragment = (AudioFragment) fm.findFragmentByTag(fragId);
-				temp = ((AudioFragment) tempFragment).saveContent();
-
-				if (!temp.get(Constants.Flags.Cont1.name()).equalsIgnoreCase("")) {
-					cont1 = temp.get(Constants.Flags.Cont1.name());
-				} else {
-					cont1 = "No Audio";
-				}
-
-				fileIn = new File(cont1);
-				fileIn.setReadable(true, false);
-				u = Uri.fromFile(fileIn);
-				audioUris.add(u);
 
 				break;*/
 
@@ -219,7 +194,7 @@ public class SharingModule {
 					intent.putExtra(Intent.EXTRA_TEXT, text);
 
 					intent.putExtra(Intent.EXTRA_SUBJECT, subject);
- 
+
 
 					intent.putParcelableArrayListExtra(
 							android.content.Intent.EXTRA_STREAM, allUris);
@@ -301,7 +276,7 @@ public class SharingModule {
 
 	}
 
-	private void initShareIntent(Bundle bundle) {
+	private void initShareIntent(Bundle bundle, Activity activity) {
 		/* Log.d("sharing", "sharing"); */
 		String subject = bundle.getString(SUBJECT);
 		String text = bundle.getString(SUBJECT);
@@ -322,7 +297,7 @@ public class SharingModule {
 
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.setType("*/*");
-		PackageManager pm = context.getPackageManager();
+		PackageManager pm = activity.getPackageManager();
 		List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
 		Intent openInChooser = Intent.createChooser(emailIntent, "Select");
 
@@ -333,7 +308,7 @@ public class SharingModule {
 				.toArray(new LabeledIntent[intentList.size()]);
 
 		openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-		context.startActivity(openInChooser);
+		activity.startActivity(openInChooser);
 	}
 
 }

@@ -7,6 +7,7 @@ import com.omar.deathnote.notes.link.LinkPresenter
 import com.omar.deathnote.notes.note.NotePresenter
 import com.omar.deathnote.notes.picture.PicturePresenter
 import com.omar.deathnote.notes.title.TitlePresenter
+import com.omar.deathnote.utility.SharingUtil
 import dagger.Module
 import dagger.Provides
 
@@ -15,9 +16,12 @@ open class ContentViewModule {
 
     @ContentViewScope
     @Provides
-    fun provideContentPresenter(noteDao: NoteDao,
-                                contentDao: ContentDao): ContentPresenter {
-        return ContentPresenter(noteDao, contentDao)
+    fun provideContentPresenter(
+            noteDao: NoteDao,
+            contentDao: ContentDao,
+            sharingUtil: SharingUtil
+    ): ContentPresenter {
+        return ContentPresenter(noteDao, contentDao, sharingUtil)
     }
 
     @Provides

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.alkurop.database.Content1;
+import com.alkurop.database.Content;
 import com.alkurop.database.ContentDao;
 import com.alkurop.database.Note;
 import com.alkurop.database.NoteDao;
@@ -82,7 +82,7 @@ public class DB {
                             int contentType = noteCursor.getInt(noteCursor.getColumnIndexOrThrow(COLUMN_TYPE));
                             String stringContent = noteCursor.getString(noteCursor.getColumnIndexOrThrow(COLUMN_CONT1));
                             String stringContentAdditional = noteCursor.getString(noteCursor.getColumnIndexOrThrow(COLUMN_CONT2));
-                            final Content1 contentNote = new Content1();
+                            final Content contentNote = new Content();
                             contentNote.setParentNoteId(noteId);
                             contentNote.setId(contentId);
                             contentNote.setType(contentType);

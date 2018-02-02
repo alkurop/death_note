@@ -22,13 +22,10 @@ public class MainListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     }
 
     void setDataList(List<NoteViewModel> newList) {
-        if (newList.equals(dataList)) {
-            return;
-        }
-        //todo fix diff util
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MainAdapterDiffUtilCallback(dataList, newList), false);
         this.dataList = newList;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
+        //notifyDataSetChanged();
     }
 
     @Override

@@ -1,11 +1,11 @@
-package com.omar.deathnote.main
+package com.omar.deathnote.notes.content
 
 import android.support.v7.util.DiffUtil
+import com.alkurop.database.Content
 
-class MainAdapterDiffUtilCallback(
-        val oldList: List<NoteViewModel>,
-        val newList: List<NoteViewModel>
-) : DiffUtil.Callback() {
+class ContentAdapterDiffUtilCallback(val oldList: List<Content>,
+                                     val newList: List<Content>)
+    : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].id == newList[newItemPosition].id
@@ -20,9 +20,9 @@ class MainAdapterDiffUtilCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].timedate == newList[newItemPosition].timedate
-                && oldList[oldItemPosition].title == newList[newItemPosition].title
-                && oldList[oldItemPosition].style == newList[newItemPosition].style
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem.content.equals(newItem.content)
+                && oldItem.additionalContent == newItem.additionalContent
     }
-
 }

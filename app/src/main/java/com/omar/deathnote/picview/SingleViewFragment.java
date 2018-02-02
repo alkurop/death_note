@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.alkurop.database.Content1;
+import com.alkurop.database.Content;
 import com.alkurop.database.ContentDao;
 import com.omar.deathnote.AppComponent;
 import com.omar.deathnote.ComponentContainer;
@@ -44,9 +44,9 @@ public class SingleViewFragment extends Fragment {
         Disposable subscribe = mContentDao.getById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(mainThread())
-                .subscribe(new Consumer<Content1>() {
+                .subscribe(new Consumer<Content>() {
                     @Override
-                    public void accept(Content1 content1) throws Exception {
+                    public void accept(Content content1) throws Exception {
                         ImageView imageView = getView().findViewById(R.id.imageview);
                         Picasso.with(getContext()).load(content1.getContent())
                                 .into(imageView);

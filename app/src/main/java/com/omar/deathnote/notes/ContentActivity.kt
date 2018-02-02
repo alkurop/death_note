@@ -20,8 +20,10 @@ import com.omar.deathnote.Constants
 import com.omar.deathnote.R
 import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.main.SpinnerItem
-import com.omar.deathnote.notes.add.bll.AddDialogPresenter
-import com.omar.deathnote.notes.add.ui.AddDialog
+import com.omar.deathnote.notes.content.ContentAdapter
+import com.omar.deathnote.notes.content.ContentType
+import com.omar.deathnote.notes.content.add.bll.AddDialogPresenter
+import com.omar.deathnote.notes.content.add.ui.AddDialog
 import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -112,7 +114,7 @@ class ContentActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-        // R.id.action_share -> presenter.shareClicked()
+            R.id.action_share -> presenter.onAction(ContentAction.ShareClicked)
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -158,7 +160,8 @@ class ContentActivity : AppCompatActivity() {
 
     fun subscribeToPresenter() {
         dis += presenter.navigation.observeOn(AndroidSchedulers.mainThread()).subscribe { navigate(it) }
-        dis += presenter.viewState.observeOn(AndroidSchedulers.mainThread()).subscribe { renderView(it) }
+        dis += presenter.viewState.distinctUntilChanged()
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { renderView(it) }
     }
 
     fun renderView(state: NoteViewModel) {
