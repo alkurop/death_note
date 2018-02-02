@@ -7,9 +7,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -26,14 +32,17 @@ import android.widget.LinearLayout;
 
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.db.DB;
 import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 import com.omar.deathnote.picview.SingleViewActivity;
 import com.omar.deathnote.utility.FileManager;
 import com.omar.deathnote.utility.OnDeleteFragment;
 import com.omar.deathnote.utility.SaveNote;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -553,24 +562,7 @@ public class PicFragment extends Fragment {
 		}
 
 		private ArrayList<String> loadImagesToViewer() {
-			DB db = DB.getInstance(thiscontext);
-			ArrayList<String> values = new ArrayList<String>();
-			db.open();
-			Cursor cursor = db.getAllNoteData(noteId);
-			while (cursor.moveToNext()) {
-				if (cursor.getString(cursor.getColumnIndex(DB.COLUMN_TYPE))
-						.equalsIgnoreCase(Constants.Frags.PicFragment.name())) {
-
-					values.add(cursor.getString(cursor
-							.getColumnIndex(DB.COLUMN_CONT1)));
-
-				}
-
-			}
-			cursor.close();
-			db.close();
-
-			return values;
+			return new ArrayList<>();
 		}
 
 		private int getPositionToViewer(ArrayList<String> values, String path) {

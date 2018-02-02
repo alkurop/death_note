@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
+import com.omar.deathnote.lagacy_db.DB;
 import com.omar.deathnote.notes.legacy.bll.INoteEventHandler;
 import com.omar.deathnote.notes.legacy.bll.NotePresenter;
 
@@ -24,6 +25,9 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+        DB.DBHelper deathnote = new DB.DBHelper(this, "deathnote", null, 2);
+        deathnote.getWritableDatabase().close();
+
     }
 
     public static INoteEventHandler getNotePresenter() {

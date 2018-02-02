@@ -12,8 +12,8 @@ android {
         applicationId "com.omar.deathnote"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 20
-        versionName "3.0"
+        versionCode 21
+        versionName "4.0"
     }
     signingConfigs {
 
@@ -41,7 +41,6 @@ android {
 
 dependencies {
     implementation project(':database')
-    implementation project(':legacydatabase')
     implementation project(':audiorecord')
 
     implementation "com.android.support:recyclerview-v7:$versions.support"

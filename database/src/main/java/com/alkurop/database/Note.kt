@@ -3,8 +3,9 @@ package com.alkurop.database
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 
-@Entity(tableName = "maintab2",
-        indices = [Index(value = ["id"], unique = true)]
+@Entity(
+    tableName = "maintab2",
+    indices = [Index(value = ["id"], unique = true)]
 )
 open class Note {
 

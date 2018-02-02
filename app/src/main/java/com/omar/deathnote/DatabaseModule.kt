@@ -15,8 +15,8 @@ class DatabaseModule {
     @Provides
     fun provideDatabase(app: App): AppDatabase {
         return Room
-                .databaseBuilder(app, AppDatabase::class.java, "deathnote_room")
-                .build()
+            .databaseBuilder(app, AppDatabase::class.java, "deathnote_room")
+            .build()
     }
 
     @Singleton

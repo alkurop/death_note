@@ -4,9 +4,9 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 
 @Database(
-        entities = [Note::class, Content1::class],
-        version = 1,
-        exportSchema = false
+    entities = [Note::class, Content1::class],
+    version = 1,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
