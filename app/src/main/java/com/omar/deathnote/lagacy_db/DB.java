@@ -75,7 +75,7 @@ public class DB {
                                 .subscribe();
 
                         Cursor noteCursor = mDB.query(NOTE + noteId, null, null, null, null, null,
-                                                   null);
+                                                      null);
                         boolean hasNext1 = noteCursor.moveToFirst();
                         while (hasNext1) {
                             long contentId = noteCursor.getLong(noteCursor.getColumnIndexOrThrow(COLUMN_ID));
@@ -95,10 +95,10 @@ public class DB {
                                 }
                             }).subscribeOn(Schedulers.io())
                                     .subscribe();
-                          //  mDB.execSQL("DROP TABLE IF EXISTS " + NOTE + String.valueOf(noteId));
+                            mDB.execSQL("DROP TABLE IF EXISTS " + NOTE + String.valueOf(noteId));
                             hasNext1 = noteCursor.moveToNext();
                         }
-                      //  mDB.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
+                        mDB.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
                         noteCursor.close();
                         haseItem = cursor.moveToNext();
                     }

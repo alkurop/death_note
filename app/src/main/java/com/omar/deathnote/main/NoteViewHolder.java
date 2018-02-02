@@ -1,6 +1,7 @@
 package com.omar.deathnote.main;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,8 @@ class NoteViewHolder extends RecyclerView.ViewHolder {
     void bindData(NoteViewModel note, MainAdapterCallback callback) {
         this.callback = callback;
         this.note = note;
-        itemTitle.setText(note.getTitle());
+        String title = TextUtils.isEmpty(note.getTitle()) ? itemView.getContext().getString(R.string.no_title) : note.getTitle();
+        itemTitle.setText(title);
         itemDate.setText(note.getTimedate());
         itemImg.setImageResource(Constants.getStyleImage(note.getStyle()));
     }

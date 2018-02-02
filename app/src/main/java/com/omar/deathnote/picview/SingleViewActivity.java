@@ -5,34 +5,41 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.omar.deathnote.AppComponent;
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
 
-public class SingleViewActivity extends FragmentActivity {
+public class SingleViewActivity extends AppCompatActivity {
 
- 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_viewpager);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		int position = getIntent().getIntExtra(Constants.ID, 0);
+        setContentView(R.layout.activity_viewpager);
+        findViewById(R.id.spinner).setVisibility(View.GONE);
 
-		ArrayList<String> list = getIntent()
-				.getStringArrayListExtra(Constants.LIST);
-		
-		
-		
-		/*Log.d("position", String.valueOf(position));*/
-		ViewPager pager = (ViewPager) findViewById(R.id.pager);
-		pager.setAdapter(new ImagesPagerAdapter(getSupportFragmentManager(),
-				 list));
-		pager.setCurrentItem(position);
-	}
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        int position = getIntent().getIntExtra(Constants.ID, 0);
+        ArrayList<String> list = getIntent().getStringArrayListExtra(Constants.LIST);
+        ViewPager pager = findViewById(R.id.pager);
+        pager.setAdapter(new ImagesPagerAdapter(getSupportFragmentManager(), list));
+        pager.setCurrentItem(position);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

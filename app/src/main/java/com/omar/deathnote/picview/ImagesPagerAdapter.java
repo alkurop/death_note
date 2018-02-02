@@ -10,27 +10,26 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.omar.deathnote.Constants;
 
 public class ImagesPagerAdapter extends FragmentPagerAdapter {
-	public ImagesPagerAdapter(FragmentManager fm, ArrayList<String> list) {
-		super(fm);
+    ImagesPagerAdapter(FragmentManager fm, ArrayList<String> list) {
+        super(fm);
+        values = list;
+    }
 
-		values = list;
-	}
+    private ArrayList<String> values = new ArrayList<String>();
 
-	private ArrayList<String> values = new ArrayList<String>();
+    @Override
+    public Fragment getItem(int i) {
+        Bundle args = new Bundle();
+        args.putString(Constants.PATH, values.get(i));
 
-	@Override
-	public Fragment getItem(int i) {
-		Bundle args = new Bundle();
-		args.putString(Constants.PATH, values.get(i));
+        SingleViewFragment fragment = new SingleViewFragment();
+        fragment.setArguments(args);
 
-		SingleViewFragment fragment = new SingleViewFragment();
-		fragment.setArguments(args);
+        return fragment;
+    }
 
-		return fragment;
-	}
-
-	@Override
-	public int getCount() {
-		return values.size();
-	}
+    @Override
+    public int getCount() {
+        return values.size();
+    }
 }

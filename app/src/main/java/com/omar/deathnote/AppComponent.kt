@@ -1,5 +1,6 @@
 package com.omar.deathnote
 
+import com.omar.deathnote.picview.SingleViewFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -22,5 +23,7 @@ interface AppComponent : BaseComponent {
     }
 
     fun inject(daggerComponentContainer: ComponentContainer)
+
+    fun inject(fragment: SingleViewFragment)
 
 }

@@ -11,18 +11,18 @@ abstract class BaseContentPresenter(val contentDao: ContentDao) {
     fun save() {
         if (content.parentNoteId != 0L) {
             Completable
-                    .fromAction {
-                        contentDao.addOrUpdate(content)
-                    }.subscribeOn(Schedulers.io()).subscribe()
+                .fromAction {
+                    contentDao.addOrUpdate(content)
+                }.subscribeOn(Schedulers.io()).subscribe()
         }
     }
 
     fun delete() {
         Completable
-                .fromAction {
-                    contentDao.delete(content.id)
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            .fromAction {
+                contentDao.delete(content.id)
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 }

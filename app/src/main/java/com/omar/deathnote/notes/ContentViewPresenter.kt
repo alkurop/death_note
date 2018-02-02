@@ -16,6 +16,8 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.text.SimpleDateFormat
+import java.util.Date
 
 const val DEFAULT_STYLE = 1
 
@@ -133,9 +135,12 @@ class ContentPresenter(
             .flatMapObservable { noteViewModel ->
                 val note = Note()
                 note.id = noteViewModel.noteId
-                note.timedate = "not_implemented"
+                note.timedate = SimpleDateFormat("dd  MMMM  HH:mm:ss  ").format(Date())
                 note.style = noteViewModel.style
-                val content = listOf<Content1>(Content1().apply { type = Constants.Frags.TitleFragment.ordinal })
+                val content = listOf(
+                    Content1().apply { type = Constants.Frags.TitleFragment.ordinal },
+                    Content1().apply { type = Constants.Frags.NoteFragment.ordinal }
+                )
 
                 Single
                     .fromCallable { noteDao.addOrUpdate(note) }

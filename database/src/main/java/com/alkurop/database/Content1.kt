@@ -4,12 +4,15 @@ import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
-@Entity(foreignKeys = [(ForeignKey(
+
+@Entity(
+    foreignKeys = [(ForeignKey(
         entity = Note::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("parentNoteId") ))],
-        tableName = "content",
-        indices = [Index(value = ["parentNoteId"], unique = false)]
+        childColumns = arrayOf("parentNoteId")
+    ))],
+    tableName = "content",
+    indices = [Index(value = ["parentNoteId"], unique = false)]
 )
 open class Content1 {
 
@@ -29,7 +32,7 @@ open class Content1 {
 interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdate(content: Content1):Long
+    fun addOrUpdate(content: Content1): Long
 
     @Query("Delete from content where id = :arg0")
     fun delete(id: Long)
@@ -37,9 +40,12 @@ interface ContentDao {
     @Query("delete from content where parentNoteId = :arg0")
     fun deleteRelatedToNote(noteId: Long)
 
-    @Query("Select * from content where parentNoteId = :arg0 order by id acs")
+    @Query("Select * from content where parentNoteId = :arg0")
     fun getRelatedToNote(noteId: Long): Flowable<List<Content1>>
 
-    @Query("Select * from content where parentNoteId = :arg0 and type = 1 order by id acs")
+    @Query("Select * from content where parentNoteId = :arg0 and type = 0")
     fun getTitleContent(noteId: Long): Flowable<Content1>
+
+    @Query("Select * from content where id = :arg0 ")
+    fun getById(id: Long): Single<Content1>
 }

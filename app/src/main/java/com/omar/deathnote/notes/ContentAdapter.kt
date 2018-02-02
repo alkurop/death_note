@@ -19,7 +19,7 @@ class ContentAdapter : RecyclerView.Adapter<ContentViewHolder>() {
     lateinit var layouInflater: LayoutInflater
 
     fun updateList(newItems: List<Content1>) {
-        if(newItems == items) return
+        if (newItems == items) return
         val calculateDiff = DiffUtil.calculateDiff(ContentAdapterDiffUtilCallback(items, newItems))
         items = newItems
         calculateDiff.dispatchUpdatesTo(this)
@@ -54,21 +54,24 @@ class ContentAdapter : RecyclerView.Adapter<ContentViewHolder>() {
             }
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
+    }
 
+    override fun onViewRecycled(holder: ContentViewHolder) {
+        holder.unbind()
     }
 
     override fun getItemCount(): Int =
-            items.size
+        items.size
 
     override fun onBindViewHolder(holder: ContentViewHolder?, position: Int) {
         holder?.bind(items[position])
     }
 
     override fun getItemViewType(position: Int): Int =
-            items[position].type
+        items[position].type
 }
 
-abstract class ContentViewHolder(itemView: View?)
-    : RecyclerView.ViewHolder(itemView) {
+abstract class ContentViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(content: Content1)
+    open fun unbind() {}
 }

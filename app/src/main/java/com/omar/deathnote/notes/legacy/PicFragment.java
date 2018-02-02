@@ -551,13 +551,13 @@ public class PicFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(ArrayList<String> images) {
-			Intent i = new Intent(thiscontext, SingleViewActivity.class);
+			Intent intent = new Intent(thiscontext, SingleViewActivity.class);
 			
-			i.putExtra(Constants.ID, getPositionToViewer(images, path));
+			intent.putExtra(Constants.ID, getPositionToViewer(images, path));
 
-			i.putStringArrayListExtra(Constants.LIST, images);
+			intent.putStringArrayListExtra(Constants.LIST, images);
 			
-			startActivity(i);
+			startActivity(intent);
 			super.onPostExecute(images);
 		}
 

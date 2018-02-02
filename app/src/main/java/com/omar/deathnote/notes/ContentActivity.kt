@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import com.alkurop.github.mediapicker.MediaPicker
 import com.alkurop.github.mediapicker.MediaType
 import com.github.alkurop.jpermissionmanager.PermissionOptionalDetails
@@ -82,8 +83,9 @@ class ContentActivity : AppCompatActivity() {
         initSpinner()
 
         permissionMananager = PermissionsManager(this)
-        MediaPicker.getResult(this)
+        val subscribe = MediaPicker.getResult(this)
             .subscribe {
+                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
                 when (it.first) {
                     MediaType.AUDIO -> presenter.onAction(ContentAction.AddContent(ContentType.AUDIO_FILE, it.second.toString()))
                     MediaType.PHOTO -> presenter.onAction(ContentAction.AddContent(ContentType.PICTURE_FILE, it.second.toString()))
@@ -91,6 +93,7 @@ class ContentActivity : AppCompatActivity() {
                     }
                 }
             }
+        dis += subscribe
     }
 
     override fun onDestroy() {

@@ -143,5 +143,6 @@
     <string name="camera_permission_title">Camera Permission</string>
     <string name="mic_permission_title">Mic Permission</string>
     <string name="storage_permission_title">Storage Permission</string>
+    <string name="no_title">No title</string>
 
 </resources>

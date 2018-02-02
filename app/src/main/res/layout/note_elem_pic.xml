@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/noteElemAudio"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
     android:orientation="vertical">
 
     <FrameLayout
@@ -26,11 +29,11 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_margin="16dp"
                     android:id="@+id/contentView"
-                    android:scaleType="centerInside"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:minHeight="220dp" />
 
                 <ImageView
                     android:id="@+id/del"
