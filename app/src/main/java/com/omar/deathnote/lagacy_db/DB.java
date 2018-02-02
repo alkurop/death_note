@@ -50,7 +50,7 @@ public class DB {
 
         @Override
         public void onUpgrade(SQLiteDatabase mDB, int oldVersion, int newVersion) {
-            if (oldVersion < 2) {
+            if (oldVersion < 4) {
                 Cursor cursor = mDB.query(DB_TABLE, null, null, null, null, null,
                                           null);
                 if (cursor != null) {
@@ -95,10 +95,10 @@ public class DB {
                                 }
                             }).subscribeOn(Schedulers.io())
                                     .subscribe();
-                            mDB.execSQL("DROP TABLE IF EXISTS " + NOTE + String.valueOf(noteId));
+                          //  mDB.execSQL("DROP TABLE IF EXISTS " + NOTE + String.valueOf(noteId));
                             hasNext1 = noteCursor.moveToNext();
                         }
-                        mDB.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
+                      //  mDB.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
                         noteCursor.close();
                         haseItem = cursor.moveToNext();
                     }

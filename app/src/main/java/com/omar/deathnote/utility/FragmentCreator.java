@@ -112,9 +112,6 @@ public class FragmentCreator {
 			fTrans.add(R.id.noteList, ((AudioFragment) tempFragment), fragId);
 			fragList.put(fragId, Constants.Frags.AudioFragment.name());
 			break;
-		case NoticeDialogFragment:
-			throw new IllegalArgumentException("Illigal fragment type");
-
 		}
 
 		fTrans.commitAllowingStateLoss();
