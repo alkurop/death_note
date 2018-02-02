@@ -25,25 +25,31 @@ sealed class MainViewNavigation {
     object NavigateAbout : MainViewNavigation()
 }
 
-data class MainViewState(val items: List<NoteViewModel>? = null,
-                         val style: Int? = null)
+data class MainViewState(
+        val items: List<NoteViewModel>? = null,
+        val style: Int? = null
+)
 
-data class NoteViewModel(val id: Long,
-                         val style: Int,
-                         val timedate: String,
-                         val title: String)
+data class NoteViewModel(
+        val id: Long,
+        val style: Int,
+        val timedate: String,
+        val title: String
+)
 
-class MainViewPresenter(val noteDao: NoteDao,
-                        val contentDao: ContentDao) {
+class MainViewPresenter(
+        val noteDao: NoteDao,
+        val contentDao: ContentDao
+) {
     companion object {
         private const val DEFAULT_NEW_NOTE_STYLE = 1
     }
 
     val viewStatePublisher = BehaviorSubject.create<MainViewState>()
     val viewState = viewStatePublisher
-            .scan(MainViewState(), { old, new ->
-                MainViewState(new.items ?: old.items, new.style ?: old.style)
-            })
+        .scan(MainViewState(), { old, new ->
+            MainViewState(new.items ?: old.items, new.style ?: old.style)
+        })
 
     val navigation = PublishSubject.create<MainViewNavigation>()
     private val dis = CompositeDisposable()
@@ -62,11 +68,12 @@ class MainViewPresenter(val noteDao: NoteDao,
 
             is MainViewActions.DeleteListItemClicked -> {
                 dis += Completable
-                        .fromAction {
-                            noteDao.delete(action.id)
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
+                    .fromAction {
+                        contentDao.deleteRelatedToNote(action.id)
+                        noteDao.delete(action.id)
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
             }
             is MainViewActions.SpinnerItemClicked -> {
                 dispose()
@@ -77,30 +84,30 @@ class MainViewPresenter(val noteDao: NoteDao,
                 }
                 //todo move this to a use case
                 dis += notesFlowable
-                        .switchMap { notes ->
-                            val map = notes.map { note ->
-                                contentDao.getTitleContent(note.id)
-                                        .take(1)
-                                        .map {
-                                            NoteViewModel(
-                                                    id = note.id,
-                                                    style = note.style,
-                                                    timedate = note.timedate,
-                                                    title = it.content ?: ""
-                                            )
-                                        }
-                            }
+                    .switchMap { notes ->
+                        val map = notes.map { note ->
+                            contentDao.getTitleContent(note.id)
+                                .take(1)
+                                .map {
+                                    NoteViewModel(
+                                        id = note.id,
+                                        style = note.style,
+                                        timedate = note.timedate,
+                                        title = it.content ?: ""
+                                    )
+                                }
+                        }
 
-                            if (map.isEmpty()) {
-                                Flowable.just(listOf())
-                            } else {
-                                Flowable.combineLatest<NoteViewModel,
-                                        List<NoteViewModel>>(map, { it.map { it as NoteViewModel } })
-                            }
+                        if (map.isEmpty()) {
+                            Flowable.just(listOf())
+                        } else {
+                            Flowable.combineLatest<NoteViewModel,
+                                    List<NoteViewModel>>(map, { it.map { it as NoteViewModel } })
                         }
-                        .subscribe {
-                            updateNotesList(it)
-                        }
+                    }
+                    .subscribe {
+                        updateNotesList(it)
+                    }
             }
             MainViewActions.AboutClicked -> {
                 navigation.onNext(MainViewNavigation.NavigateAbout)

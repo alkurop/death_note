@@ -23,11 +23,4 @@ public class Contact extends Activity {
 		startActivity(contact);  
 			 finish();
 		}	
-	
- 
-
-	 
-	
-	
-	
 }

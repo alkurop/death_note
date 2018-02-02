@@ -1,33 +1,43 @@
 package com.omar.deathnote.pref;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
-public class PrefActivity extends PreferenceActivity {
+import com.jakewharton.rxbinding2.view.RxView;
+import com.omar.deathnote.R;
 
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
-		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new AboutPrefFragment())
-				.commit();
-//		getActionBar().setDisplayHomeAsUpEnabled(true);
-		super.onCreate(savedInstanceState);
+import io.reactivex.functions.Consumer;
 
-	}
+public class PrefActivity extends AppCompatActivity {
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.action_about);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        RxView.clicks(findViewById(R.id.email)).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                Intent intent  = new Intent(PrefActivity.this, Contact.class);
+                startActivity(intent);
+            }
+        });
+    }
 
-		switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-		case android.R.id.home:
-
-			finish();
-
-			break;
-		}
-		return false;
-	}
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

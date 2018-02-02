@@ -24,7 +24,7 @@
 
     <string name="edittext4_title">Version</string>
     <string name="edittext4_summary">
-        1.01
+        4.0 \n
     </string>
 
 
@@ -144,5 +144,6 @@
     <string name="mic_permission_title">Mic Permission</string>
     <string name="storage_permission_title">Storage Permission</string>
     <string name="no_title">No title</string>
+    <string name="contacts">Contacts:</string>
 
 </resources>

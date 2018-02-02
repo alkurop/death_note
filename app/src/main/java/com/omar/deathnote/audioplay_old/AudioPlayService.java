@@ -310,7 +310,6 @@ public class AudioPlayService extends Service implements OnCompletionListener,
                 seekIntent.putExtra(Constants.MEDIA_MAX, String.valueOf(mediaMax));
                 seekIntent.putExtra(Constants.SONG_ENDED, String.valueOf(songEnded));
                 sendBroadcast(seekIntent);
-
             }
 
         }

@@ -5,27 +5,27 @@
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext4_summary"
-            android:title="@string/edittext4_title"/>
+            android:title="@string/edittext4_title" />
 
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext2_summary"
-            android:title="@string/edittext2_title"/>
+            android:title="@string/edittext2_title" />
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext3_summary"
-            android:title="@string/edittext3_title"/>
+            android:title="@string/edittext3_title" />
         <PreferenceScreen
             android:selectable="false"
             android:summary="@string/edittext1_summary"
-            android:title="@string/edittext1_title"/>
+            android:title="@string/edittext1_title" />
 
         <PreferenceScreen
             android:summary="@string/contact_developer_uri"
-            android:title="Contacts:">
+            android:title="@string/contacts">
             <intent
                 android:targetClass="com.omar.deathnote.pref.Contact"
-                android:targetPackage="com.omar.deathnote"/>
+                android:targetPackage="com.omar.deathnote" />
         </PreferenceScreen>
 
     </PreferenceCategory>
