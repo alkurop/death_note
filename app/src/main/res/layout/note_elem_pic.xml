@@ -17,13 +17,20 @@
         <LinearLayout
             android:id="@+id/picLayout"
             android:layout_width="match_parent"
-            android:layout_height="270dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/list_item_shape"
             android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_margin="16dp"
+                    android:id="@+id/contentView"
+                    android:scaleType="centerInside"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <ImageView
                     android:id="@+id/del"

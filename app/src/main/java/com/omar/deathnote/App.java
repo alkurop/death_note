@@ -25,7 +25,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        DB.DBHelper deathnote = new DB.DBHelper(this, "deathnote", null, 2);
+        DB.DBHelper deathnote = new DB.DBHelper(this, "deathnote", null, 3);
         deathnote.getWritableDatabase().close();
 
     }
