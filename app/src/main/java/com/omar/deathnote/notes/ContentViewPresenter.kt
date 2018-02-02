@@ -24,7 +24,8 @@ const val DEFAULT_STYLE = 1
 data class NoteViewModel(
         val content: List<Content1>? = null,
         val style: Int = DEFAULT_STYLE,
-        val noteId: Long = 0
+        val noteId: Long = 0,
+        val noteDate: String = ""
 )
 
 sealed class ContentAction {
@@ -62,7 +63,9 @@ class ContentPresenter(
                 val noteViewModel = NoteViewModel(
                     content = content,
                     style = if (new.style != 0) new.style else old.style,
-                    noteId = noteId
+                    noteId = noteId,
+
+                    noteDate = new.noteDate.takeIf { it.isNotBlank() } ?: old.noteDate
                 )
                 noteViewModel
             })
@@ -106,7 +109,6 @@ class ContentPresenter(
         dis += Completable.fromAction { contentDao.addOrUpdate(content) }
             .subscribeOn(Schedulers.io())
             .subscribe()
-
     }
 
     private fun deleteContent(id: Long) {
@@ -121,7 +123,8 @@ class ContentPresenter(
                 NoteViewModel(
                     content = contentList,
                     style = note.style,
-                    noteId = note.id
+                    noteId = note.id,
+                    noteDate = note.timedate
                 )
             })
             .subscribeOn(Schedulers.io())
@@ -149,7 +152,7 @@ class ContentPresenter(
                         noteDao.getById(it)
                             .firstOrError()
                     }.toObservable()
-                    .map { NoteViewModel(noteId = it.id, style = it.style, content = content) }
+                    .map { NoteViewModel(noteId = it.id, style = it.style, content = content, noteDate = it.timedate) }
 
             }
             .subscribe {
@@ -164,7 +167,7 @@ class ContentPresenter(
             .flatMapObservable {
                 val note = Note()
                 note.id = it.noteId
-                note.timedate = "not_implemented"
+                note.timedate = it.noteDate
                 note.style = style
 
                 if (note.id > 0)
@@ -181,7 +184,7 @@ class ContentPresenter(
                 }
             }
             .subscribe {
-                viewStatePublisher.onNext(NoteViewModel(noteId = it.id, style = it.style))
+                viewStatePublisher.onNext(NoteViewModel(noteId = it.id, style = it.style, noteDate = it.timedate))
             }
     }
 }
