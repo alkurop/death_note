@@ -171,7 +171,6 @@ class ContentPresenter(
                 note.style = style
 
                 if (note.id > 0)
-
                     Single
                         .fromCallable { noteDao.addOrUpdate(note) }
                         .subscribeOn(Schedulers.io())
