@@ -1,4 +1,4 @@
-package com.omar.deathnote.models;
+package com.omar.deathnote.main;
 
 /**
  * Created by omar on 9/10/15.

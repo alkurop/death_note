@@ -12,8 +12,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.models.SpinnerItem
-import com.omar.deathnote.notes.legacy.ui.NoteActivity
 import com.omar.deathnote.notes.ContentActivity
 import com.omar.deathnote.pref.PrefActivity
 import com.omar.deathnote.utility.plusAssign

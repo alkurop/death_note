@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.omar.deathnote.Constants;
 import com.omar.deathnote.R;
-import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
+import com.omar.deathnote.notes.ContentActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -536,7 +536,7 @@ public class AudioPlayService extends Service implements OnCompletionListener,
                 next, 0);
 
         Intent notificationIntent = new Intent(getApplicationContext(),
-                NoteActivity_old.class);
+                ContentActivity.class);
 
         PendingIntent intentBack = PendingIntent.getActivity(
                 getApplicationContext(), 0, notificationIntent, 0);

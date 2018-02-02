@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.omar.deathnote.R;
-import com.omar.deathnote.models.SpinnerItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

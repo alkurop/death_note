@@ -1,11 +1,5 @@
 package com.omar.deathnote.utility;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ComponentName;
@@ -19,11 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.omar.deathnote.Constants;
-import com.omar.deathnote.notes.legacy.AudioFragment;
-import com.omar.deathnote.notes.legacy.DefaultFragment;
-import com.omar.deathnote.notes.legacy.LinkFragment;
-import com.omar.deathnote.notes.legacy.NoteFragment;
-import com.omar.deathnote.notes.legacy.PicFragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SharingModule {
 
@@ -90,7 +85,7 @@ public class SharingModule {
 			}
 
 			switch (eType) {
-
+/*
 			case TitleFragment:
 
 				tempFragment = (DefaultFragment) fm.findFragmentByTag(fragId);
@@ -168,7 +163,7 @@ public class SharingModule {
 				u = Uri.fromFile(fileIn);
 				audioUris.add(u);
 
-				break;
+				break;*/
 
 			default:
 				throw new IllegalArgumentException("illigal fragment type");

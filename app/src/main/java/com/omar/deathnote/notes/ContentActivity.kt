@@ -19,7 +19,7 @@ import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
 import com.omar.deathnote.main.MySpinnerAdapter
-import com.omar.deathnote.models.SpinnerItem
+import com.omar.deathnote.main.SpinnerItem
 import com.omar.deathnote.notes.add.bll.AddDialogPresenter
 import com.omar.deathnote.notes.add.ui.AddDialog
 import com.omar.deathnote.utility.plusAssign

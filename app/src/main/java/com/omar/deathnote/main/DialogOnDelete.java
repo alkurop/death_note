@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.omar.deathnote.R;
-import com.omar.deathnote.notes.legacy.ui.NoteActivity_old;
 
 @SuppressLint("InflateParams")
 public class DialogOnDelete extends DialogFragment implements OnClickListener {
@@ -26,21 +25,12 @@ public class DialogOnDelete extends DialogFragment implements OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        if (NoteActivity_old.class.isInstance(activity)) {
-            deleteDialog = NoteActivity_old.getDeleteDialog();
-        } else if (MainActivity.class.isInstance(activity)) {
-            //todo
+        if (DeleteDialog.class.isInstance(activity)) {
+            deleteDialog = (DeleteDialog) activity;
         } else {
-            if (DeleteDialog.class.isInstance(activity))
-
-            {
-
-                deleteDialog = (DeleteDialog) activity;
-            } else {
-                // The activity doesn't implement the interface, throw exception
-                throw new IllegalArgumentException(
-                        "Activity must implement DeleteDialog interface");
-            }
+            // The activity doesn't implement the interface, throw exception
+            throw new IllegalArgumentException(
+                    "Activity must implement DeleteDialog interface");
         }
     }
 
