@@ -2,8 +2,10 @@ package com.omar.deathnote.utility
 
 import android.content.Intent
 import android.net.Uri
+import android.support.v4.content.FileProvider
 import com.alkurop.database.Content
 import com.alkurop.database.ContentDao
+import com.alkurop.github.mediapicker.MediaPicker
 import com.omar.deathnote.App
 import com.omar.deathnote.Constants
 import io.reactivex.Completable
@@ -22,6 +24,7 @@ class SharingUtil @Inject constructor(
         return contentDao.getRelatedToNote(noteId)
             .subscribeOn(io())
             .observeOn(mainThread())
+            .firstOrError()
             .flatMapCompletable {
                 Completable.fromAction {
                     val sharingIntent = getSharingIntent(it)
@@ -47,11 +50,13 @@ class SharingUtil @Inject constructor(
             }
         val text = textStringBuilder.toString()
 
-        val uris = contentList.filter { it.type == Constants.Frags.PicFragment.ordinal }
+        val mediaPickerUris = contentList.filter { it.type == Constants.Frags.PicFragment.ordinal }
             .map { it.content }
-            .map { Uri.fromFile(File(it)) }
+            .map {
+                Uri.parse(it)
+            }
 
-        val urisArrayList = ArrayList(uris)
+        val urisArrayList = ArrayList(mediaPickerUris)
 
 
         val intent = Intent()

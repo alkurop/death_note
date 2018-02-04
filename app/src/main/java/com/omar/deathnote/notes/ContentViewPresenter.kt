@@ -106,9 +106,9 @@ class ContentPresenter(
     }
 
     private fun share() {
-//        dis += sharingUtil
-//            .share(viewState.value.noteId)
-//            .subscribe()
+        dis += sharingUtil
+            .share(viewState.value.noteId)
+            .subscribe()
     }
 
     private fun addContent(action: ContentAction.AddContent) {
