@@ -6,11 +6,7 @@ package com.omar.deathnote.mediaplay.devices;
 public interface IVoiceRecorderCallback {
         void onErrorOccured(String error);
 
-
-
         void normalMessage(String message);
 
-
-
-        void sendPositionUpdate(int position);
+        void sendPositionUpdate(long position);
 }
