@@ -3,6 +3,7 @@ package com.omar.deathnote.notes
 import android.Manifest.permission.*
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -18,6 +19,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
+import com.omar.deathnote.main.MainViewActions
 import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.main.SpinnerItem
 import com.omar.deathnote.notes.content.ContentAdapter
@@ -60,6 +62,7 @@ class ContentActivity : AppCompatActivity() {
     lateinit var permissionMananager: PermissionsManager
 
     val dis = CompositeDisposable()
+    var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +103,7 @@ class ContentActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        alertDialog?.takeIf { it.isShowing }?.dismiss()
         if (isFinishing) {
             presenter.dispose()
             ComponentContainer.instance.remove(ContentViewComponent::class.java)
@@ -167,7 +171,8 @@ class ContentActivity : AppCompatActivity() {
     fun renderView(state: NoteViewModel) {
         state.content?.let {
             if (recyclerView.adapter == null) {
-                recyclerView.adapter = ContentAdapter()
+                recyclerView.adapter = ContentAdapter(
+                    { presenter.onAction(ContentAction.DeleteContent(it)) })
             }
             (recyclerView.adapter as ContentAdapter).updateList(state.content)
         }
@@ -193,6 +198,16 @@ class ContentActivity : AppCompatActivity() {
                 addDialog.setEventHandler(dialogPresenter)
                 dialogPresenter.setView(addDialog)
                 addDialog.show(supportFragmentManager, "")
+            }
+            is ContentNavigation.ConfirmDeleteContent -> {
+                alertDialog = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
+                    .setTitle(getString(R.string.delete_content_dialog_title))
+                    .setTitle(getString(R.string.delete_content_dialog_message))
+                    .setNegativeButton(android.R.string.cancel, { _, _ -> })
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        presenter.onAction(ContentAction.DeleteContentConfirmed(navigation.id))
+                    })
+                    .show()
             }
         }
     }

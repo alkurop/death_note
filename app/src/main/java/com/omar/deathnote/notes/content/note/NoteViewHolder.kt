@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.note
+package com.omar.deathnote.notes.content.note
 
 import android.view.View
 import com.alkurop.database.Content
@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.note_elem_note.view.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class NoteViewHolder(itemView: View?)
-    : ContentViewHolder(itemView) {
+class NoteViewHolder(
+        itemView: View?,
+        onDeleteCallback: (Long) -> Unit
+) : ContentViewHolder(itemView, onDeleteCallback) {
 
     @Inject
     lateinit var presenter: NotePresenter
@@ -22,12 +24,12 @@ class NoteViewHolder(itemView: View?)
         presenter.content = content
         itemView.etTxt.setText(content.content)
         RxTextView.afterTextChangeEvents(itemView.etTxt)
-                .debounce(1, TimeUnit.SECONDS)
-                .subscribe {
-                    content.content = it.editable()?.toString()
-                    presenter.save()
-                }
-        RxView.clicks(itemView.del).subscribe { presenter.delete() }
+            .debounce(1, TimeUnit.SECONDS)
+            .subscribe {
+                content.content = it.editable()?.toString()
+                presenter.save()
+            }
+        RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
     }
 }

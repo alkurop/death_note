@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.link
+package com.omar.deathnote.notes.content.link
 
 import android.view.View
 import com.alkurop.database.Content
@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.note_elem_link.view.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LinkViewHolder(itemView: View?)
-    : ContentViewHolder(itemView) {
+class LinkViewHolder(
+        itemView: View?,
+        onDeleteCallback: (Long) -> Unit
+) : ContentViewHolder(itemView, onDeleteCallback) {
 
     @Inject
     lateinit var presenter: LinkPresenter
@@ -22,11 +24,11 @@ class LinkViewHolder(itemView: View?)
         presenter.content = content
         itemView.etText.setText(content.content)
         RxTextView.afterTextChangeEvents(itemView.etText)
-                .debounce(1, TimeUnit.SECONDS)
-                .subscribe {
-                    content.content = it.editable()?.toString()
-                    presenter.save()
-                }
-        RxView.clicks(itemView.del).subscribe { presenter.delete() }
+            .debounce(1, TimeUnit.SECONDS)
+            .subscribe {
+                content.content = it.editable()?.toString()
+                presenter.save()
+            }
+        RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
     }
 }

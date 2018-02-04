@@ -32,16 +32,20 @@
 
         <activity
             android:name="com.omar.deathnote.pref.PrefActivity"
+            android:screenOrientation="sensorPortrait"
             android:label=" " />
         <activity
             android:name="com.omar.deathnote.pref.Contact"
+            android:screenOrientation="sensorPortrait"
             android:label=" " />
         <activity
             android:name="com.omar.deathnote.picview.SingleViewActivity"
+            android:screenOrientation="sensorPortrait"
             android:label=" " />
 
         <service
             android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
+            android:screenOrientation="sensorPortrait"
             android:enabled="true" />
 
     </application>

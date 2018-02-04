@@ -2,14 +2,14 @@ package com.omar.deathnote.notes
 
 import com.omar.deathnote.BaseComponent
 import com.omar.deathnote.ComponentBuilder
-import com.omar.deathnote.notes.audio.AudioViewHolder
-import com.omar.deathnote.notes.link.LinkViewHolder
-import com.omar.deathnote.notes.note.NoteViewHolder
-import com.omar.deathnote.notes.picture.PictureViewHolder
-import com.omar.deathnote.notes.title.TitleViewHolder
+import com.omar.deathnote.notes.content.audio.AudioViewHolder
+import com.omar.deathnote.notes.content.link.LinkViewHolder
+import com.omar.deathnote.notes.content.note.NoteViewHolder
+import com.omar.deathnote.notes.content.picture.PictureViewHolder
+import com.omar.deathnote.notes.content.title.TitleViewHolder
 import dagger.Subcomponent
 
-@Subcomponent(modules = [(ContentViewModule::class)])
+@Subcomponent()
 @ContentViewScope
 interface ContentViewComponent : BaseComponent {
 

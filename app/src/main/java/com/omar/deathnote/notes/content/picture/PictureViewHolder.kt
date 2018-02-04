@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.picture
+package com.omar.deathnote.notes.content.picture
 
 import android.content.Intent
 import android.view.View
@@ -19,7 +19,10 @@ import kotlinx.android.synthetic.main.note_elem_pic.view.del
 import java.util.ArrayList
 import javax.inject.Inject
 
-class PictureViewHolder(itemView: View?) : ContentViewHolder(itemView) {
+class PictureViewHolder(
+        itemView: View?,
+        onDeleteCallback: (Long) -> Unit
+) : ContentViewHolder(itemView, onDeleteCallback) {
 
     @Inject
     lateinit var presenter: PicturePresenter
@@ -34,7 +37,7 @@ class PictureViewHolder(itemView: View?) : ContentViewHolder(itemView) {
             .resize(800, 800).centerInside()
             .into(itemView.contentView)
 
-        RxView.clicks(itemView.del).subscribe { presenter.delete() }
+        RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
         RxView.clicks(itemView.container).subscribe { presenter.openImageViewer() }
         dis += presenter.navSubject.observeOn(mainThread())

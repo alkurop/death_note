@@ -17,10 +17,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.text.SimpleDateFormat
 import java.util.Date
+import javax.inject.Inject
 
 const val DEFAULT_STYLE = 1
 
@@ -36,6 +38,7 @@ sealed class ContentAction {
     data class OpenNoteById(val id: Long) : ContentAction()
     object FabClicked : ContentAction()
     data class DeleteContent(val id: Long) : ContentAction()
+    data class DeleteContentConfirmed(val id: Long) : ContentAction()
     data class UpdateStyle(val style: Int) : ContentAction()
     data class AddContent(val type: ContentType, val content: String? = null) : ContentAction()
     object ShareClicked : ContentAction()
@@ -43,9 +46,10 @@ sealed class ContentAction {
 
 sealed class ContentNavigation {
     object ContentSelector : ContentNavigation()
+    data class ConfirmDeleteContent(val id: Long) : ContentNavigation()
 }
 
-class ContentPresenter(
+class ContentPresenter @Inject constructor(
         private val noteDao: NoteDao,
         private val contentDao: ContentDao,
         private val sharingUtil: SharingUtil
@@ -97,7 +101,19 @@ class ContentPresenter(
         when (action) {
             is ContentAction.CreateNewNote -> createNote()
             is ContentAction.OpenNoteById -> openNote(action.id)
-            is ContentAction.DeleteContent -> deleteContent(action.id)
+            is ContentAction.DeleteContentConfirmed -> deleteContent(action.id)
+            is ContentAction.DeleteContent -> {
+                dis += contentDao.getById(action.id)
+                    .subscribeOn(io())
+                    .toObservable()
+                    .subscribe {
+                        if (it.content.isNullOrBlank()) {
+                            deleteContent(action.id)
+                        } else {
+                            navigation.onNext(ContentNavigation.ConfirmDeleteContent(action.id))
+                        }
+                    }
+            }
             is ContentAction.UpdateStyle -> updateNoteStyle(action.style)
             is ContentAction.FabClicked -> navigation.onNext(ContentNavigation.ContentSelector)
             is ContentAction.AddContent -> addContent(action)
@@ -123,7 +139,12 @@ class ContentPresenter(
     }
 
     private fun deleteContent(id: Long) {
-        contentDao.deleteRelatedToNote(id)
+        Completable
+            .fromAction {
+                contentDao.delete(id)
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     private fun openNote(id: Long) {

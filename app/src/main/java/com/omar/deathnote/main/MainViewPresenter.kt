@@ -14,6 +14,7 @@ sealed class MainViewActions {
     object AboutClicked : MainViewActions()
     data class ListItemClicked(val id: Long) : MainViewActions()
     data class DeleteListItemClicked(val id: Long) : MainViewActions()
+    data class DeleteListItemConfirmed(val id: Long) : MainViewActions()
     data class SpinnerItemClicked(val style: Int) : MainViewActions()
 }
 
@@ -21,6 +22,7 @@ sealed class MainViewNavigation {
     data class NavigateNoteDetails(val id: Long) : MainViewNavigation()
     data class NavigateNewNote(val style: Int) : MainViewNavigation()
     object NavigateAbout : MainViewNavigation()
+    data class ConfirmDeleteItem(val noteId: Long) : MainViewNavigation()
 }
 
 data class MainViewState(
@@ -64,14 +66,26 @@ class MainViewPresenter(
             }
             is MainViewActions.ListItemClicked -> navigation.onNext(MainViewNavigation.NavigateNoteDetails(action.id))
 
+            is MainViewActions.DeleteListItemConfirmed -> deleteListItem(action.id)
             is MainViewActions.DeleteListItemClicked -> {
-                dis += Completable
-                    .fromAction {
-                        contentDao.deleteRelatedToNote(action.id)
-                        noteDao.delete(action.id)
+                dis += contentDao.getRelatedToNote(action.id)
+                    .firstOrError()
+                    .toObservable()
+                    .subscribe {
+                        var doesHaveContent = false
+                        it.forEach {
+                            val thisItemHasContent = it.content.isNullOrBlank().not()
+                            if (thisItemHasContent) {
+                                doesHaveContent = true
+                            }
+
+                        }
+                        if (doesHaveContent) {
+                            navigation.onNext(MainViewNavigation.ConfirmDeleteItem(action.id))
+                        } else {
+                            deleteListItem(action.id)
+                        }
                     }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
             }
             is MainViewActions.SpinnerItemClicked -> {
                 dispose()
@@ -114,5 +128,15 @@ class MainViewPresenter(
 
     fun updateNotesList(notes: List<NoteViewModel>) {
         viewStatePublisher.onNext(MainViewState(notes))
+    }
+
+    fun deleteListItem(id: Long) {
+        dis += Completable
+            .fromAction {
+                contentDao.deleteRelatedToNote(id)
+                noteDao.delete(id)
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 }

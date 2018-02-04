@@ -1,6 +1,7 @@
-package com.omar.deathnote.notes.note
+package com.omar.deathnote.notes.content.note
 
 import com.alkurop.database.ContentDao
 import com.omar.deathnote.notes.content.BaseContentPresenter
+import javax.inject.Inject
 
-class NotePresenter(contentDao: ContentDao) : BaseContentPresenter(contentDao)
+class NotePresenter @Inject constructor(contentDao: ContentDao) : BaseContentPresenter(contentDao)

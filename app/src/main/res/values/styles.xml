@@ -38,7 +38,7 @@
 
 
     <style name="DialogStyle">
-        <item name="android:windowBackground">@color/dialog_frame_background</item>
+        <item name="android:windowBackground">@color/dialog_frame_background</item>z
         <item name="android:colorBackground">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

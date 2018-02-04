@@ -145,5 +145,9 @@
     <string name="storage_permission_title">Storage Permission</string>
     <string name="no_title">No title</string>
     <string name="contacts">Contacts:</string>
+    <string name="delete_note_dialog_title">Delete note</string>
+    <string name="delete_content_dialog_title">Delete content</string>
+    <string name="delete_note_dialog_message">Would you like to delete this note?</string>
+    <string name="delete_content_dialog_message">Would you like to delete this content?</string>
 
 </resources>

@@ -16,13 +16,4 @@ abstract class BaseContentPresenter(val contentDao: ContentDao) {
                 }.subscribeOn(Schedulers.io()).subscribe()
         }
     }
-
-    fun delete() {
-        Completable
-            .fromAction {
-                contentDao.delete(content.id)
-            }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-    }
 }

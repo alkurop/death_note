@@ -2,6 +2,7 @@ package com.omar.deathnote.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var presenter: MainViewPresenter
 
     val dis = CompositeDisposable()
+    var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        alertDialog?.takeIf { it.isShowing }?.dismiss()
         if (isFinishing) {
             presenter.dispose()
             ComponentContainer.instance.remove(MainScreenComponent::class.java)
@@ -87,9 +90,9 @@ class MainActivity : AppCompatActivity() {
 
     fun initSpinner() {
         val spinnerItemList = Constants
-                .select_images
-                .indices
-                .map { SpinnerItem(Constants.select_images[it], getString(Constants.select_names[it])) }
+            .select_images
+            .indices
+            .map { SpinnerItem(Constants.select_images[it], getString(Constants.select_names[it])) }
 
         val spinnerAdatper = MySpinnerAdapter(spinnerItemList)
         spinner.adapter = spinnerAdatper
@@ -129,6 +132,17 @@ class MainActivity : AppCompatActivity() {
             is MainViewNavigation.NavigateNoteDetails -> ContentActivity.openNote(this, navigation.id)
             is MainViewNavigation.NavigateNewNote -> ContentActivity.newNote(this, navigation.style)
             MainViewNavigation.NavigateAbout -> startActivity(Intent(this, PrefActivity::class.java))
+            is MainViewNavigation.ConfirmDeleteItem -> {
+                alertDialog = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
+                    .setTitle(getString(R.string.delete_note_dialog_title))
+                    .setTitle(getString(R.string.delete_note_dialog_message))
+                    .setNegativeButton(android.R.string.cancel, { _, _ -> })
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        presenter.onAction(MainViewActions.DeleteListItemConfirmed(navigation.noteId))
+                    })
+                    .show()
+
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.omar.deathnote.notes.title
+package com.omar.deathnote.notes.content.title
 
 import android.view.View
 import com.alkurop.database.Content
@@ -6,11 +6,14 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.notes.ContentViewComponent
 import com.omar.deathnote.notes.content.ContentViewHolder
-import kotlinx.android.synthetic.main.note_elem_title.view.*
+import kotlinx.android.synthetic.main.note_elem_title.view.tvTitle
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TitleViewHolder(itemView: View) : ContentViewHolder(itemView) {
+class TitleViewHolder(
+        itemView: View?,
+        onDeleteCallback: (Long) -> Unit
+) : ContentViewHolder(itemView, onDeleteCallback) {
 
     @Inject
     lateinit var presenter: TitlePresenter

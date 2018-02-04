@@ -1,12 +1,13 @@
-package com.omar.deathnote.notes.picture
+package com.omar.deathnote.notes.content.picture
 
 import com.alkurop.database.ContentDao
 import com.omar.deathnote.Constants
 import com.omar.deathnote.notes.content.BaseContentPresenter
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class PicturePresenter(contentDao: ContentDao) : BaseContentPresenter(contentDao) {
+class PicturePresenter @Inject constructor(contentDao: ContentDao) : BaseContentPresenter(contentDao) {
     val navSubject = PublishSubject.create<OpenImageViewrNavigation>()
     fun openImageViewer() {
         val parentNoteId = content.parentNoteId
