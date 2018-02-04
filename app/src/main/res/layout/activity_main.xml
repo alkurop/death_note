@@ -11,23 +11,32 @@
         <include layout="@layout/toolbar" />
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v7.widget.RecyclerView
-
-        android:id="@+id/recyclerView"
+    <com.stanfy.enroscar.views.StateView
+        android:id="@+id/stateView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        style="@style/FabStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:scrollbars="vertical" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                style="@style/FabStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp" />
+        </FrameLayout>
+    </com.stanfy.enroscar.views.StateView>
 </android.support.design.widget.CoordinatorLayout>

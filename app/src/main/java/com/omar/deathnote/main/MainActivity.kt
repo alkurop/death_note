@@ -1,14 +1,18 @@
 package com.omar.deathnote.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
@@ -16,6 +20,8 @@ import com.omar.deathnote.R
 import com.omar.deathnote.notes.ContentActivity
 import com.omar.deathnote.pref.PrefActivity
 import com.omar.deathnote.utility.plusAssign
+import com.stanfy.enroscar.views.StateHelper
+import com.stanfy.enroscar.views.StateHelper.STATE_EMPTY
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,6 +54,17 @@ class MainActivity : AppCompatActivity() {
         initSpinner()
         subscribeToPresenter()
         subscribeToUiChanges()
+        stateView.stateHelper.setStateViewCreator(STATE_EMPTY, object : StateHelper.StateViewCreator() {
+            override fun bindView(context: Context, view: View, lastResponseData: Any?, parent: ViewGroup) {
+            }
+
+            override fun createView(context: Context?, parent: ViewGroup?): View {
+                val view = LayoutInflater.from(context).inflate(R.layout.add_view, parent, false)
+                view.setOnClickListener { presenter.onAction(MainViewActions.FabClicked) }
+                return view
+            }
+
+        })
     }
 
     private fun initRecyclerView() {
@@ -120,6 +137,11 @@ class MainActivity : AppCompatActivity() {
         state.items?.let {
             val mainListAdapter = recyclerView.adapter as MainListAdapter
             mainListAdapter.setDataList(state.items)
+            if (state.items.isEmpty()) {
+                stateView.setEmptyState(null)
+            } else {
+                stateView.setNormalState()
+            }
         }
         state.style?.let {
             spinner.setSelection(it)

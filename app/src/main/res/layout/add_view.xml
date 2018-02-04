@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:padding="24dp"
+    android:foreground="?selectableItemBackgroundBorderless"
+    android:focusable="true">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/list_item_shape"
+        android:gravity="center"
+        android:text="Click to\nadd note"
+        android:textSize="36sp" />
+</LinearLayout>
