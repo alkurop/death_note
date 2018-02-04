@@ -65,7 +65,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
 
     implementation 'com.github.alkurop:Android-Runtime-Permission-Manager:0.0.13'
-    implementation 'com.github.alkurop:Android-Media-Picker:0.0.9'
+    implementation 'com.github.alkurop:Android-Media-Picker:0.1.0'
     implementation 'com.stanfy.enroscar:enroscar-ui:2.1'
 
 
