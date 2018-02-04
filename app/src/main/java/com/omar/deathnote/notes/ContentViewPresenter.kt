@@ -20,6 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -139,12 +140,15 @@ class ContentPresenter @Inject constructor(
     }
 
     private fun deleteContent(id: Long) {
-        Completable
-            .fromAction {
+        dis += contentDao.getById(id)
+            .subscribeOn(io())
+            .toObservable()
+            .subscribe {
+                if (it.type == Constants.Frags.PicFragment.ordinal) {
+                    File(it.content).delete()
+                }
                 contentDao.delete(id)
             }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
     }
 
     private fun openNote(id: Long) {

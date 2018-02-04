@@ -2,12 +2,15 @@ package com.omar.deathnote.main
 
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
+import com.omar.deathnote.Constants
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.io.File
 
 sealed class MainViewActions {
     object FabClicked : MainViewActions()
@@ -69,8 +72,7 @@ class MainViewPresenter(
             is MainViewActions.DeleteListItemConfirmed -> deleteListItem(action.id)
             is MainViewActions.DeleteListItemClicked -> {
                 dis += contentDao.getRelatedToNote(action.id)
-                    .firstOrError()
-                    .toObservable()
+
                     .subscribe {
                         var doesHaveContent = false
                         it.forEach {
@@ -131,12 +133,20 @@ class MainViewPresenter(
     }
 
     fun deleteListItem(id: Long) {
-        dis += Completable
-            .fromAction {
-                contentDao.deleteRelatedToNote(id)
+        contentDao.getRelatedToNote(id)
+            .take(1)
+            .toObservable()
+            .subscribeOn(io())
+            .subscribe {
+                it.forEach { contentDao.delete(it.id) }
+
+                it.filter { it.type == Constants.Frags.PicFragment.ordinal }
+                    .map { it.content }
+                    .filter { it.isNullOrBlank().not() }
+                    .forEach {
+                        File(it).delete()
+                    }
                 noteDao.delete(id)
             }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
     }
 }

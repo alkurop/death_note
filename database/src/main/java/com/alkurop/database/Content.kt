@@ -36,9 +36,6 @@ interface ContentDao {
     @Query("Delete from content where id = :arg0")
     fun delete(id: Long)
 
-    @Query("delete from content where parentNoteId = :arg0")
-    fun deleteRelatedToNote(noteId: Long)
-
     @Query("Select * from content where parentNoteId = :arg0")
     fun getRelatedToNote(noteId: Long): Flowable<List<Content>>
 
