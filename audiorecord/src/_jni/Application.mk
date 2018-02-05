@@ -1,1 +1,2 @@
-APP_ABI=x86 armeabi
+APP_ABI=all
+APP_CFLAGS += -DSTDC_HEADERS

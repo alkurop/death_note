@@ -1,4 +1,4 @@
-#include "lame-3.98.4_libmp3lame/lame.h"
+#include "libmp3lame/lame.h"
 #include "com_omar_deathnote_mediaplay_devices_SimpleLame.h"
 
 static lame_global_flags *glf = NULL;
@@ -6,8 +6,13 @@ static lame_global_flags *glf = NULL;
 
 
 JNIEXPORT void JNICALL Java_com_omar_deathnote_mediaplay_devices_SimpleLame_init(
-		JNIEnv *env, jclass cls, jint inSamplerate, jint outChannel,
-		jint outSamplerate, jint outBitrate, jint quality) {
+		JNIEnv *env,
+		 jclass cls,
+		jint inSamplerate,
+		 jint outChannel,
+		jint outSamplerate,
+		jint outBitrate,
+		jint quality) {
 	if (glf != NULL) {
 		lame_close(glf);
 		glf = NULL;

@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation project(':database')
+    implementation project(':audiorecord')
 
     implementation "com.android.support:recyclerview-v7:$versions.support"
     implementation "com.android.support:appcompat-v7:$versions.support"

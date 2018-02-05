@@ -9,18 +9,9 @@ package com.omar.deathnote.mediaplay.devices;
  */
 public class SimpleLame {
 
-    /**
-     * Initialize LAME.
-     *
-     * @param inSamplerate  input sample rate in Hz.
-     * @param outChannel    number of channels in input stream.
-     * @param outSamplerate output sample rate in Hz.
-     * @param outBitrate    brate compression ratio in KHz.
-     */
-    public static void init(int inSamplerate, int outChannel, int outSamplerate, int outBitrate) {
-        init(inSamplerate, outChannel, outSamplerate, outBitrate, 7);
+    static {
+        System.loadLibrary("mp3lame");
     }
-
     /**
      * Initialize LAME.
      *
