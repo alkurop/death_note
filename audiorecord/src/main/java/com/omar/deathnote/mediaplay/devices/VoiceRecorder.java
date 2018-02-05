@@ -22,20 +22,21 @@ public class VoiceRecorder {
     private static final int STATUS_ERROR = 1;
     private static final int COUNTER = 2;
 
-    private final int mSampleRate;
-    private final int mBitRate;
-
     private final short channelConfig = Constants.CHANNEL_PRESETS[0];
+
     private final int quality = Constants.QUALITY_PRESETS[1];
     private final short audioFormat = Constants.AUDIO_FORMAT_PRESETS[1];
+    private static final int sleepMillis = 100;
+
     private final String filePath;
 
     private int minBufferSize;
+    private final int mSampleRate;
+    private final int mBitRate;
     private short[] buffer;
     private byte[] mp3buffer;
-    private boolean recording;
 
-    private static final int sleepMillis = 100;
+    private boolean recording;
     private long counter;
 
     public VoiceRecorder(String filepath,
@@ -45,12 +46,9 @@ public class VoiceRecorder {
         this.mSampleRate = 41000;
         this.mBitRate = 192;
         callbackHandler = new CallbackHandler(callback);
-
     }
 
-
     public void recordStart() {
-
         minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);
         recording = true;
         recThread();
@@ -60,9 +58,7 @@ public class VoiceRecorder {
     public void recordStop() {
         recording = false;
         sendHandlerMessage(STATUS_NORMAL, "Recorder stopped");
-
     }
-
 
     private void initBuffer() {
         buffer = new short[mSampleRate * (16 / 8) * 5]; // SampleRate[Hz]
@@ -171,8 +167,6 @@ public class VoiceRecorder {
         } else {
             throw new Exception("Error init recorder");
         }
-
-
     }
 
     private void sendHandlerMessage(int status, String data) {

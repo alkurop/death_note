@@ -25,4 +25,5 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation "com.jakewharton.timber:timber:$versions.timber"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 }
