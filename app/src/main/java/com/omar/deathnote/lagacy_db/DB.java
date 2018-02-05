@@ -1,6 +1,5 @@
 package com.omar.deathnote.lagacy_db;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,7 +18,6 @@ import io.reactivex.Completable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-@SuppressLint("SimpleDateFormat")
 public class DB {
 
     private static final String DB_TABLE = "maintab";

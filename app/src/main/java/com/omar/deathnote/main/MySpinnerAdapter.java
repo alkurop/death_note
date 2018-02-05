@@ -15,9 +15,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MySpinnerAdapter extends BaseAdapter {
-    public interface SpinnerCallback {
-        void onItemSelected(int position);
-    }
 
     private final List<SpinnerItem> spinnerItemList;
 

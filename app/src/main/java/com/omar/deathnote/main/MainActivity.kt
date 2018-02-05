@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity() {
                         presenter.onAction(MainViewActions.DeleteListItemConfirmed(navigation.noteId))
                     })
                     .show()
-
             }
         }
     }
