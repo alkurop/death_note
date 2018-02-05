@@ -5,87 +5,80 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Process
 import io.reactivex.Completable
-import io.reactivex.Notification
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.io.File
 import java.io.FileOutputStream
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-data class AudioTimer(val time: Long)
+object AudioRecorder {
 
-class AudioRecorder {
+    private val BIT_RATE_PRESETS = intArrayOf(320, 192, 160, 128)
+    private val SAMPLE_RATE_PRESETS = intArrayOf(44100, 22050, 11025, 8000)
 
-    companion object {
-        private val BIT_RATE_PRESETS = intArrayOf(320, 192, 160, 128)
-        private val SAMPLE_RATE_PRESETS = intArrayOf(44100, 22050, 11025, 8000)
+    private val AUDIO_FORMAT_PRESETS = shortArrayOf(
+        AudioFormat.ENCODING_PCM_8BIT.toShort(),
+        AudioFormat.ENCODING_PCM_16BIT.toShort()
+    )
 
-        private val AUDIO_FORMAT_PRESETS = shortArrayOf(
-            AudioFormat.ENCODING_PCM_8BIT.toShort(),
-            AudioFormat.ENCODING_PCM_16BIT.toShort()
-        )
+    private val QUALITY_PRESETS = intArrayOf(2, 5, 7)  // the lower the better
+    private val CHANNEL_PRESETS = shortArrayOf(
+        AudioFormat.CHANNEL_IN_MONO.toShort(),
+        AudioFormat.CHANNEL_IN_STEREO.toShort()
+    )
 
-        private val QUALITY_PRESETS = intArrayOf(2, 5, 7)  // the lower the better
-        private val CHANNEL_PRESETS = shortArrayOf(
-            AudioFormat.CHANNEL_IN_MONO.toShort(),
-            AudioFormat.CHANNEL_IN_STEREO.toShort()
-        )
+    private val channelConfig = CHANNEL_PRESETS[0]
+    private val quality = QUALITY_PRESETS[1]
+    private val audioFormat = AUDIO_FORMAT_PRESETS[1]
+    private val TIMER_RESOLUTION_SLEEP_MILLIS = 100L
 
-        private val channelConfig = Constants.CHANNEL_PRESETS[0]
-        private val quality = Constants.QUALITY_PRESETS[1]
-        private val audioFormat = Constants.AUDIO_FORMAT_PRESETS[1]
-        private val sleepMillis = 100
-
-    }
 
     private var minBufferSize: Int = 0
-    private val mSampleRate: Int
-    private val mBitRate: Int
+    private val mSampleRate: Int = SAMPLE_RATE_PRESETS[0]
+    private val mBitRate: Int = BIT_RATE_PRESETS[1]
     private lateinit var buffer: ShortArray
     private lateinit var mp3buffer: ByteArray
 
-    init {
-        this.mSampleRate = 41000
-        this.mBitRate = 192
-    }
-
     private var isStarted = AtomicBoolean(false)
-    private val statusBus = PublishSubject.create<Notification<AudioTimer>>()
-    private var counter: Int = 0
-    private lateinit var filePath: String
 
-    private val disposable = CompositeDisposable()
-
-    fun startRecord(filePath: String): Observable<AudioTimer> {
+    fun startRecord(filePath: String): Observable<Long> {
         if (isStarted.get()) {
             stopRecord()
         }
-        this.filePath = filePath
-
         minBufferSize = AudioRecord.getMinBufferSize(
             mSampleRate,
             channelConfig.toInt(),
             audioFormat.toInt()
         )
 
-        return statusBus
-            .dematerialize<AudioTimer>()
-            .doOnTerminate { stopRecord() }
+        val resultBus = PublishSubject.create<Long>()
+        val observer = Subscriber<Long>(resultBus)
+
+        Observable.interval(TIMER_RESOLUTION_SLEEP_MILLIS, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .subscribeWith(observer)
+
+        record(filePath).toObservable<Long>()
+            .subscribeOn(Schedulers.io())
+            .subscribeWith(observer)
+
+        return resultBus
             .doOnDispose { stopRecord() }
     }
 
     fun stopRecord() {
         if (isStarted.get()) {
             isStarted.set(false)
-            counter = 0
-            statusBus.onNext(Notification.createOnComplete())
         }
     }
 
-    private fun record(): Completable {
+    private fun record(filePath: String): Completable {
         return Completable.fromAction {
             isStarted.set(true)
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
@@ -99,13 +92,11 @@ class AudioRecorder {
             output.use {
                 val recorder = findAudioRecord()
                 recorder.startRecording()
-                var readSize = 0
+                var readSize: Int
                 while (isStarted.get()) {
-
                     readSize = recorder.read(buffer, 0, minBufferSize)
                     val encResult = SimpleLame.encode(buffer, buffer, readSize, mp3buffer)
                     output.write(mp3buffer, 0, encResult)
-
                 }
                 val flushResult = SimpleLame.flush(mp3buffer)
                 if (flushResult != 0) {
@@ -119,11 +110,26 @@ class AudioRecorder {
     }
 
     private fun findAudioRecord(): AudioRecord {
-        minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig.toInt(), audioFormat.toInt())
+        minBufferSize = AudioRecord.getMinBufferSize(
+            mSampleRate,
+            channelConfig.toInt(),
+            audioFormat.toInt()
+        )
         if (minBufferSize != AudioRecord.ERROR_BAD_VALUE) {
 
-            val recorder = AudioRecord(MediaRecorder.AudioSource.DEFAULT, mSampleRate, channelConfig.toInt(), audioFormat.toInt(), minBufferSize * 4)
-            SimpleLame.init(mSampleRate, 1, mSampleRate, mBitRate, quality)
+            val recorder = AudioRecord(
+                MediaRecorder.AudioSource.DEFAULT,
+                mSampleRate, channelConfig.toInt(),
+                audioFormat.toInt(),
+                minBufferSize * 4
+            )
+            SimpleLame.init(
+                mSampleRate,
+                1,
+                mSampleRate,
+                mBitRate,
+                quality
+            )
 
             if (recorder.state == AudioRecord.STATE_INITIALIZED) {
                 return recorder
@@ -138,14 +144,23 @@ class AudioRecorder {
     }
 }
 
-internal class Subscriber(
-        val resultBus: Subject<AudioTimer>
-) : DisposableObserver<AudioTimer>() {
-    override fun onComplete() {
-        resultBus.onComplete()
+private operator fun CompositeDisposable.plusAssign(dis: Disposable) {
+    this.add(dis)
+}
+
+internal class Subscriber<T>(
+        val resultBus: Subject<T>
+) : Observer<T> {
+    override fun onSubscribe(d: Disposable) {
+
     }
 
-    override fun onNext(value: AudioTimer) {
+    override fun onComplete() {
+        resultBus.onComplete()
+        println("Sub completed")
+    }
+
+    override fun onNext(value: T) {
         resultBus.onNext(value)
     }
 
@@ -153,3 +168,4 @@ internal class Subscriber(
         resultBus.onError(e)
     }
 }
+

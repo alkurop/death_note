@@ -2,7 +2,8 @@ package com.omar.deathnote.notes
 
 import com.omar.deathnote.BaseComponent
 import com.omar.deathnote.ComponentBuilder
-import com.omar.deathnote.notes.content.audio.AudioViewHolder
+import com.omar.deathnote.notes.content.audio.player.AudioPlayerViewHolder
+import com.omar.deathnote.notes.content.audio.recorder.AudioRecorderViewHolder
 import com.omar.deathnote.notes.content.link.LinkViewHolder
 import com.omar.deathnote.notes.content.note.NoteViewHolder
 import com.omar.deathnote.notes.content.picture.PictureViewHolder
@@ -26,7 +27,9 @@ interface ContentViewComponent : BaseComponent {
 
     fun inject(noteViewHolder: NoteViewHolder)
 
-    fun inject(audioViewHolder: AudioViewHolder)
+    fun inject(audioViewHolder: AudioRecorderViewHolder)
 
     fun inject(linkViewHolder: LinkViewHolder)
+
+    fun inject(audioPlayerViewHolder: AudioPlayerViewHolder)
 }

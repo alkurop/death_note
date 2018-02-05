@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.alkurop.database.Content
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.notes.content.audio.AudioViewHolder
+import com.omar.deathnote.notes.content.audio.recorder.AudioRecorderViewHolder
 import com.omar.deathnote.notes.content.link.LinkViewHolder
 import com.omar.deathnote.notes.content.note.NoteViewHolder
 import com.omar.deathnote.notes.content.picture.PictureViewHolder
@@ -38,7 +38,7 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
             }
             Constants.Frags.AudioFragment.ordinal -> {
                 val view = layouInflater.inflate(R.layout.note_elem_audio, parent, false)
-                AudioViewHolder(view, onDeleteCallback)
+                AudioRecorderViewHolder(view, onDeleteCallback)
             }
             Constants.Frags.LinkFragment.ordinal -> {
                 val view = layouInflater.inflate(R.layout.note_elem_link, parent, false)

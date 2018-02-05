@@ -130,7 +130,7 @@
     <string name="pic_from_gallery">Find in gallery</string>
     <string name="pic_from_camera">Take a photo</string>
     <string name="new_picture">New picture</string>
-    <string name="new_audio">Audio</string>
+    <string name="new_audio_record">Audio record</string>
     <string name="new_note">Note</string>
     <string name="new_link">Web link</string>
     <string name="back">Back</string>

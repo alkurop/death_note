@@ -48,12 +48,13 @@ public class AddDialogPresenter implements IAddDialogPresenter {
                 generatePicListItems();
             }
         });
-        /*items.add(new AddDialogItemDataHolder(context.getString(R.string.new_audio)) {
+        items.add(new AddDialogItemDataHolder(context.getString(R.string.new_audio_record)) {
             @Override
             public void doAction() {
-                generateAudioListItems();
+                view.dismiss();
+                callback.addContent(ContentType.AUDIO_RECORD);
             }
-        });*/
+        });
         items.add(new AddDialogItemDataHolder(context.getString(R.string.new_note)) {
             @Override
             public void doAction() {
