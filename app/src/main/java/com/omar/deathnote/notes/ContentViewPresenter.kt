@@ -144,8 +144,13 @@ class ContentPresenter @Inject constructor(
             .subscribeOn(io())
             .toObservable()
             .subscribe {
-                if (it.type == Constants.Frags.PicFragment.ordinal) {
-                    File(it.content).delete()
+                if (it.type == Constants.Frags.PicFragment.ordinal
+                    || it.type == Constants.Frags.AudioRecord.ordinal
+                    || it.type == Constants.Frags.AudioPlay.ordinal) {
+                    val file = File(it.content)
+                    if (file.exists()) {
+                        file.delete()
+                    }
                 }
                 contentDao.delete(id)
             }

@@ -13,7 +13,7 @@ enum class ContentType {
 
 fun ContentType.toFragType(): Constants.Frags =
     when (this) {
-        ContentType.AUDIO_FILE -> Constants.Frags.AudioFragment
+        ContentType.AUDIO_FILE -> Constants.Frags.AudioPlay
         ContentType.AUDIO_RECORD -> Constants.Frags.AudioRecord
         ContentType.NOTE -> Constants.Frags.NoteFragment
         ContentType.LINK -> Constants.Frags.LinkFragment

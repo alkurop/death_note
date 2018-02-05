@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.alkurop.database.Content
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
+import com.omar.deathnote.notes.content.audio.player.AudioPlayerViewHolder
 import com.omar.deathnote.notes.content.audio.recorder.AudioRecorderViewHolder
 import com.omar.deathnote.notes.content.link.LinkViewHolder
 import com.omar.deathnote.notes.content.note.NoteViewHolder
@@ -36,9 +37,9 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
                 val view = layouInflater.inflate(R.layout.note_elem_title, parent, false)
                 TitleViewHolder(view, onDeleteCallback)
             }
-            Constants.Frags.AudioFragment.ordinal -> {
-                val view = layouInflater.inflate(R.layout.note_elem_audio, parent, false)
-                AudioRecorderViewHolder(view, onDeleteCallback)
+            Constants.Frags.AudioPlay.ordinal -> {
+                val view = layouInflater.inflate(R.layout.note_elem_audio_playback, parent, false)
+                AudioPlayerViewHolder(view, onDeleteCallback)
             }
             Constants.Frags.LinkFragment.ordinal -> {
                 val view = layouInflater.inflate(R.layout.note_elem_link, parent, false)
@@ -51,6 +52,10 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
             Constants.Frags.PicFragment.ordinal -> {
                 val view = layouInflater.inflate(R.layout.note_elem_pic, parent, false)
                 PictureViewHolder(view, onDeleteCallback)
+            }
+            Constants.Frags.AudioRecord.ordinal -> {
+                val view = layouInflater.inflate(R.layout.note_elem_audio_record, parent, false)
+                AudioRecorderViewHolder(view, onDeleteCallback)
             }
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }

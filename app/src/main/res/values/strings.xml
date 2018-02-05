@@ -149,6 +149,6 @@
     <string name="delete_content_dialog_title">Delete content</string>
     <string name="delete_note_dialog_message">Would you like to delete this note?</string>
     <string name="delete_content_dialog_message">Would you like to delete this content?</string>
-    <string name="click_to_nadd_note">Clickto\nadd note</string>
+    <string name="click_to_nadd_note">Click to\nadd note</string>
 
 </resources>

@@ -6,7 +6,7 @@ import android.support.annotation.DrawableRes;
 public class Constants {
 
     public enum Frags {
-        TitleFragment, NoteFragment,  LinkFragment, AudioFragment, PicFragment, AudioRecord
+        TitleFragment, NoteFragment,  LinkFragment, AudioPlay, PicFragment, AudioRecord
     }
 
     public final static String ID = "noteId";

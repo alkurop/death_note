@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply from: '../libs.gradle'
+
 
 android {
     compileSdkVersion 26

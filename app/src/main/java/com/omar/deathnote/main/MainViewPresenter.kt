@@ -6,7 +6,6 @@ import com.omar.deathnote.Constants
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -140,11 +139,18 @@ class MainViewPresenter(
             .subscribe {
                 it.forEach { contentDao.delete(it.id) }
 
-                it.filter { it.type == Constants.Frags.PicFragment.ordinal }
+                it.filter {
+                    it.type == Constants.Frags.PicFragment.ordinal
+                            || it.type == Constants.Frags.AudioRecord.ordinal
+                            || it.type == Constants.Frags.AudioPlay.ordinal
+                }
                     .map { it.content }
                     .filter { it.isNullOrBlank().not() }
                     .forEach {
-                        File(it).delete()
+                        val file = File(it)
+                        if (file.exists()) {
+                            file.delete()
+                        }
                     }
                 noteDao.delete(id)
             }

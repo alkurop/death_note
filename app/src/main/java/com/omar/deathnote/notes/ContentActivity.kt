@@ -190,8 +190,9 @@ class ContentActivity : AppCompatActivity() {
                         ContentType.PICTURE_CAPTURE -> askCameraPermissions { captureImageCamera() }
                         ContentType.LINK,
                         ContentType.NOTE -> presenter.onAction(ContentAction.AddContent(content))
-                        ContentType.AUDIO_RECORD -> askRecordPermissions { }
-                        ContentType.AUDIO_FILE -> askGaleryPermissions { openAudioGal() }
+                        ContentType.AUDIO_RECORD -> askRecordPermissions {
+                            presenter.onAction(ContentAction.AddContent(content))
+                        }
                     }
                 }
                 val addDialog = AddDialog()
