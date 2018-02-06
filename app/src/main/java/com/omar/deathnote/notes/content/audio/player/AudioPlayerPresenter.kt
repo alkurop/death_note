@@ -24,10 +24,10 @@ class AudioPlayerPresenter @Inject constructor(
             .subscribeOn(io())
             .doOnTerminate { stopPlayback() }
             .subscribe {
-                if (it.duration == it.position) {
-                    latestState = it
+                latestState = if (it.duration != it.position) {
+                    it
                 } else {
-                    latestState = null
+                    null
                 }
                 stateBus.onNext(AudioPlayerState.AudioProgress(it))
             }

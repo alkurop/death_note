@@ -63,6 +63,9 @@ public class AudioPlayerImpl implements AudioPlayer {
 
             @Override
             void onTrackEnded() {
+                AudioPlayerProgress playerProgress =
+                        new AudioPlayerProgress(mExoPlayer.getDuration(), mExoPlayer.getDuration());
+                mProgressSubject.onNext(Notification.createOnNext(playerProgress));
                 stopPlayback();
             }
         };

@@ -15,6 +15,25 @@ open class Note {
     var style: Int = 0
 
     var timedate: String = ""
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Note
+
+        if (id != other.id) return false
+        if (style != other.style) return false
+        if (timedate != other.timedate) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + style
+        result = 31 * result + timedate.hashCode()
+        return result
+    }
 }
 
 @Dao

@@ -1,8 +1,6 @@
 package com.omar.deathnote.notes.content.audio.player
 
-import android.animation.LayoutTransition
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import com.alkurop.database.Content
 import com.jakewharton.rxbinding2.view.RxView
@@ -24,13 +22,6 @@ class AudioPlayerViewHolder(
         itemView: View?,
         onDeleteCallback: (Long) -> Unit
 ) : ContentViewHolder(itemView, onDeleteCallback) {
-
-    init {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            (itemView as ViewGroup).layoutTransition
-                .enableTransitionType(LayoutTransition.CHANGING)
-        }
-    }
 
     val dis = CompositeDisposable()
 

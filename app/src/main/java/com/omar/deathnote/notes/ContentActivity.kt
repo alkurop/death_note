@@ -112,6 +112,7 @@ class ContentActivity : AppCompatActivity() {
         super.onDestroy()
         alertDialog?.takeIf { it.isShowing }?.dismiss()
         if (isFinishing) {
+            audioWrapper.stopRecording()
             audioWrapper.tearDown()
             presenter.dispose()
             ComponentContainer.instance.remove(ContentViewComponent::class.java)
@@ -227,10 +228,6 @@ class ContentActivity : AppCompatActivity() {
 
     fun openImageGal() {
         MediaPicker.fromGallery(this, MediaType.PHOTO)
-    }
-
-    fun openAudioGal() {
-        MediaPicker.fromGallery(this, MediaType.AUDIO)
     }
 
     fun askCameraPermissions(onSuccessOperator: (() -> Unit)) {

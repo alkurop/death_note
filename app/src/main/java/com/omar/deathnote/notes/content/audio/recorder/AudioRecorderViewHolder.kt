@@ -1,11 +1,8 @@
 package com.omar.deathnote.notes.content.audio.recorder
 
-import android.animation.LayoutTransition
 import android.view.View
-import android.view.ViewGroup
 import com.alkurop.database.Content
 import com.jakewharton.rxbinding2.view.RxView
-import com.omar.deathnote.BuildConfig
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.R
 import com.omar.deathnote.notes.ContentViewComponent
@@ -27,13 +24,6 @@ class AudioRecorderViewHolder(
     @Inject
     lateinit var recorderPresenter: AudioRecorderPresenter
     val dis = CompositeDisposable()
-
-    init {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            (itemView as ViewGroup).layoutTransition
-                .enableTransitionType(LayoutTransition.CHANGING)
-        }
-    }
 
     override fun bind(content: Content) {
         itemView.songTime.text = itemView.context.getString(R.string.rec_countet)
