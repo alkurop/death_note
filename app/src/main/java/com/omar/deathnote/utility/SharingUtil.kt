@@ -57,11 +57,11 @@ class SharingUtil @Inject constructor(
             }
             .map { it.content }
             .map {
-                Uri.parse(it)
+                val authority = MediaPicker.getFileProviderAuthority(application.applicationContext)
+                FileProvider.getUriForFile(application, authority, File(it!!.replace("file://", "")))
             }
 
         val urisArrayList = ArrayList(mediaPickerUris)
-
 
         val intent = Intent()
         intent.action = Intent.ACTION_SEND_MULTIPLE

@@ -1,6 +1,8 @@
 package com.omar.deathnote.notes
 
-import android.Manifest.permission.*
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.RECORD_AUDIO
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -10,7 +12,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import com.alkurop.github.mediapicker.MediaPicker
 import com.alkurop.github.mediapicker.MediaType
 import com.github.alkurop.jpermissionmanager.PermissionOptionalDetails
@@ -19,7 +20,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
 import com.omar.deathnote.R
-import com.omar.deathnote.main.MainViewActions
 import com.omar.deathnote.main.MySpinnerAdapter
 import com.omar.deathnote.main.SpinnerItem
 import com.omar.deathnote.notes.content.ContentAdapter
@@ -31,8 +31,11 @@ import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_content.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_content.background
+import kotlinx.android.synthetic.main.activity_content.fab
+import kotlinx.android.synthetic.main.activity_content.recyclerView
+import kotlinx.android.synthetic.main.toolbar.spinner
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import javax.inject.Inject
 
 class ContentActivity : AppCompatActivity() {
@@ -95,7 +98,6 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager = PermissionsManager(this)
         val subscribe = MediaPicker.getResult(this)
             .subscribe {
-                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
                 when (it.first) {
                     MediaType.AUDIO -> presenter.onAction(ContentAction.AddContent(ContentType.AUDIO_FILE, it.second.toString()))
                     MediaType.PHOTO -> presenter.onAction(ContentAction.AddContent(ContentType.PICTURE_FILE, it.second.toString()))
