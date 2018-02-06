@@ -1,7 +1,10 @@
 package com.omar.deathnote.notes.content.picture
 
 import android.content.Intent
+import android.graphics.Color
+import android.support.v4.widget.DrawerLayout
 import android.view.View
+import android.view.ViewTreeObserver
 import com.alkurop.database.Content
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
@@ -13,11 +16,13 @@ import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.note_elem_pic.view.container
 import kotlinx.android.synthetic.main.note_elem_pic.view.contentView
-import kotlinx.android.synthetic.main.note_elem_pic.view.del
 import java.util.ArrayList
 import javax.inject.Inject
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
+import kotlinx.android.synthetic.main.note_elem_pic.view.container
+import kotlinx.android.synthetic.main.note_elem_pic.view.del
+
 
 class PictureViewHolder(
         itemView: View?,
@@ -33,13 +38,27 @@ class PictureViewHolder(
         ComponentContainer.instance[ContentViewComponent::class.java].inject(this)
         presenter.content = content
 
-        Picasso.with(itemView.context).load(content.content)
-            .resize(800, 800).centerInside()
-            .into(itemView.contentView)
+        val transformation = RoundedTransformationBuilder()
+            .cornerRadiusDp(20f)
+            .oval(false)
+            .build()
+
+        itemView.contentView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                itemView.contentView.viewTreeObserver.removeOnPreDrawListener(this)
+                Picasso.with(itemView.context)
+                    .load(content.content)
+                    .fit()
+                    .transform(transformation)
+                    .into(itemView.contentView)
+                return true
+            }
+        })
 
         RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
         RxView.clicks(itemView.container).subscribe { presenter.openImageViewer() }
+
         dis += presenter.navSubject.observeOn(mainThread())
             .subscribe {
                 val intent = Intent(itemView.context, SingleViewActivity::class.java)
