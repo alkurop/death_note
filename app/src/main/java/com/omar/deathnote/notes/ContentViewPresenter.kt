@@ -4,10 +4,12 @@ import com.alkurop.database.Content
 import com.alkurop.database.ContentDao
 import com.alkurop.database.Note
 import com.alkurop.database.NoteDao
+import com.omar.deathnote.App
 import com.omar.deathnote.Constants
 import com.omar.deathnote.notes.content.ContentType
 import com.omar.deathnote.notes.content.toFragType
 import com.omar.deathnote.utility.SharingUtil
+import com.omar.deathnote.utility.deleteContentFile
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -52,7 +54,8 @@ sealed class ContentNavigation {
 class ContentPresenter @Inject constructor(
         private val noteDao: NoteDao,
         private val contentDao: ContentDao,
-        private val sharingUtil: SharingUtil
+        private val sharingUtil: SharingUtil,
+        private val app: App
 ) {
     private val dis = CompositeDisposable()
     private val viewStatePublisher = BehaviorSubject.create<NoteViewModel>()
@@ -143,15 +146,7 @@ class ContentPresenter @Inject constructor(
             .subscribeOn(io())
             .toObservable()
             .subscribe {
-                if (it.type == Constants.Frags.PicFragment.ordinal
-                    || it.type == Constants.Frags.AudioRecord.ordinal
-                    || it.type == Constants.Frags.AudioPlay.ordinal
-                    && it.content.isNullOrBlank().not()) {
-                    val file = File(it.content)
-                    if (file.exists()) {
-                        file.delete()
-                    }
-                }
+                it.deleteContentFile(app)
                 contentDao.delete(id)
             }
     }

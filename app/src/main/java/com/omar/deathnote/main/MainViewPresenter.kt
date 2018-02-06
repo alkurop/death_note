@@ -2,7 +2,9 @@ package com.omar.deathnote.main
 
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
+import com.omar.deathnote.App
 import com.omar.deathnote.Constants
+import com.omar.deathnote.utility.deleteContentFile
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
@@ -41,7 +43,8 @@ data class NoteViewModel(
 
 class MainViewPresenter(
         val noteDao: NoteDao,
-        val contentDao: ContentDao
+        val contentDao: ContentDao,
+        val app: App
 ) {
     companion object {
         private const val DEFAULT_NEW_NOTE_STYLE = 1
@@ -137,22 +140,10 @@ class MainViewPresenter(
             .toObservable()
             .subscribeOn(io())
             .subscribe {
-                it.forEach { contentDao.delete(it.id) }
-
-                it.filter {
-                    it.type == Constants.Frags.PicFragment.ordinal
-                            || it.type == Constants.Frags.AudioRecord.ordinal
-                            || it.type == Constants.Frags.AudioPlay.ordinal
-                            && it.content.isNullOrBlank().not()
+                it.forEach {
+                    contentDao.delete(it.id)
+                    it.deleteContentFile(app)
                 }
-                    .map { it.content }
-                    .filter { it.isNullOrBlank().not() }
-                    .forEach {
-                        val file = File(it)
-                        if (file.exists()) {
-                            file.delete()
-                        }
-                    }
                 noteDao.delete(id)
             }
     }
