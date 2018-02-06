@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation project(':database')
     implementation project(':audiorecord')
+    implementation project(':audioplay')
 
     implementation "com.android.support:recyclerview-v7:$versions.support"
     implementation "com.android.support:appcompat-v7:$versions.support"
@@ -67,6 +68,4 @@ dependencies {
     implementation 'com.github.alkurop:Android-Runtime-Permission-Manager:0.0.13'
     implementation 'com.github.alkurop:Android-Media-Picker:0.1.1'
     implementation 'com.stanfy.enroscar:enroscar-ui:2.1'
-
-
 }

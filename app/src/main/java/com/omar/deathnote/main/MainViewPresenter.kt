@@ -143,6 +143,7 @@ class MainViewPresenter(
                     it.type == Constants.Frags.PicFragment.ordinal
                             || it.type == Constants.Frags.AudioRecord.ordinal
                             || it.type == Constants.Frags.AudioPlay.ordinal
+                            && it.content.isNullOrBlank().not()
                 }
                     .map { it.content }
                     .filter { it.isNullOrBlank().not() }

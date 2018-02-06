@@ -26,6 +26,7 @@ import com.omar.deathnote.notes.content.ContentAdapter
 import com.omar.deathnote.notes.content.ContentType
 import com.omar.deathnote.notes.content.add.bll.AddDialogPresenter
 import com.omar.deathnote.notes.content.add.ui.AddDialog
+import com.omar.deathnote.utility.AudioWrapper
 import com.omar.deathnote.utility.plusAssign
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,9 +60,13 @@ class ContentActivity : AppCompatActivity() {
     @Inject
     lateinit var presenter: ContentPresenter
 
+    @Inject
+    lateinit var audioWrapper: AudioWrapper
+
     lateinit var permissionMananager: PermissionsManager
 
     val dis = CompositeDisposable()
+
     var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +110,7 @@ class ContentActivity : AppCompatActivity() {
         super.onDestroy()
         alertDialog?.takeIf { it.isShowing }?.dismiss()
         if (isFinishing) {
+            audioWrapper.tearDown()
             presenter.dispose()
             ComponentContainer.instance.remove(ContentViewComponent::class.java)
         }

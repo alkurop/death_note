@@ -46,11 +46,15 @@ object AudioRecorder {
     private lateinit var mp3buffer: ByteArray
 
     private var isStarted = AtomicBoolean(false)
+    private var isRecording = AtomicBoolean(false)
 
     fun startRecord(filePath: String): Observable<Long> {
         if (isStarted.get()) {
             stopRecord()
         }
+
+
+
         minBufferSize = AudioRecord.getMinBufferSize(
             mSampleRate,
             channelConfig.toInt(),
@@ -60,11 +64,20 @@ object AudioRecorder {
         val resultBus = PublishSubject.create<Long>()
         val observer = Subscriber<Long>(resultBus)
 
+
         Observable.interval(TIMER_RESOLUTION_SLEEP_MILLIS, TimeUnit.MILLISECONDS)
+            .map { (it + 1) * TIMER_RESOLUTION_SLEEP_MILLIS }
             .subscribeOn(Schedulers.io())
             .subscribeWith(observer)
 
-        record(filePath).toObservable<Long>()
+        Completable
+            .fromAction {
+                while (isRecording.get()) {
+                }
+            }
+            .andThen(
+                record(filePath)
+            ).toObservable<Long>()
             .subscribeOn(Schedulers.io())
             .subscribeWith(observer)
 
@@ -80,6 +93,7 @@ object AudioRecorder {
 
     private fun record(filePath: String): Completable {
         return Completable.fromAction {
+            isRecording.set(true)
             isStarted.set(true)
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
             val outFile = File(filePath)
@@ -105,6 +119,7 @@ object AudioRecorder {
                 recorder.stop()
                 recorder.release()
                 SimpleLame.close()
+                isRecording.set(false)
             }
         }
     }

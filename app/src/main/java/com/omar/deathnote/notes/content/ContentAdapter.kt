@@ -23,7 +23,7 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
         if (newItems == items) return
         val calculateDiff = DiffUtil.calculateDiff(ContentAdapterDiffUtilCallback(items, newItems))
         items = newItems
-        calculateDiff.dispatchUpdatesTo(this)
+         calculateDiff.dispatchUpdatesTo(this)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

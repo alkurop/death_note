@@ -11,7 +11,6 @@ import com.omar.deathnote.utility.SharingUtil
 import com.omar.deathnote.utility.plusAssign
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -146,7 +145,8 @@ class ContentPresenter @Inject constructor(
             .subscribe {
                 if (it.type == Constants.Frags.PicFragment.ordinal
                     || it.type == Constants.Frags.AudioRecord.ordinal
-                    || it.type == Constants.Frags.AudioPlay.ordinal) {
+                    || it.type == Constants.Frags.AudioPlay.ordinal
+                    && it.content.isNullOrBlank().not()) {
                     val file = File(it.content)
                     if (file.exists()) {
                         file.delete()

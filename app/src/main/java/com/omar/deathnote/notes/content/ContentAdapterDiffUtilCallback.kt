@@ -21,6 +21,9 @@ class ContentAdapterDiffUtilCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return true
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem.content.equals(newItem.content)
+                && oldItem.additionalContent == newItem.additionalContent
     }
 }

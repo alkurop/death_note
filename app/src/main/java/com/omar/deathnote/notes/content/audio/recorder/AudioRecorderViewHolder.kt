@@ -7,6 +7,7 @@ import com.alkurop.database.Content
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.BuildConfig
 import com.omar.deathnote.ComponentContainer
+import com.omar.deathnote.R
 import com.omar.deathnote.notes.ContentViewComponent
 import com.omar.deathnote.notes.content.ContentViewHolder
 import com.omar.deathnote.utility.plusAssign
@@ -35,6 +36,7 @@ class AudioRecorderViewHolder(
     }
 
     override fun bind(content: Content) {
+        itemView.songTime.text = itemView.context.getString(R.string.rec_countet)
         ComponentContainer.instance[ContentViewComponent::class.java].inject(this)
         recorderPresenter.content = content
         RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
@@ -59,12 +61,14 @@ class AudioRecorderViewHolder(
                     }
                     is AudioRecordState.CounterUpdate -> {
                         itemView.songTime.text = it.counter
+                        content.additionalContent = it.counter
                     }
                 }
             }
     }
 
     override fun unbind() {
+        recorderPresenter.stopRecording()
         dis.clear()
     }
 }

@@ -50,7 +50,11 @@ class SharingUtil @Inject constructor(
             }
         val text = textStringBuilder.toString()
 
-        val mediaPickerUris = contentList.filter { it.type == Constants.Frags.PicFragment.ordinal }
+        val mediaPickerUris = contentList
+            .filter {
+                it.type == Constants.Frags.PicFragment.ordinal
+                        || it.type == Constants.Frags.AudioPlay.ordinal
+            }
             .map { it.content }
             .map {
                 Uri.parse(it)
