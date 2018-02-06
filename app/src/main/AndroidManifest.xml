@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -42,11 +42,6 @@
             android:name="com.omar.deathnote.picview.SingleViewActivity"
             android:screenOrientation="sensorPortrait"
             android:label=" " />
-
-        <service
-            android:name="com.omar.deathnote.audioplay_old.AudioPlayService"
-            android:screenOrientation="sensorPortrait"
-            android:enabled="true" />
 
     </application>
 
