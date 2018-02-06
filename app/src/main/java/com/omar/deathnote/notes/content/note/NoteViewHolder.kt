@@ -1,5 +1,7 @@
 package com.omar.deathnote.notes.content.note
 
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.View
 import com.alkurop.database.Content
 import com.jakewharton.rxbinding2.view.RxView
@@ -29,6 +31,8 @@ class NoteViewHolder(
                 content.content = it.editable()?.toString()
                 presenter.save()
             }
+        Linkify.addLinks(itemView.etTxt, Linkify.ALL)
+        itemView.etTxt.movementMethod = LinkMovementMethod.getInstance();
         RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
     }
