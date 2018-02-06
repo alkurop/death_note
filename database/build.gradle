@@ -4,11 +4,11 @@ apply plugin: 'kotlin-android'
 apply from: '../libs.gradle'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -28,7 +28,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     api "android.arch.persistence.room:runtime:$versions.room"
     api "android.arch.persistence.room:rxjava2:$versions.room"
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
 
     kapt "android.arch.persistence.room:compiler:$versions.room"
