@@ -40,6 +40,7 @@
                     android:text="@string/app_name"
                     android:textSize="16sp" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,6 +54,15 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text="@string/if_you_feeling_are_high_n_and_you_re_ready_to_die_n_use_it_wise" />
+
+            <TextView
+                android:layout_marginTop="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
