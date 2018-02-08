@@ -62,13 +62,13 @@ public class AddDialogPresenter implements IAddDialogPresenter {
                 callback.addContent(ContentType.NOTE);
             }
         });
-        /*items.add(new AddDialogItemDataHolder(context.getString(R.string.new_link)) {
+        items.add(new AddDialogItemDataHolder(context.getString(R.string.new_link)) {
             @Override
             public void doAction() {
                 view.dismiss();
                 callback.addContent(ContentType.LINK);
             }
-        });*/
+        });
         adaper.notifyDataSetChanged();
     }
 

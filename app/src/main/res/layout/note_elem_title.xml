@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -13,29 +13,30 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="20dp"
-        android:paddingBottom="10dp"
-        >
+        android:paddingBottom="10dp">
+
         <ImageView
-                android:id="@+id/del"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:padding="4sp"
-                android:clickable="true"
-                android:src="@drawable/del_btn"
-                android:visibility="gone"/>
+            android:id="@+id/del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:padding="4sp"
+            android:src="@drawable/del_btn"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/list_item_shape"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:paddingLeft="1dp"
-                android:paddingRight="10dp" >
+                android:paddingRight="10dp">
 
                 <TextView
                     android:id="@+id/songTitle"
@@ -60,7 +61,6 @@
                     android:textColor="#000000"
                     android:textColorHint="#000000"
                     android:textColorLink="#c7c7c7"
-                    android:textCursorDrawable="@drawable/black_cursor"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

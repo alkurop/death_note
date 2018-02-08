@@ -24,15 +24,15 @@ class NoteViewHolder(
     override fun bind(content: Content) {
         ComponentContainer.instance[ContentViewComponent::class.java].inject(this)
         presenter.content = content
-        itemView.etTxt.setText(content.content)
-        RxTextView.afterTextChangeEvents(itemView.etTxt)
+        itemView.etText.setText(content.content)
+        RxTextView.afterTextChangeEvents(itemView.etText)
             .debounce(1, TimeUnit.SECONDS)
             .subscribe {
                 content.content = it.editable()?.toString()
                 presenter.save()
             }
-        Linkify.addLinks(itemView.etTxt, Linkify.ALL)
-        itemView.etTxt.movementMethod = LinkMovementMethod.getInstance();
+        Linkify.addLinks(itemView.etText, Linkify.ALL)
+        itemView.etText.movementMethod = LinkMovementMethod.getInstance();
         RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
     }
