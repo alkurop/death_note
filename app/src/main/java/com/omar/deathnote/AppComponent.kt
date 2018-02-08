@@ -6,8 +6,9 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Component(modules = arrayOf(
-        FeaturesModule::class,
-        DatabaseModule::class
+        AppModule::class,
+        DatabaseModule::class,
+        FeaturesModule::class
 ))
 @Singleton
 interface AppComponent : BaseComponent {

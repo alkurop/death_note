@@ -1,15 +1,15 @@
 package com.omar.deathnote
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
+import android.arch.persistence.room.migration.Migration
 import com.alkurop.database.AppDatabase
 import com.alkurop.database.ContentDao
+import com.alkurop.database.LinkDao
 import com.alkurop.database.NoteDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.migration.Migration
-import com.alkurop.database.LinkDao
 
 
 @Module
@@ -47,4 +47,5 @@ class DatabaseModule {
     fun provideLinkDao(database: AppDatabase): LinkDao {
         return database.getLinkDao()
     }
+
 }
