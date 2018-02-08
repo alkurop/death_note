@@ -1,5 +1,6 @@
 package com.omar.deathnote.utility
 
+import android.util.Patterns
 import com.alkurop.database.Link
 import com.alkurop.database.LinkDao
 import com.google.gson.Gson
@@ -32,6 +33,10 @@ class LinkLoader @Inject constructor(
             if (path.startsWith("http://") || path.startsWith("https://"))
                 path
             else "https://$path"
+
+        if (Patterns.WEB_URL.matcher(convertedPath).matches().not()) {
+            Maybe.empty<SourceContent>()
+        }
 
         return linkDao.getByPath(convertedPath)
             .toObservable()
