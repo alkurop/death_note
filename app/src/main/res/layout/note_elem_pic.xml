@@ -4,9 +4,10 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground">
@@ -17,10 +18,10 @@
         android:background="@drawable/list_item_shape" />
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:minHeight="300dp"
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="300dp"
         android:scaleType="centerCrop"
         app:riv_corner_radius="20dp" />
 
