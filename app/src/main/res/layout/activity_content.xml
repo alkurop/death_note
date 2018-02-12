@@ -34,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        app:layout_behavior="com.omar.deathnote.utility.ScrollAwareFABBehaviour" />
+        app:layout_behavior="com.omar.deathnote.utility.ScrollAwareFABBehaviourReverse" />
 
 </android.support.design.widget.CoordinatorLayout>

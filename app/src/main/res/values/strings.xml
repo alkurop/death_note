@@ -151,5 +151,6 @@
     <string name="delete_content_dialog_message">Would you like to delete this content?</string>
     <string name="click_to_nadd_note">Click to\nadd note</string>
     <string name="if_you_feeling_are_high_n_and_you_re_ready_to_die_n_use_it_wise">If you feelings are high\nand you\'re ready to die\nuse it wise</string>
+    <string name="please_wait">Please wait</string>
 
 </resources>

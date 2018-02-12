@@ -3,6 +3,7 @@ package com.omar.deathnote.notes
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.RECORD_AUDIO
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -71,6 +72,7 @@ class ContentActivity : AppCompatActivity() {
     val dis = CompositeDisposable()
 
     var alertDialog: AlertDialog? = null
+    var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,19 +100,39 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager = PermissionsManager(this)
         val subscribe = MediaPicker.getResult(this)
             .subscribe {
+                if (!it.first.equals(MediaType.LOADING)) {
+                    showLoading(false)
+                }
                 when (it.first) {
-                    MediaType.AUDIO -> presenter.onAction(ContentAction.AddContent(ContentType.AUDIO_FILE, it.second.toString()))
-                    MediaType.PHOTO -> presenter.onAction(ContentAction.AddContent(ContentType.PICTURE_FILE, it.second.toString()))
+                    MediaType.AUDIO -> {
+                        recyclerView.smoothScrollToPosition(recyclerView.adapter.itemCount - 1)
+                        presenter.onAction(ContentAction.AddContent(ContentType.AUDIO_FILE, it.second.toString()))
+                    }
+                    MediaType.PHOTO -> {
+                        recyclerView.smoothScrollToPosition(recyclerView.adapter.itemCount - 1)
+                        presenter.onAction(ContentAction.AddContent(ContentType.PICTURE_FILE, it.second.toString()))
+                    }
                     MediaType.VIDEO -> {
+                    }
+                    MediaType.LOADING -> {
+                        showLoading(true)
                     }
                 }
             }
         dis += subscribe
     }
 
+    private fun showLoading(shouldShow: Boolean) {
+        progressDialog?.takeIf { it.isShowing }?.dismiss()
+        if (shouldShow) {
+            progressDialog = ProgressDialog.show(this, null, getString(R.string.please_wait), true, false)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         alertDialog?.takeIf { it.isShowing }?.dismiss()
+        progressDialog?.takeIf { it.isShowing }?.dismiss()
         if (isFinishing) {
             audioWrapper.stopRecording()
             audioWrapper.tearDown()
@@ -198,8 +220,12 @@ class ContentActivity : AppCompatActivity() {
                         ContentType.PICTURE_FILE -> askGaleryPermissions { openImageGal() }
                         ContentType.PICTURE_CAPTURE -> askCameraPermissions { captureImageCamera() }
                         ContentType.LINK,
-                        ContentType.NOTE -> presenter.onAction(ContentAction.AddContent(content))
+                        ContentType.NOTE -> {
+                            recyclerView.smoothScrollToPosition(recyclerView.adapter.itemCount - 1)
+                            presenter.onAction(ContentAction.AddContent(content))
+                        }
                         ContentType.AUDIO_RECORD -> askRecordPermissions {
+                            recyclerView.smoothScrollToPosition(recyclerView.adapter.itemCount - 1)
                             presenter.onAction(ContentAction.AddContent(content))
                         }
                     }
