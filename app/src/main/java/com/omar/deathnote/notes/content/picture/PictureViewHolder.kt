@@ -38,18 +38,12 @@ class PictureViewHolder(
         ComponentContainer.instance[ContentViewComponent::class.java].inject(this)
         presenter.content = content
 
-        val transformation = RoundedTransformationBuilder()
-            .cornerRadiusDp(20f)
-            .oval(false)
-            .build()
-
         itemView.contentView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 itemView.contentView.viewTreeObserver.removeOnPreDrawListener(this)
                 Picasso.with(itemView.context)
                     .load(content.content)
-                    .fit()
-                    .transform(transformation)
+                    .resize(itemView.measuredWidth, 0)
                     .into(itemView.contentView)
                 return true
             }

@@ -39,7 +39,7 @@ public class SingleViewFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         Long id = Long.parseLong(getArguments().getString(Constants.PATH));
         Disposable subscribe = mContentDao.getById(id)
                 .subscribeOn(Schedulers.io())
@@ -49,6 +49,7 @@ public class SingleViewFragment extends Fragment {
                     public void accept(Content content1) throws Exception {
                         ImageView imageView = getView().findViewById(R.id.imageview);
                         Picasso.with(getContext()).load(content1.getContent())
+                                .resize(0, view.getMeasuredHeight())
                                 .into(imageView);
                     }
                 });
