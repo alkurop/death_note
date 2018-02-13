@@ -37,20 +37,20 @@ class LinkLoader @Inject constructor(
         if (Patterns.WEB_URL.matcher(convertedPath).matches().not()) {
             Maybe.empty<SourceContent>()
         }
-
+        val apiObservable = getLinkFromApi(convertedPath)
+            .toObservable()
+            .flatMap {
+                val link = it.toLink(convertedPath)
+                linkDao.addOrUpdate(link)
+                Observable.just(link)
+            }
         return linkDao.getByPath(convertedPath)
             .toObservable()
-            .observeOn(scheduler)
             .publish { share ->
                 val expired = share.filter { it.isExpired() }
                     .flatMap { localLink ->
-                        getLinkFromApi(convertedPath)
-                            .toObservable()
-                            .flatMap {
-                                val link = it.toLink()
-                                linkDao.addOrUpdate(link)
-                                Observable.just(link)
-                            }
+
+                        apiObservable
                             .switchIfEmpty {
                                 Observable.just(localLink)
                             }
@@ -60,7 +60,9 @@ class LinkLoader @Inject constructor(
                 Observable.merge(expired, notExpired)
 
             }
+            .switchIfEmpty(apiObservable)
             .firstElement()
+            .subscribeOn(scheduler)
             .map { it.toSourceContent() }
     }
 
@@ -88,18 +90,20 @@ class LinkLoader @Inject constructor(
                 Observable.empty<SourceContent>()
             })
             .firstElement()
+            .observeOn(scheduler)
     }
 
     private fun Link.isExpired(): Boolean {
-        val expirationPeriond = TimeUnit.DAYS.convert(13, TimeUnit.MILLISECONDS)
-        return timeStamp!! < System.currentTimeMillis() - expirationPeriond
+        val expirationPeriond = TimeUnit.MILLISECONDS.convert(13, TimeUnit.DAYS)
+        val isExpired = timeStamp!! < System.currentTimeMillis() - expirationPeriond
+        return isExpired
     }
 
-    private fun SourceContent.toLink(): Link {
+    private fun SourceContent.toLink(requestPath: String): Link {
         return Link().apply {
             timeStamp = System.currentTimeMillis()
             content = gson.toJson(this@toLink)
-            path = this@toLink.finalUrl
+            path = requestPath
         }
     }
 

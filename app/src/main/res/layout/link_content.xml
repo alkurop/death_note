@@ -10,9 +10,9 @@
     <ImageView
         android:id="@+id/image_post"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="centerInside" />
+        android:scaleType="center" />
 
     <LinearLayout
         android:id="@+id/info_wrap"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#d0d0d0"
+            android:textColor="@color/accent"
             android:textSize="14sp"
             tools:text="text" />
 

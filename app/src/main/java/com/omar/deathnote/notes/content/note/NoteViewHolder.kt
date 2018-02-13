@@ -28,7 +28,7 @@ class NoteViewHolder(
         RxTextView.afterTextChangeEvents(itemView.etText)
             .debounce(1, TimeUnit.SECONDS)
             .subscribe {
-                content.content = it.editable()?.toString()
+                content.content = it.editable()?.toString()?.trim()
                 presenter.save()
             }
         Linkify.addLinks(itemView.etText, Linkify.ALL)

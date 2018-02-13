@@ -28,7 +28,7 @@
             android:label=" "
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name="com.omar.deathnote.pref.PrefActivity"

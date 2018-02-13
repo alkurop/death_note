@@ -13,13 +13,19 @@ class LinkPresenter @Inject constructor(
         contentDao: ContentDao,
         val linkLoader: LinkLoader
 ) : BaseContentPresenter(contentDao) {
-    val sourceContentPublisher = PublishSubject.create<SourceContent>()
+    val sourceContentPublisher = PublishSubject.create<KOptional<SourceContent>>()
 
     fun getLinkContent(url: String): Disposable = linkLoader
         .getLink(url)
         .subscribeOn(io())
+        .map { KOptional(it) }
+        .defaultIfEmpty(KOptional(null))
+        .toObservable()
+        .startWith(KOptional<SourceContent>(null))
         .subscribe {
             sourceContentPublisher.onNext(it)
         }
 
 }
+
+data class KOptional<T>(val value: T?)

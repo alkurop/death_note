@@ -25,7 +25,7 @@ class TitleViewHolder(
         RxTextView.afterTextChangeEvents(itemView.tvTitle)
             .debounce(1, TimeUnit.SECONDS)
             .subscribe {
-                content.content = it.editable()?.toString()
+                content.content = it.editable()?.toString()?.trim()
                 presenter.save()
             }
     }

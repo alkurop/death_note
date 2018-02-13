@@ -36,23 +36,26 @@ class LinkViewHolder(
 
         RxTextView
             .afterTextChangeEvents(itemView.etText)
-            .debounce(1, TimeUnit.SECONDS)
+            .debounce(500, TimeUnit.MILLISECONDS)
             .subscribe {
                 content.content = it.editable()?.toString()
                 presenter.save()
-                dis += presenter.getLinkContent(it.editable()!!.toString())
+                dis += presenter.getLinkContent(it.editable()!!.toString().trim())
             }
 
         RxView.clicks(itemView.del).subscribe { onDeleteCallback.invoke(content.id) }
 
         dis += presenter.sourceContentPublisher
             .observeOn(mainThread())
-            .subscribe { itemView.linkContent.setContent(it) }
+            .subscribe {
+                currentContent = it.value
+                itemView.linkContent.setContent(it.value)
+            }
 
         RxView.clicks(itemView.linkContent)
             .subscribe {
                 currentContent?.let {
-                    val uri = Uri.parse(it.cannonicalUrl)
+                    val uri = Uri.parse(it.finalUrl)
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     itemView.context.startActivity(intent)
                 }
