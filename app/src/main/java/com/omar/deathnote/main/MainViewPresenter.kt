@@ -142,7 +142,7 @@ class MainViewPresenter(
             .subscribe {
                 it.forEach {
                     contentDao.delete(it.id)
-                    it.deleteContentFile(app)
+                    it.deleteContentFile()
                 }
                 noteDao.delete(id)
             }

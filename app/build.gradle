@@ -12,8 +12,8 @@ android {
         applicationId "com.omar.deathnote"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 25
-        versionName "4.4"
+        versionCode 26
+        versionName "4.5"
     }
     signingConfigs {
         debug {
@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
 
     implementation 'com.github.alkurop:Android-Runtime-Permission-Manager:0.0.13'
-    implementation 'com.github.alkurop:Android-Media-Picker:0.1.5'
+    implementation 'com.github.alkurop:Android-Media-Picker:0.1.6'
     implementation 'com.stanfy.enroscar:enroscar-ui:2.1'
     implementation 'com.makeramen:roundedimageview:2.3.0'
 

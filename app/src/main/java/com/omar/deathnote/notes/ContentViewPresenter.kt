@@ -146,7 +146,7 @@ class ContentPresenter @Inject constructor(
             .subscribeOn(io())
             .toObservable()
             .subscribe {
-                it.deleteContentFile(app)
+                it.deleteContentFile()
                 contentDao.delete(id)
             }
     }

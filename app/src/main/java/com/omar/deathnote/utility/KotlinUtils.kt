@@ -1,10 +1,10 @@
 package com.omar.deathnote.utility
 
-import android.content.Context
 import com.alkurop.database.Content
 import com.omar.deathnote.Constants
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import java.io.File
 
 operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
@@ -12,7 +12,7 @@ operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
 }
 
 
-fun Content.deleteContentFile(context: Context) {
+fun Content.deleteContentFile() {
     if (this.type == Constants.Frags.PicFragment.ordinal
         || this.type == Constants.Frags.AudioRecord.ordinal
         || this.type == Constants.Frags.AudioPlay.ordinal
@@ -20,7 +20,11 @@ fun Content.deleteContentFile(context: Context) {
         val path = content!!.replace("file://", "")
         val file = File(path)
         if (file.exists()) {
-            file.delete()
+            try {
+                file.delete()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 }
