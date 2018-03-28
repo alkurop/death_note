@@ -110,7 +110,7 @@ class ContentPresenter @Inject constructor(
                     .subscribeOn(io())
                     .toObservable()
                     .subscribe {
-                        if (it.content.isNullOrBlank()) {
+                        if (it.content.isNullOrBlank().not()) {
                             deleteContent(action.id)
                         } else {
                             navigation.onNext(ContentNavigation.ConfirmDeleteContent(action.id))

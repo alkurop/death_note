@@ -53,7 +53,7 @@ public class DB {
                                           null);
                 if (cursor != null) {
 
-                    boolean haseItem = false;
+                    boolean haseItem;
                     haseItem = cursor.moveToFirst();
                     while (haseItem) {
                         long noteId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID));

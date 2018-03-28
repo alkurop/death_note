@@ -15,9 +15,8 @@ operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
 fun Content.deleteContentFile() {
     if (this.type == Constants.Frags.PicFragment.ordinal
         || this.type == Constants.Frags.AudioRecord.ordinal
-        || this.type == Constants.Frags.AudioPlay.ordinal
-        && this.content.isNullOrBlank().not()) {
-        val path = content!!.replace("file://", "")
+        || this.type == Constants.Frags.AudioPlay.ordinal) {
+        val path = content?.replace("file://", "") ?: ""
         val file = File(path)
         if (file.exists()) {
             try {
