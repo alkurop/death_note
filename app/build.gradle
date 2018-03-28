@@ -12,8 +12,8 @@ android {
         applicationId "com.omar.deathnote"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 28
-        versionName "4.7"
+        versionCode 29
+        versionName "4.8"
     }
     signingConfigs {
         debug {
