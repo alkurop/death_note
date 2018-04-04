@@ -5,6 +5,7 @@ import com.alkurop.database.ContentDao
 import com.omar.deathnote.notes.content.BaseContentPresenter
 import com.omar.deathnote.notes.content.audio.recorder.AudioRecordState
 import com.omar.deathnote.utility.AudioWrapper
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
@@ -20,7 +21,8 @@ class AudioPlayerPresenter @Inject constructor(
 
     fun startPlayback(): Disposable {
         stateBus.onNext(AudioPlayerState.Playing)
-        return audioWrapper.startPlayback(content.content!!, latestState)
+        val contentUri = content.content ?: return CompositeDisposable()
+        return audioWrapper.startPlayback(contentUri, latestState)
             .subscribeOn(io())
             .doOnTerminate { stopPlayback() }
             .subscribe {
