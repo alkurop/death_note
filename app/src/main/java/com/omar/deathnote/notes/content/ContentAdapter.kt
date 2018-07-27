@@ -30,7 +30,7 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
         layouInflater = LayoutInflater.from(recyclerView.context)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContentViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentViewHolder {
         return when (viewType) {
             Constants.Frags.TitleFragment.ordinal -> {
                 val view = layouInflater.inflate(R.layout.note_elem_title, parent, false)
@@ -67,8 +67,8 @@ class ContentAdapter(val onDeleteCallback: (Long) -> Unit) : RecyclerView.Adapte
     override fun getItemCount(): Int =
         items.size
 
-    override fun onBindViewHolder(holder: ContentViewHolder?, position: Int) {
-        holder?.bind(items[position])
+    override fun onBindViewHolder(holder: ContentViewHolder, position: Int) {
+        holder.bind(items[position])
     }
 
     override fun getItemViewType(position: Int): Int =

@@ -48,9 +48,9 @@ interface LinkDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdate(link: Link): Long
 
-    @Query("Delete from link where id = :arg0")
+    @Query("Delete from link where id = :id")
     fun delete(id: Long)
 
-    @Query("Select * from link where path = :arg0 ")
+    @Query("Select * from link where path = :path ")
     fun getByPath(path: String): Maybe<Link>
 }

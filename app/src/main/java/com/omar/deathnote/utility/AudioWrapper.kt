@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @ContentViewScope
 class AudioWrapper @Inject constructor(appplication: App) {
-    val audioPlayer: AudioPlayer = AudioPlayerImpl(appplication)
+    private val audioPlayer: AudioPlayer = AudioPlayerImpl(appplication)
 
     fun generateFilePath(): String {
         return getFileDirectory(MediaPicker.fileDirectory) + "/" + createFileName(".mp3")

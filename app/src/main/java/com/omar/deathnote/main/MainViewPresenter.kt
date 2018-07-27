@@ -3,15 +3,13 @@ package com.omar.deathnote.main
 import com.alkurop.database.ContentDao
 import com.alkurop.database.NoteDao
 import com.omar.deathnote.App
-import com.omar.deathnote.Constants
 import com.omar.deathnote.utility.deleteContentFile
 import com.omar.deathnote.utility.plusAssign
-import io.reactivex.*
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.io.File
 
 sealed class MainViewActions {
     object FabClicked : MainViewActions()
@@ -52,9 +50,9 @@ class MainViewPresenter(
 
     val viewStatePublisher = BehaviorSubject.create<MainViewState>()
     val viewState = viewStatePublisher
-        .scan(MainViewState(), { old, new ->
+        .scan(MainViewState()) { old, new ->
             MainViewState(new.items ?: old.items, new.style ?: old.style)
-        })
+        }
 
     val navigation = PublishSubject.create<MainViewNavigation>()
     private val dis = CompositeDisposable()

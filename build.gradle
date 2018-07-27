@@ -1,12 +1,14 @@
 buildscript {
     apply from: 'libs.gradle'
+    ext.compileSdkVersion = 27
+    ext.minSdkVersion = 16
 
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }

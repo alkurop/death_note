@@ -1,13 +1,15 @@
 ext.versions = [
-        'butterknife': '8.8.1',
-        'dbflow'     : '2.2.1',
-        'facebook'   : '4.11.0',
-        'gson'       : '2.3',
-        'kotlin'     : '1.2.20',
-        'picasso'    : '2.5.2',
-        'support'    : '27.0.2',
-        'rxAndroid'  : '2.0.1',
-        'dagger'     : '2.14.1',
-        'room'       : '1.0.0',
-        'timber'     : '4.6.0'
+        'butterknife'   : '8.8.1',
+        'dbflow'        : '2.2.1',
+        'facebook'      : '4.11.0',
+        'gson'          : '2.3',
+        'kotlin'        : '1.2.51',
+        'picasso'       : '2.5.2',
+        'support'       : '27.1.1',
+        'rxAndroid'     : '2.0.2',
+        'rxKotlin'     : '2.2.0',
+        'dagger'        : '2.14.1',
+        'room'          : '1.1.1',
+        'timber'        : '4.6.1',
 ]
+

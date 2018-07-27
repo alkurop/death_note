@@ -4,7 +4,7 @@ import com.omar.deathnote.BaseComponent
 import com.omar.deathnote.ComponentBuilder
 import dagger.Subcomponent
 
-@Subcomponent(modules = arrayOf(MainScreenModule::class))
+@Subcomponent(modules = [(MainScreenModule::class)])
 @MainViewScope
 interface MainScreenComponent : BaseComponent {
 

@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.omar.deathnote.ComponentContainer
 import com.omar.deathnote.Constants
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun initSpinner() {
+    private fun initSpinner() {
         val spinnerItemList = Constants
             .select_images
             .indices
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         spinner.adapter = spinnerAdatper
     }
 
-    fun subscribeToUiChanges() {
+    private fun subscribeToUiChanges() {
         RxView.clicks(fab).subscribe { presenter.onAction(MainViewActions.FabClicked) }
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
@@ -128,12 +127,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun subscribeToPresenter() {
+    private fun subscribeToPresenter() {
         dis += presenter.navigation.observeOn(mainThread()).subscribe { navigate(it) }
         dis += presenter.viewState.observeOn(mainThread()).subscribe { renderView(it) }
     }
 
-    fun renderView(state: MainViewState) {
+    private fun renderView(state: MainViewState) {
         state.items?.let {
             val mainListAdapter = recyclerView.adapter as MainListAdapter
             mainListAdapter.setDataList(state.items)
@@ -149,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun navigate(navigation: MainViewNavigation) {
+    private fun navigate(navigation: MainViewNavigation) {
         when (navigation) {
             is MainViewNavigation.NavigateNoteDetails -> ContentActivity.openNote(this, navigation.id)
             is MainViewNavigation.NavigateNewNote -> ContentActivity.newNote(this, navigation.style)
@@ -158,10 +157,10 @@ class MainActivity : AppCompatActivity() {
                 alertDialog = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
                     .setTitle(getString(R.string.delete_note_dialog_title))
                     .setTitle(getString(R.string.delete_note_dialog_message))
-                    .setNegativeButton(android.R.string.cancel, { _, _ -> })
-                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
                         presenter.onAction(MainViewActions.DeleteListItemConfirmed(navigation.noteId))
-                    })
+                    }
                     .show()
             }
         }

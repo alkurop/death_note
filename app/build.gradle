@@ -6,12 +6,11 @@ apply plugin: 'kotlin-kapt'
 apply from:'../libs.gradle'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.omar.deathnote"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.compileSdkVersion
         versionCode 30
         versionName "4.9"
     }
@@ -46,9 +45,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$versions.support"
     implementation "com.android.support:appcompat-v7:$versions.support"
     implementation "com.android.support:design:$versions.support"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-
     implementation "com.jakewharton:butterknife:$versions.butterknife"
 
     kapt "com.jakewharton:butterknife-compiler:$versions.butterknife"
@@ -57,14 +54,12 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$versions.picasso"
     implementation "com.google.code.gson:gson:$versions.gson"
 
-    implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation "com.google.dagger:dagger:$versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"
-
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
+    implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
-
     implementation 'com.github.alkurop:Android-Runtime-Permission-Manager:0.0.13'
     implementation 'com.github.alkurop:Android-Media-Picker:0.1.7'
     implementation 'com.stanfy.enroscar:enroscar-ui:2.1'

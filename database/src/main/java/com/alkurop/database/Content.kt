@@ -56,15 +56,15 @@ interface ContentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdate(content: Content): Long
 
-    @Query("Delete from content where id = :arg0")
+    @Query("Delete from content where id = :id")
     fun delete(id: Long)
 
-    @Query("Select * from content where parentNoteId = :arg0")
+    @Query("Select * from content where parentNoteId = :noteId")
     fun getRelatedToNote(noteId: Long): Flowable<List<Content>>
 
-    @Query("Select * from content where parentNoteId = :arg0 and type = 0")
+    @Query("Select * from content where parentNoteId = :noteId and type = 0")
     fun getTitleContent(noteId: Long): Flowable<Content>
 
-    @Query("Select * from content where id = :arg0 ")
+    @Query("Select * from content where id = :id ")
     fun getById(id: Long): Single<Content>
 }

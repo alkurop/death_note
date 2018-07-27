@@ -39,16 +39,16 @@ open class Note {
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM maintab2 WHERE style = :arg0 ORDER BY id DESC")
+    @Query("SELECT * FROM maintab2 WHERE style = :style ORDER BY id DESC")
     fun getNotesByStyle(style: Int): Flowable<List<Note>>
 
     @Query("SELECT * FROM maintab2 ORDER BY id DESC")
     fun getAllNotes(): Flowable<List<Note>>
 
-    @Query("DELETE FROM maintab2 WHERE id = :arg0")
+    @Query("DELETE FROM maintab2 WHERE id = :id")
     fun delete(id: Long)
 
-    @Query("SELECT * FROM maintab2 WHERE id = :arg0")
+    @Query("SELECT * FROM maintab2 WHERE id = :id")
     fun getById(id: Long): Flowable<Note>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

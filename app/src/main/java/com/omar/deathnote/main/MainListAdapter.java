@@ -25,7 +25,6 @@ public class MainListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MainAdapterDiffUtilCallback(dataList, newList), false);
         this.dataList = newList;
         diffResult.dispatchUpdatesTo(this);
-        //notifyDataSetChanged();
     }
 
     @Override

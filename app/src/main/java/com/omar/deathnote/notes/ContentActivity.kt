@@ -165,7 +165,7 @@ class ContentActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    fun initSpinner() {
+    private fun initSpinner() {
         val spinnerItemList = Constants
             .select_images
             .indices
@@ -176,11 +176,11 @@ class ContentActivity : AppCompatActivity() {
         spinner.adapter = spinnerAdatper
     }
 
-    fun initList() {
+    private fun initList() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    fun subscribeToListeners() {
+    private fun subscribeToListeners() {
         RxView.clicks(fab).subscribe { presenter.onAction(ContentAction.FabClicked) }
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
@@ -193,17 +193,16 @@ class ContentActivity : AppCompatActivity() {
         }
     }
 
-    fun subscribeToPresenter() {
+    private fun subscribeToPresenter() {
         dis += presenter.navigation.observeOn(AndroidSchedulers.mainThread()).subscribe { navigate(it) }
         dis += presenter.viewState.distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread()).subscribe { renderView(it) }
     }
 
-    fun renderView(state: NoteViewModel) {
+    private fun renderView(state: NoteViewModel) {
         state.content?.let {
             if (recyclerView.adapter == null) {
-                recyclerView.adapter = ContentAdapter(
-                    { presenter.onAction(ContentAction.DeleteContent(it)) })
+                recyclerView.adapter = ContentAdapter { presenter.onAction(ContentAction.DeleteContent(it)) }
             }
             (recyclerView.adapter as ContentAdapter).updateList(state.content)
         }
@@ -211,7 +210,7 @@ class ContentActivity : AppCompatActivity() {
         Picasso.with(this).load(Constants.note_bg_images[state.style - 1]).into(background)
     }
 
-    fun navigate(navigation: ContentNavigation) {
+    private fun navigate(navigation: ContentNavigation) {
         when (navigation) {
             ContentNavigation.ContentSelector -> {
                 val dialogPresenter = AddDialogPresenter()
@@ -239,24 +238,24 @@ class ContentActivity : AppCompatActivity() {
                 alertDialog = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
                     .setTitle(getString(R.string.delete_content_dialog_title))
                     .setTitle(getString(R.string.delete_content_dialog_message))
-                    .setNegativeButton(android.R.string.cancel, { _, _ -> })
-                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
                         presenter.onAction(ContentAction.DeleteContentConfirmed(navigation.id))
-                    })
+                    }
                     .show()
             }
         }
     }
 
-    fun captureImageCamera() {
+    private fun captureImageCamera() {
         MediaPicker.fromCamera(this, MediaType.PHOTO)
     }
 
-    fun openImageGal() {
+    private fun openImageGal() {
         MediaPicker.fromGallery(this, MediaType.PHOTO)
     }
 
-    fun askCameraPermissions(onSuccessOperator: (() -> Unit)) {
+    private fun askCameraPermissions(onSuccessOperator: (() -> Unit)) {
         permissionMananager.clearPermissionsListeners()
         permissionMananager.clearPermissions()
 
@@ -288,7 +287,7 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager.makePermissionRequest()
     }
 
-    fun askGaleryPermissions(onSuccessOperator: (() -> Unit)) {
+    private fun askGaleryPermissions(onSuccessOperator: (() -> Unit)) {
         permissionMananager.clearPermissionsListeners()
         permissionMananager.clearPermissions()
 
@@ -314,7 +313,7 @@ class ContentActivity : AppCompatActivity() {
         permissionMananager.makePermissionRequest()
     }
 
-    fun askRecordPermissions(onSuccessOperator: (() -> Unit)) {
+    private fun askRecordPermissions(onSuccessOperator: (() -> Unit)) {
         permissionMananager.clearPermissionsListeners()
         permissionMananager.clearPermissions()
 

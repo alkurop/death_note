@@ -65,7 +65,7 @@ class ContentPresenter @Inject constructor(
 
     init {
         viewStatePublisher
-            .scan(NoteViewModel(), { old, new ->
+            .scan(NoteViewModel()) { old, new ->
                 val noteId = if (new.noteId != 0L) new.noteId else old.noteId
                 val content = (new.content ?: old.content)?.map {
                     it.parentNoteId = noteId
@@ -80,7 +80,7 @@ class ContentPresenter @Inject constructor(
                     noteDate = new.noteDate.takeIf { it.isNotBlank() } ?: old.noteDate
                 )
                 noteViewModel
-            })
+            }
             .subscribeWith(object : DisposableObserver<NoteViewModel>() {
                 override fun onComplete() {
                     viewState.onComplete()
@@ -90,7 +90,7 @@ class ContentPresenter @Inject constructor(
                     viewState.onNext(t)
                 }
 
-                override fun onError(e: Throwable?) {
+                override fun onError(e: Throwable) {
                     viewState.onError(e)
                 }
             })

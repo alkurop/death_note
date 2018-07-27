@@ -3,8 +3,8 @@ package com.omar.deathnote.main
 import android.support.v7.util.DiffUtil
 
 class MainAdapterDiffUtilCallback(
-        val oldList: List<NoteViewModel>,
-        val newList: List<NoteViewModel>
+        private val oldList: List<NoteViewModel>,
+        private val newList: List<NoteViewModel>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
